@@ -5,8 +5,17 @@
 - [Brief](#brief)
 - [Project Contents](#project-contents)
 - [Description](#description)
+    - [Log - A custom and configurable logger](#log---a-custom-and-configurable-logger)
+        - [Credit](#credit)
+    - [String - A custom String class](#string---a-custom-string-class)
+        - [Credit](#credit-1)
+    - [C++ Utilities](#c-utilities)
+    - [Command Line Interface (CLI) parser](#command-line-interface-cli-parser)
+        - [The constructors and input parameters](#the-constructors-and-input-parameters)
+        - [The types of options](#the-types-of-options)
     - [Disclaimer](#disclaimer)
 - [Dependencies](#dependencies)
+    - [cli_parser.h](#cli_parserh)
 - [Installation / Build steps](#installation-and-build-steps)
 
 ## Brief
@@ -57,7 +66,7 @@ Most of this code is completely unique, and I have developed everything from scr
 
 This class allows a developer to quickly define and manage arguments that can be passed in on the command line for binary file execution. This will probably not do everything you want it to, but it does everything I want it to, and has been developed in a way to minimise the code I need to write. You should carefully examine the constructor list and their input parameters and code docs for detailed instructions on how to use this class, but here are a few points:
 
-#### The constructors and input paraemters
+#### The constructors and input parameters
 
 - Tags automatically prepend the appropriate number of hyphon characters, so you should only define tags as a string without any hyphons.
 
