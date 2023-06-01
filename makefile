@@ -115,6 +115,8 @@ CPPFLAGS := $(INC_FLAGS) -MMD -MP
 ################################################################################
 ############################ Other target recipe's #############################
 
+target: tests
+
 # Build test executables
 $(TEST_EXECS): make_directories announce_compiling_tests
 	@echo Building \"$@\" executable...
@@ -128,6 +130,7 @@ $(TEST_EXECS): make_directories announce_compiling_tests
 	clean \
 	rebuild \
 	rebuild_and_runtests \
+	install \
 	run_tests make_directories clear_log_files \
 	announce_compiling_tests \
 	single_test single_test_and_run
