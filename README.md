@@ -116,4 +116,4 @@ The cli parser requires the log class to print out to `std::cout` and text files
 
 ## Installation and Build steps
 
-Run `sudo make install` and the files will be copied into the includes folder and will create a default directory or the user can specify one. The install location should not be directly in the includes folder as some files could clash with existing file names, so make sure to install them in a sub directory within the includes directory.
+Run `sudo make install` and the files will be copied into the includes folder and will create a default directory or you can specify one by doing `make install at=/usr/local/include/your-directory-name`, and the makefile will automatically create the directory if it does not exist. The install location should not be directly in the base includes folder as some files could clash with existing file names in the C++ language or other installed libraries, so make sure to install them in a sub directory within the includes directory.
