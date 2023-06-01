@@ -51,7 +51,11 @@ This class implements several common functions and loops you might use in C++ to
 
 The `String` is null-terminated correctly, but please report any errors you experience.
 
-**Things to note**: This class can be assigned `char`'s, `const char*`, `std::string`'s and other `String` class objects. Concatenation and insertion functions work on this class, and a number of combinations of parameter lists have been considered for different functions. This class can also return **both** a `const char*` and a `std::string`, but when used in a function that accepts a `const char*` and a `std::string` in the same index position in the parameter list, you will need to force it to return a `const char*` by calling `c_str()` on the `String` object, otherwise you experience an error because your code is not sure which variable type you are trying to use and therefore, which function parameter list you are trying to specify.
+**Things to note**:
+1. This class can be assigned `char`'s, `const char*`, `std::string`'s and other `String` class objects.
+2. Concatenation and insertion functions work on this class, and a number of combinations of parameter lists have been considered for different functions.
+3. This class can return **both** a `const char*` and a `std::string`, but when used in a function that accepts a `const char*` and a `std::string` in the same index position in the parameter list, you will need to force it to return a `const char*` by calling `c_str()` on the `String` object, otherwise you experience an error because your code is not sure which variable type you are trying to use and therefore, which function parameter list you are trying to specify.
+4. While you can concatenate two `char`'s and assign the concatenation to a `String` object, it is worth noting that 'adding' two `char`'s to each other produces a different `char` because they are essentially integers.
 
 #### Credit
 
