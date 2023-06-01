@@ -7,44 +7,34 @@ TEST_CASE("String assignment tests", "[single-file]")
 {
     //  #################### Assignment ####################
 
-    std::cout << "Starting assignment tests...\n";
-
     String _customString;
     std::string _emptyString = "";
-    bool _result = _customString.c_str() == _emptyString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.c_str(), _emptyString.c_str()) == 0);
 
     std::string _stdstring = "std::string var";
     _customString = _stdstring;
-    _result = _customString.c_str() == _stdstring;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.c_str() , _stdstring.c_str()) == 0);
 
     const char* _constCharPointer = "const char*";
     _customString = _constCharPointer;
-    _result = _customString.c_str() == _constCharPointer;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.c_str(), _constCharPointer) == 0);
 
     String _anotherString = "Another String object";
     _customString = _anotherString;
-    _result = _customString.c_str() == _anotherString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.c_str() , _anotherString.c_str()) == 0);
     
     char _charPointer[] = "Char Pointer";
     _customString = _charPointer;
-    _result = _customString.c_str() == _charPointer;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.c_str() , _charPointer) == 0);
 
     char _char = 'c';
     _customString = _char;
-    _result = _customString.c_str() == std::string(1, _char);
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.c_str() , std::string(1, _char).c_str()) == 0);
 }
 
 TEST_CASE("String contains tests", "[single-file]")
 {
     //  #################### Contains ####################
-
-    std::cout << "Starting contains tests...";
 
     std::string _containsString = "Contains String";
     String _customString = "A check for Contains String boolean function";
@@ -71,8 +61,6 @@ TEST_CASE("String replace tests", "[single-file]")
 {
     //  #################### Replace ####################
 
-    std::cout << "Starting replace tests...";
-
     std::string _replaceThis = "Replacing";
     std::string _withThis = "Replaced";
 
@@ -88,137 +76,115 @@ TEST_CASE("String replace tests", "[single-file]")
     std::string _resultString = "Replaced this q";
 
     String _customString = "Replacing this q";
-    bool _result = _customString.replace(_replaceThis, _withThis).c_str() 
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThis, _withThis).c_str() 
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replaced this q";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThisCPointer, _withThisCPointer).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThisCPointer, _withThisCPointer).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replacing this w";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThisCChar, _withThisCChar).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThisCChar, _withThisCChar).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replacing this w";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThisChar, _withThisChar).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThisChar, _withThisChar).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replaced this q";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThis, _withThisCPointer).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThis, _withThisCPointer).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "w this q";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThis, _withThisCChar).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThis, _withThisCChar).c_str()
+            , _resultString.c_str()) == 0);
 
     _resultString = "Replacing this Replacing";
     _customString = "Replacing this w";
-    _result = _customString.replace(_withThisCChar, _replaceThis).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_withThisCChar, _replaceThis).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "w this q";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThis, _withThisChar).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThis, _withThisChar).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replacing this Replacing";
     _customString = "Replacing this w";
-    _result = _customString.replace(_withThisChar, _replaceThis).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_withThisChar, _replaceThis).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "w this q";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThisCPointer, _withThisCChar).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThisCPointer, _withThisCChar).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replacing this Replacing";
     _customString = "Replacing this w";
-    _result = _customString.replace(_withThisCChar, _replaceThisCPointer).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_withThisCChar, _replaceThisCPointer).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "w this q";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThisCPointer, _withThisChar).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThisCPointer, _withThisChar).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replacing this Replacing";
     _customString = "Replacing this w";
-    _result = _customString.replace(_withThisChar, _replaceThisCPointer).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_withThisChar, _replaceThisCPointer).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replacing this w";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThisCChar, _withThisChar).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThisCChar, _withThisChar).c_str()
+            , _resultString.c_str()) == 0);
     
     // #####
 
     _resultString = "Replaced this q";
     _customString = "Replacing this q";
-    _result = _customString.replace("Replacing", _withThis).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace("Replacing", _withThis).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replaced this q";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThis, "Replaced").c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThis, "Replaced").c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replaced this q";
     _customString = "Replacing this q";
-    _result = _customString.replace("Replacing", _withThisCPointer).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace("Replacing", _withThisCPointer).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replaced this q";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThisCPointer, "Replaced").c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThisCPointer, "Replaced").c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replacing this w";
     _customString = "Replacing this q";
-    _result = _customString.replace("q", _withThisCChar).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace("q", _withThisCChar).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replacing this w";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThisCChar, "w").c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThisCChar, "w").c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replacing this w";
     _customString = "Replacing this q";
-    _result = _customString.replace("q", _withThisChar).c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace("q", _withThisChar).c_str()
+            , _resultString.c_str()) == 0);
     
     _resultString = "Replacing this w";
     _customString = "Replacing this q";
-    _result = _customString.replace(_replaceThisChar, "w").c_str()
-            == _resultString;
-    REQUIRE(_result);
+    REQUIRE(strcmp(_customString.replace(_replaceThisChar, "w").c_str()
+            , _resultString.c_str()) == 0);
 }
 
 TEST_CASE("String split tests", "[single-file]")
@@ -226,8 +192,6 @@ TEST_CASE("String split tests", "[single-file]")
     //  #################### Split ####################
     std::vector<String> _vector;
 
-    std::cout << "Starting split tests...";
-    
 #pragma GCC diagnostic ignored "-Wsign-compare"
 
     String _customString = "This is a space delimited string";
@@ -277,8 +241,6 @@ TEST_CASE("String split tests", "[single-file]")
 
 TEST_CASE("String base C++ function tests", "[single-file]")
 {
-    std::cout << "Starting length and substr tests...";
-
     //  #################### length ####################
     
     String _customString = "0123456789";
@@ -291,103 +253,102 @@ TEST_CASE("String base C++ function tests", "[single-file]")
     
     std::string _resultString = " will be a";
     _customString = "This will be a substring";
-    REQUIRE(_customString.substr(4, 10).c_str() == _resultString);
+    REQUIRE(strcmp(_customString.substr(4, 10).c_str(), 
+                _resultString.c_str()) == 0);
 
     _resultString = "This";
-    REQUIRE(_customString.substr(0, 4).c_str() == _resultString);
+    REQUIRE(strcmp(_customString.substr(0, 4).c_str(), 
+                _resultString.c_str()) == 0);
     
     _resultString = " substring";
-    REQUIRE(_customString.substr(14, _customString.length()).c_str() == _resultString);
+    REQUIRE(strcmp(_customString.substr(14, _customString.length()).c_str(), 
+                _resultString.c_str()) == 0);
 }
 
 TEST_CASE("String plus operator tests", "[single-file]")
 {
     //  #################### operators + ####################
     
-    std::cout << "Starting plus operator tests...";
-
     std::string _resultString = "Str Lit String literal";
     String _firstConcat = "String literal";
     String _secondConcat = "Str Lit " + _firstConcat;
-    REQUIRE(_secondConcat.c_str() == _resultString);
+    REQUIRE(strcmp(_secondConcat.c_str(), _resultString.c_str()) == 0);
 
     _resultString = "String literalstr lit";
     _secondConcat = _firstConcat + "str lit";
-    REQUIRE(_secondConcat.c_str() == _resultString);
+    REQUIRE(strcmp(_secondConcat.c_str(), _resultString.c_str()) == 0);
 
     _resultString = "String literalstr litString literal";
     String _thirdConcat = _secondConcat + _firstConcat;
-    REQUIRE(_secondConcat.c_str() == _resultString);
+    REQUIRE(strcmp(_thirdConcat.c_str(), _resultString.c_str()) == 0);
 
     _resultString = "String literalConst char pointer";
     const char* _concatCCharPointer = "Const char pointer";
     String _fourthConcat = _firstConcat + _concatCCharPointer;
-    REQUIRE(_secondConcat.c_str() == _resultString);
+    REQUIRE(strcmp(_fourthConcat.c_str(), _resultString.c_str()) == 0);
 
     _resultString = "Const char pointerString literal";
     _fourthConcat = _concatCCharPointer + _firstConcat;
-    REQUIRE(_secondConcat.c_str() == _resultString);
+    REQUIRE(strcmp(_fourthConcat.c_str(), _resultString.c_str()) == 0);
 
     _resultString = "String literalc";
     char _concatChar = 'c';
     String _fifthConcat = _firstConcat + _concatChar;
-    REQUIRE(_secondConcat.c_str() == _resultString);
+    REQUIRE(strcmp(_fifthConcat.c_str(), _resultString.c_str()) == 0);
 
     _resultString = "cString literal";
     _fifthConcat = _concatChar + _firstConcat;
-    REQUIRE(_secondConcat.c_str() == _resultString);
+    REQUIRE(strcmp(_fifthConcat.c_str(), _resultString.c_str()) == 0);
 
     _resultString = "ch";
     char _concatOtherChar = 'h';
-    String _sixthConcat = _concatChar + _concatOtherChar;
-    REQUIRE(_secondConcat.c_str() == _resultString);
+    String _sixthConcat = std::string(1, _concatChar) + std::string(1, _concatOtherChar);
+    REQUIRE(strcmp(_sixthConcat.c_str(), _resultString.c_str()) == 0);
     
     _resultString = "String Literal concatenated";
     String _seventhConcat = "String " + std::string("Literal concatenated");
-    REQUIRE(_secondConcat.c_str() == _resultString);
+    REQUIRE(strcmp(_seventhConcat.c_str(), _resultString.c_str()) == 0);
 }
 
 TEST_CASE("String plus-equals operator tests", "[single-file]")
 {
     //  #################### operators += ####################
 
-    std::cout << "Starting plus-equals operator tests...";
-    
     std::string _resultString = "1";
     String _myString = "1";
-    REQUIRE(_myString.c_str() == _resultString);
+    REQUIRE(strcmp(_myString.c_str(), _resultString.c_str()) == 0);
     
     _resultString = "12";
     _myString += "2";
-    REQUIRE(_myString.c_str() == _resultString);
+    REQUIRE(strcmp(_myString.c_str(), _resultString.c_str()) == 0);
     
     _resultString = "123";
     _myString += '3';
-    REQUIRE(_myString.c_str() == _resultString);
+    REQUIRE(strcmp(_myString.c_str(), _resultString.c_str()) == 0);
     
     _resultString = "1234";
     std::string _stringToPlusEquals = "4";
     _myString += _stringToPlusEquals;
-    REQUIRE(_myString.c_str() == _resultString);
+    REQUIRE(strcmp(_myString.c_str(), _resultString.c_str()) == 0);
     
     _resultString = "12345";
     const char* _charPointerToPlusEquals = "5";
     _myString += _charPointerToPlusEquals;
-    REQUIRE(_myString.c_str() == _resultString);
+    REQUIRE(strcmp(_myString.c_str(), _resultString.c_str()) == 0);
     
     _resultString = "123456";
     const char _cCharToPlusEquals = '6';
     _myString += _cCharToPlusEquals;
-    REQUIRE(_myString.c_str() == _resultString);
+    REQUIRE(strcmp(_myString.c_str(), _resultString.c_str()) == 0);
     
     _resultString = "1234567";
     char _charToPlusEquals = '7';
     _myString += _charToPlusEquals;
-    REQUIRE(_myString.c_str() == _resultString);
+    REQUIRE(strcmp(_myString.c_str(), _resultString.c_str()) == 0);
     
     _resultString = "12345678";
     char _charArrayToPlusEquals[] = "8";
     _myString += _charArrayToPlusEquals;
-    REQUIRE(_myString.c_str() == _resultString);
+    REQUIRE(strcmp(_myString.c_str(), _resultString.c_str()) == 0);
 }
 
