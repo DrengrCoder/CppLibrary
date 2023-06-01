@@ -138,14 +138,14 @@ $(TEST_EXECS): make_directories announce_compiling_tests
 ################################################################################
 ############################ Build command recipe's ############################
 
-CURRENT_TEST_TO_BUILD := cli_parser_test
-single_test:
-	$(RM) $(BLD_TEST_DIR)/$(CURRENT_TEST_TO_BUILD)
-	@echo Compiling $(CURRENT_TEST_TO_BUILD)
-	@$(CXX) $(CXXFLAGS) -o $(BLD_TEST_DIR)/$(CURRENT_TEST_TO_BUILD) $(TEST_DIR)/$(CURRENT_TEST_TO_BUILD).cpp
+# CURRENT_TEST_TO_BUILD := string_test
+# single_test:
+# 	$(RM) $(BLD_TEST_DIR)/$(CURRENT_TEST_TO_BUILD)
+# 	@echo Compiling $(CURRENT_TEST_TO_BUILD)
+# 	@$(CXX) $(CXXFLAGS) -o $(BLD_TEST_DIR)/$(CURRENT_TEST_TO_BUILD) $(TEST_DIR)/$(CURRENT_TEST_TO_BUILD).cpp
 
-single_test_and_run: single_test
-	$(BLD_TEST_DIR)/$(CURRENT_TEST_TO_BUILD) -s --reporter console || exit;
+# single_test_and_run: single_test
+# 	$(BLD_TEST_DIR)/$(CURRENT_TEST_TO_BUILD) -s --reporter console || exit;
 
 # Build test files
 tests: $(TEST_EXECS)
