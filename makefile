@@ -180,7 +180,7 @@ rebuild_and_runtests: rebuild run_tests
 
 # Install the files into the includes directory
 install:
-	@echo Installing C++ Files to includes directory
+	@echo Installing C++ Files to \"$(at)\"
 	@mkdir -p $(at)
 	@cp src/* $(at)
 
