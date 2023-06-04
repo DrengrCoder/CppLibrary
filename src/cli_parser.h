@@ -769,7 +769,7 @@ public:
         std::stringstream baseOss;
         baseOss << "Help Information for Argument: \"" << _tags[0] << "\"...\n";
         for (std::string choice : _choicesList) {
-            baseOss << "\n\t" << _tags[0] << "=" << choice;
+            baseOss << "\n\t" << _tags[0] << " " << choice;
         }
         std::cout << baseOss.str() << "\n" << std::endl;
     }
