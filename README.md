@@ -102,7 +102,7 @@ This class allows a developer to quickly define and manage arguments that can be
 
 ### Catch.hpp
 
-This header file allows you to write unit tests for C++ programs and comes from the 'catch2' library. This has been included in the project so be used in another projects as desired, and is also used by the tests in this project.
+This header file allows you to write unit tests for C++ programs and comes from the 'catch2' library. This has been included in the project to be used in another projects as desired, and is also used by the tests in this project.
 
 #### Disclaimer
 The 'catch.hpp' is not something I own or developed, and is part of the 'catch2' library to help developers build and run unit tests in C++ programs. I own no rights to this file and cannot guarantee its stability or security.
