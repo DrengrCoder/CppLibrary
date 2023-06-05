@@ -1156,11 +1156,11 @@ public:
      *                  from int main.
      * @param descr     A description of the program.
      */
-    Parser(int &argc, char **argv, std::string descr){
+    Parser(int &argc, char **argv, std::string descr, std::string vers = "0.0.0.0"){
         std::string firstArg = argv[0];
         std::string exeName = firstArg
             .substr(firstArg.find_last_of('/') + 1, firstArg.size());
-        new(this) Parser(argc, argv, exeName, descr);
+        new(this) Parser(argc, argv, exeName, descr, vers);
     }
 
     /**
@@ -1181,7 +1181,7 @@ public:
      * @param descr     A description of the program.
      * @throw           InvalidArgument if the name string is empty.
      */
-    Parser(int &argc, char **argv, std::string name, std::string descr) noexcept
+    Parser(int &argc, char **argv, std::string name, std::string descr, std::string vers) noexcept
     {
 
         //  Remove leading and trailing whitespace
@@ -1205,9 +1205,7 @@ public:
             descr.substr(firstNotOf, lastNotOf - firstNotOf);
 
         //  Get the version information and store it locally
-        std::stringstream oss;
-        // oss << MAJOR_D << "." << MINOR_D << "." << BUILD_D;
-        _version = oss.str();
+        _version = vers;
 
         //  Cannot use a foreach loop on argv due to the nature of its type
         for (int i = 0; i < argc; i++) {
