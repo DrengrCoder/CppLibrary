@@ -43,9 +43,6 @@ extern class LogSettings LOG_SETTINGS;
  *          is avoided.
  */
 #define TestLogInit LOG_SETTINGS.tests_init();
-/*!
- * Closes the output file stream.
- */
 
 /**
  * @brief Closes the output file stream.
@@ -85,12 +82,12 @@ extern class LogSettings LOG_SETTINGS;
  */
 enum LogType {
 //  Level:             Brief description:          Examples:
-    LT_LL_INFO,    //  Low-level, granular info    This var set to this val
-    LT_INFO,       //  Standard info               Object successfully created
-    LT_DEBUG,      //  Debug informtion            Return value of functions or conditions, reporting values of certain var's in certain places
-    LT_WARN,       //  Warning information         Something occurred that probably shouldn't have, but has not caused any known issue at this point. Warning dialogs should be generated
-    LT_ERROR,      //  Error information           Something bad happened that could have caused the program to crash, but was handled successfully. Error dialogs should be generated
-    LT_FATAL       //  Fatal error information     Something happened that caused the program to crash, and we did not handle it.
+    LT_LL_INFO,    //  Low-level, granular info.   This var set to this val
+    LT_INFO,       //  Standard info.              Object successfully created
+    LT_DEBUG,      //  Debug informtion.           Return value of functions or conditions, reporting values of certain var's in certain places
+    LT_WARN,       //  Warning information.        Something occurred that probably shouldn't have, but has not caused any known issue at this point. Warning dialogs should be generated
+    LT_ERROR,      //  Error information.          Something bad happened that could have caused the program to crash, but was handled successfully. Error dialogs should be generated
+    LT_FATAL       //  Fatal error information.    Something happened that caused the program to crash, and we did not handle it.
 };
 
 /**
