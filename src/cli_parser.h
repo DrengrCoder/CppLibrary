@@ -137,7 +137,10 @@ public:
      *                          Option.
      * @param descr             The description for this Parser Option.
      * @param choices           The list of choices for this Parser Option.
-     * @param defaultValue      The default value for this Parser Option.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags or choices were added to this Parser
      *                          Option because they did not satisfy entry
      *                          conditions. This function has been marked
@@ -172,7 +175,10 @@ public:
      * @param choices           The list of choices for this Parser Option.
      * @param required          True if this argument must exist in the list of
      *                          args, false otherwise.
-     * @param defaultValue      The default value for this Parser Option.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags or choices were added to this Parser
      *                          Option because they did not satisfy entry
      *                          conditions. This function has been marked
@@ -205,7 +211,10 @@ public:
      *                          Parser Option.
      * @param descr             The description for this Parser Option.
      * @param choices           The list of choices for this Parser Option.
-     * @param defaultValue      The default value for this Parser Option.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags or choices were added to this Parser
      *                          Option because they did not satisfy entry
      *                          conditions. This function has been marked
@@ -240,7 +249,10 @@ public:
      * @param choices           The list of choices for this Parser Option.
      * @param required          True if this argument must exist in the list of
      *                          args, false otherwise.
-     * @param defaultValue      The default value for this Parser Option.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags or choices were added to this Parser
      *                          Option because they did not satisfy entry
      *                          conditions. This function has been marked
@@ -276,7 +288,10 @@ public:
      *                          Parser Option.
      * @param descr             The description for this Parser Option.
      * @param choices           The list of choices for this Parser Option.
-     * @param defaultValue      The default value for this Parser Option.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags or choices were added to this Parser
      *                          Option because they did not satisfy entry
      *                          conditions. This function has been marked
@@ -311,7 +326,10 @@ public:
      * @param choices           The list of choices for this Parser Option.
      * @param required          True if this argument must exist in the list of
      *                          args, false otherwise.
-     * @param defaultValue      The default value for this Parser Option.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags or choices were added to this Parser
      *                          Option because they did not satisfy entry
      *                          conditions. This function has been marked
@@ -443,8 +461,14 @@ public:
      * @param descr             The description for this Parser Option.
      * @param valueName         The value name for argument following this
      *                          Option's tags, acting as a brief description for
-     *                          the data.
-     * @param defaultValue      The default value for this Parser Option.
+     *                          the data. If you want to specify this parameter
+     *                          in the constructor with a string literal,
+     *                          surround the string in brackets with
+     *                          'std::string()'.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags were added to this Parser Option
      *                          because they did not satisfy entry conditions.
      *                          This function has been marked 'noexcept' so it
@@ -479,8 +503,14 @@ public:
      *                          args, false otherwise.
      * @param valueName         The value name for argument following this
      *                          Option's tags, acting as a brief description for
-     *                          the data.
-     * @param defaultValue      The default value for this Parser Option.
+     *                          the data. If you want to specify this parameter
+     *                          in the constructor with a string literal,
+     *                          surround the string in brackets with
+     *                          'std::string()'.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags were added to this Parser Option
      *                          because they did not satisfy entry conditions.
      *                          This function has been marked 'noexcept' so it
@@ -512,8 +542,14 @@ public:
      * @param descr             The description for this Parser Option.
      * @param valueName         The value name for argument following this
      *                          Option's tags, acting as a brief description for
-     *                          the data.
-     * @param defaultValue      The default value for this Parser Option.
+     *                          the data. If you want to specify this parameter
+     *                          in the constructor with a string literal,
+     *                          surround the string in brackets with
+     *                          'std::string()'.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags were added to this Parser Option
      *                          because they did not satisfy entry conditions.
      *                          This function has been marked 'noexcept' so it
@@ -548,8 +584,14 @@ public:
      *                          args, false otherwise.
      * @param valueName         The value name for argument following this
      *                          Option's tags, acting as a brief description for
-     *                          the data.
-     * @param defaultValue      The default value for this Parser Option.
+     *                          the data. If you want to specify this parameter
+     *                          in the constructor with a string literal,
+     *                          surround the string in brackets with
+     *                          'std::string()'.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags were added to this Parser Option
      *                          because they did not satisfy entry conditions.
      *                          This function has been marked 'noexcept' so it
@@ -584,8 +626,14 @@ public:
      * @param descr             The description for this Parser Option.
      * @param valueName         The value name for argument following this
      *                          Option's tags, acting as a brief description for
-     *                          the data.
-     * @param defaultValue      The default value for this Parser Option.
+     *                          the data. If you want to specify this parameter
+     *                          in the constructor with a string literal,
+     *                          surround the string in brackets with
+     *                          'std::string()'.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags were added to this Parser Option
      *                          because they did not satisfy entry conditions.
      *                          This function has been marked 'noexcept' so it
@@ -620,8 +668,14 @@ public:
      *                          args, false otherwise.
      * @param valueName         The value name for argument following this
      *                          Option's tags, acting as a brief description for
-     *                          the data.
-     * @param defaultValue      The default value for this Parser Option.
+     *                          the data. If you want to specify this parameter
+     *                          in the constructor with a string literal,
+     *                          surround the string in brackets with
+     *                          'std::string()'.
+     * @param defaultValue      The default value for this Parser Option. If you
+     *                          want to specify this parameter in the
+     *                          constructor with a string literal, surround the
+     *                          string in brackets with 'std::string()'.
      * @throw InvalidArgument   If no tags were added to this Parser Option
      *                          because they did not satisfy entry conditions.
      *                          This function has been marked 'noexcept' so it
