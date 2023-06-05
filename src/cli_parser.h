@@ -1155,6 +1155,7 @@ public:
      * @param argv      The char pointer array of arguments. 'argv' is pulled in
      *                  from int main.
      * @param descr     A description of the program.
+     * @param vers      The version number for the project.
      */
     Parser(int &argc, char **argv, std::string descr, std::string vers = "0.0.0.0"){
         std::string firstArg = argv[0];
@@ -1179,6 +1180,7 @@ public:
      *                  from int main.
      * @param name      A name for the program.
      * @param descr     A description of the program.
+     * @param vers      The version number for the project.
      * @throw           InvalidArgument if the name string is empty.
      */
     Parser(int &argc, char **argv, std::string name, std::string descr, std::string vers) noexcept
