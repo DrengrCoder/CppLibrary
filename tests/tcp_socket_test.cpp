@@ -51,7 +51,7 @@ TEST_CASE("Connect client to server", "[single-file]")
 {
     REQUIRE(client->Connect(PORT));
 
-    REQUIRE(client->GetClientFd() > -1);
+    REQUIRE(client->GetServerFd() > -1);
 
     serverClient = new TcpClient(server->NextConnection());
 
@@ -69,19 +69,21 @@ TEST_CASE("Send data across a server and socket object", "[single=file]")
 
     usleep(1000000);
 
-    REQUIRE(serverClient->Read() == client_msg_size);
+    char output_buffer[1000];
 
-    std::string received_msg = serverClient->GetBuffer();
+    REQUIRE(serverClient->Read(output_buffer, 1000) == client_msg_size);
 
-    REQUIRE(strcmp(received_msg.c_str(), client_msg.c_str()) == 0);
+    REQUIRE(strcmp(output_buffer, client_msg.c_str()) == 0);
 
+    ////////////////////////////////////////////////////////////////////////////
+    
     REQUIRE(serverClient->Send(server_msg.c_str()) == server_msg_size);
 
     usleep(1000000);
 
-    REQUIRE(client->Read() == server_msg_size);
+    memset(output_buffer, '\0', 1000);
 
-    received_msg = client->GetBuffer();
+    REQUIRE(client->Read(output_buffer, 1000) == server_msg_size);
 
-    REQUIRE(strcmp(received_msg.c_str(), server_msg.c_str()) == 0);
+    REQUIRE(strcmp(output_buffer, server_msg.c_str()) == 0);
 }
