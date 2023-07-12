@@ -56,6 +56,10 @@
 # Removal flags
 RM := rm -rf
 
+# Define a single test file to build, defined without the '.cpp' extension so it
+#	can build the correctly named binary
+file ?= 
+
 ################################################################################
 ############################# Directory variables ##############################
 
