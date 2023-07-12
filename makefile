@@ -152,7 +152,15 @@ $(TEST_EXECS): make_directories announce_compiling_tests
 # 	$(BLD_TEST_DIR)/$(CURRENT_TEST_TO_BUILD) -s --reporter console || exit;
 
 # Build test files
-tests: $(TEST_EXECS)
+tests: make_directories announce_compiling_tests
+	@if [$(file) == ""]; then \
+		for exec in $(TEST_EXECS); do \
+			echo Building \"$$exec\" executable...; \
+			$(CXX) $(CXXFLAGS) -o $(BLD_TEST_DIR)/$$exec $(TEST_DIR)/$$exec.cpp; \
+		done \
+	else \
+		$(CXX) $(CXXFLAGS) -o $(BLD_TEST_DIR)/$(file) $(TEST_DIR)/$(file).cpp; \
+	fi
 	@echo Finished compiling tests, see output for details.
 	@echo "####################################################################"
 
