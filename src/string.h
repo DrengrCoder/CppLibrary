@@ -66,6 +66,8 @@ private:
      */
     char *_str;
 
+    const std::string WHITESPACE = " \n\r\t\f\v";
+ 
     //  ##### Match to other overloading operators #####
 
     /**
@@ -540,6 +542,53 @@ public:
     bool contains(const std::string content) {
         std::string str = _str;
         return str.find(content) != std::string::npos;
+    }
+
+    String ltrim(){
+        std::string s = _str;
+        size_t start = s.find_first_not_of(WHITESPACE);
+        return (start == std::string::npos ? "" : s.substr(start));
+    }
+
+    String rtrim(){
+        std::string s = _str;
+        size_t end = s.find_last_not_of(WHITESPACE);
+        return (end == std::string::npos ? "" : s.substr(0, end + 1));
+    }
+
+    String trim(){
+        std::string s = _str;
+        auto start = s.begin();
+        while (start != s.end() && std::isspace(*start)){
+            start++;
+        }
+
+        auto end = s.end();
+        do {
+            end--;
+        } while (std::distance(start, end) > 0 && std::isspace(*end));
+
+        return std::string(start, end + 1);
+    }
+
+    String to_lower(){
+        std::string s = _str;
+        for (int i = 0; s[i] != '\0'; i++){
+            if (s[i] >= 'A' && s[i] <= 'Z'){
+                s[i] = s[i] + 32;
+            }
+        }
+        return s;
+    }
+
+    String to_upper(){
+        std::string s = _str;
+        for (int i = 0; s[i] != '\0'; i++){
+            if (s[i] >= 'a' && s[i] <= 'z'){
+                s[i] = s[i] - 32;
+            }
+        }
+        return s;
     }
 
 };
