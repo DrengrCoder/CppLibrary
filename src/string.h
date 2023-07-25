@@ -66,6 +66,8 @@ private:
      */
     char *_str;
 
+    const std::string WHITESPACE = " \n\r\t\f\v";
+
     //  ##### Match to other overloading operators #####
 
     /**
