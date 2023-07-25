@@ -544,6 +544,33 @@ public:
         return str.find(content) != std::string::npos;
     }
 
+    String ltrim(){
+        std::string s = _str;
+        size_t start = s.find_first_not_of(WHITESPACE);
+        return (start == std::string::npos ? "" : s.substr(start));
+    }
+
+    String rtrim(){
+        std::string s = _str;
+        size_t end = s.find_last_not_of(WHITESPACE);
+        return (end == std::string::npos ? "" : s.substr(0, end + 1));
+    }
+
+    String trim(){
+        std::string s = _str;
+        auto start = s.begin();
+        while (start != s.end() && std::isspace(*start)){
+            start++;
+        }
+
+        auto end = s.end();
+        do {
+            end--;
+        } while (std::distance(start, end) > 0 && std::isspace(*end));
+
+        return std::string(start, end + 1);
+    }
+
 };
 
 
