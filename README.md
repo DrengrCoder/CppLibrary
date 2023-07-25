@@ -105,6 +105,7 @@ This class allows a developer to quickly define and manage arguments that can be
 This header file allows you to write unit tests for C++ programs and comes from the 'catch2' library. This has been included in the project to be used in another projects as desired, and is also used by the tests in this project.
 
 #### Disclaimer
+
 The 'catch.hpp' is not something I own or developed, and is part of the 'catch2' library to help developers build and run unit tests in C++ programs. I own no rights to this file and cannot guarantee its stability or security.
 
 ## Dependencies
@@ -112,6 +113,7 @@ The 'catch.hpp' is not something I own or developed, and is part of the 'catch2'
 There are no specific dependencies other than what is available in the base C++ language and other files within this project.
 
 ### cli_parser.h
+
 The cli parser requires the log class to print out to `std::cout` and text files, although the log lines can be commented out or disabled, and the C++ utilities class for access to the function that counts occurrences of a string within another string. The way you define the logger in your code will determine how the cli parser prints log information.
 
 ## Installation and Build steps

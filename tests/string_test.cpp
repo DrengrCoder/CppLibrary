@@ -367,4 +367,15 @@ TEST_CASE("String trim test", "[single-file]")
     REQUIRE(strcmp(_string.c_str(), "   This is a string with leading and trailing spaces    ") == 0);
 }
 
+TEST_CASE("String to lower and to upper test", "[single-file]")
+{
+    String _string = "ThIs is A string WitH UPPER AnD lower CaSe ChArS";
+    String _result = _string.to_lower();
+    REQUIRE(strcmp(_result.c_str(), "this is a string with upper and lower case chars") == 0);
+
+    _result = _string.to_upper();
+    REQUIRE(strcmp(_result.c_str(), "THIS IS A STRING WITH UPPER AND LOWER CASE CHARS") == 0);
+    
+    REQUIRE(strcmp(_string.c_str(), "ThIs is A string WitH UPPER AnD lower CaSe ChArS") == 0);
+}
 

@@ -67,7 +67,7 @@ private:
     char *_str;
 
     const std::string WHITESPACE = " \n\r\t\f\v";
-
+ 
     //  ##### Match to other overloading operators #####
 
     /**
@@ -569,6 +569,26 @@ public:
         } while (std::distance(start, end) > 0 && std::isspace(*end));
 
         return std::string(start, end + 1);
+    }
+
+    String to_lower(){
+        std::string s = _str;
+        for (int i = 0; s[i] != '\0'; i++){
+            if (s[i] >= 'A' && s[i] <= 'Z'){
+                s[i] = s[i] + 32;
+            }
+        }
+        return s;
+    }
+
+    String to_upper(){
+        std::string s = _str;
+        for (int i = 0; s[i] != '\0'; i++){
+            if (s[i] >= 'a' && s[i] <= 'z'){
+                s[i] = s[i] - 32;
+            }
+        }
+        return s;
     }
 
 };
