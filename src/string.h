@@ -544,18 +544,27 @@ public:
         return str.find(content) != std::string::npos;
     }
 
+    /**
+     * Return a new String, trimming the leading (left-side) whitespace chars from the string.
+     */
     String ltrim(){
         std::string s = _str;
         size_t start = s.find_first_not_of(WHITESPACE);
         return (start == std::string::npos ? "" : s.substr(start));
     }
 
+    /**
+     * Return a new String, trimming the trailing (left-side) whitespace chars from the string.
+     */
     String rtrim(){
         std::string s = _str;
         size_t end = s.find_last_not_of(WHITESPACE);
         return (end == std::string::npos ? "" : s.substr(0, end + 1));
     }
 
+    /**
+     * Return a new String, trimming the leading and trailing whitespace char's from the string.
+     */
     String trim(){
         std::string s = _str;
         auto start = s.begin();
@@ -571,6 +580,9 @@ public:
         return std::string(start, end + 1);
     }
 
+    /**
+     * Return a new String, converted to lower case char's.
+     */
     String to_lower(){
         std::string s = _str;
         for (int i = 0; s[i] != '\0'; i++){
@@ -581,6 +593,9 @@ public:
         return s;
     }
 
+    /**
+     * Return a new String, converted to upper case char's.
+     */
     String to_upper(){
         std::string s = _str;
         for (int i = 0; s[i] != '\0'; i++){
