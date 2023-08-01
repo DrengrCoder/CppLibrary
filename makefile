@@ -66,7 +66,7 @@ file ?=
 # Install directory
 src_at ?= /usr/local/include/dylanclibs
 bin_at ?= /usr/bin/
-lint_config_at ?= /use/local/bin/lint_config
+lint_config_at ?= /usr/local/bin/lint_config
 
 # Directories
 #	Base directories
