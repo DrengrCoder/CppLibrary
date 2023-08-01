@@ -40,7 +40,7 @@ public:
      *                      failed to set.
      */
     TcpServer(){
-        log << "Initialise new TCP server object...";
+        clog << "Initialise new TCP server object...";
 
         _serverFd = socket(AF_INET, SOCK_STREAM, 0);
         if (_serverFd < 0){
@@ -66,7 +66,7 @@ public:
         _address.sin_family = AF_INET;
         _address.sin_addr.s_addr = INADDR_ANY;
 
-        log << "TCP server object initialised.";
+        clog << "TCP server object initialised.";
     }
 
     /**
@@ -98,7 +98,7 @@ public:
      * @throw runtime_error if binding the address to the socket fails.
      */
     bool StartListening(const int portNumber){
-        log << "Start listening on " << portNumber << "...";
+        clog << "Start listening on " << portNumber << "...";
 
         _address.sin_port = htons(portNumber);
 
@@ -135,7 +135,7 @@ public:
      *          to accept the new connection.
      */
     int NextConnection(){
-        log << "Accepting next connection in queue...";
+        clog << "Accepting next connection in queue...";
 
 #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
         int newSocket = accept(_serverFd, (struct sockaddr*)&_address, 

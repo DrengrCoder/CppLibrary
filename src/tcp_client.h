@@ -39,7 +39,7 @@ public:
      *                      receive a file descriptor.
      */
     TcpClient(){
-        log << "Initialise new TCP client object...";
+        clog << "Initialise new TCP client object...";
 
         _socketFd = socket(AF_INET, SOCK_STREAM, 0);
         if (_socketFd < 0){
@@ -53,7 +53,7 @@ public:
 
         _address.sin_family = AF_INET;
 
-        log << "TCP socket object initialised.";
+        clog << "TCP socket object initialised.";
     }
 
     /**
@@ -74,12 +74,12 @@ public:
      * @param sockFd    The socket file descriptor value.
      */
     TcpClient(const int sockFd){
-        log << "Storing ref to pre-existing socket file descriptor: " << sockFd
+        clog << "Storing ref to pre-existing socket file descriptor: " << sockFd
             << "...";
 
         _socketFd = sockFd;
 
-        log << "TCP client object initialised with file descriptor: " << _socketFd
+        clog << "TCP client object initialised with file descriptor: " << _socketFd
             << ".";
     }
 
@@ -105,7 +105,7 @@ public:
      * @return false        otherwise.
      */
     bool Connect(const int portNumber, const char *ip = "127.0.0.1"){
-        log << "Connecting to " << ip << ":" << portNumber << "...";
+        clog << "Connecting to " << ip << ":" << portNumber << "...";
 
         _address.sin_port = htons(portNumber);
 
@@ -131,7 +131,7 @@ public:
             return false;
         }
 
-        log << "Connected on " << ip << ":" << portNumber << ".";
+        clog << "Connected on " << ip << ":" << portNumber << ".";
         return true;
     }
 
@@ -161,7 +161,7 @@ public:
         } else if (bytes == 0){
             wlog << "No bytes were read.";
         } else {
-            log << bytes << " bytes read.";
+            clog << bytes << " bytes read.";
         }
 
         return bytes;
@@ -191,7 +191,7 @@ public:
         } else if (bytes == 0){
             wlog << "No bytes were sent.";
         } else {
-            log << bytes << " bytes sent: " << input;
+            clog << bytes << " bytes sent: " << input;
         }
 
         return bytes;
