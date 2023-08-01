@@ -64,7 +64,9 @@ file ?=
 ############################# Directory variables ##############################
 
 # Install directory
-at ?= /usr/local/include/dylanclibs
+src_at ?= /usr/local/include/dylanclibs
+bin_at ?= /usr/bin/
+lint_config_at ?= /usr/local/bin/lint_config
 
 # Directories
 #	Base directories
@@ -192,9 +194,15 @@ rebuild_and_runtests: rebuild run_tests
 
 # Install the files into the includes directory
 install:
-	@echo Installing C++ Files to \"$(at)\"
-	@mkdir -p $(at)
-	@cp src/* $(at)
+	@echo Installing C++ Files to \"$(src_at)\"
+	@mkdir -p $(src_at)
+	@cp src/* $(src_at)
+	@echo Installing custom binaries to \"$(bin_at)\"
+	@mkdir -p $(bin_at)
+	@cp bin/* $(bin_at)
+	@echo Moving lint config files to \"$(lint_config_at)\"
+	@mkdir -p $(lint_config_at)
+	@cp lint_config/* $(lint_config_at)
 
 # Run test files
 #	This assumes the test files have already been built by some other command.
@@ -227,4 +235,12 @@ clear_log_files:
 announce_compiling_tests:
 	@echo "####################################################################"
 	@echo Compiling tests...
+
+validate_cpp_lint:
+	@echo "####################################################################"
+	@echo Validating C++ code via \"cppnamelint\"...
+	for cppfile in $(SRCS); do \
+		cppnamelint check $$cppfile -config /usr/local/bin/lint_config/dylan_convention.toml; \
+	done
+	@echo "####################################################################"
 
