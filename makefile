@@ -200,7 +200,7 @@ install:
 	@echo Installing custom binaries to \"$(bin_at)\"
 	@mkdir -p $(bin_at)
 	@cp bin/* $(bin_at)
-	@echo Moving lint config files to \"$(lint_config_at)"
+	@echo Moving lint config files to \"$(lint_config_at)\"
 	@mkdir -p $(lint_config_at)
 	@cp lint_config/* $(lint_config_at)
 
