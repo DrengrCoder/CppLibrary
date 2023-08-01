@@ -236,3 +236,11 @@ announce_compiling_tests:
 	@echo "####################################################################"
 	@echo Compiling tests...
 
+validate_cpp_lint:
+	@echo "####################################################################"
+	@echo Validating C++ code via \"cppnamelint\"...
+	for cppfile in $(SRCS); do \
+		cppnamelint check $$cppfile -config /usr/local/bin/lint_config/dylan_convention.toml; \
+	done
+	@echo "####################################################################"
+
