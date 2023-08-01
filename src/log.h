@@ -51,7 +51,7 @@ extern class LogSettings LOG_SETTINGS;
 /**
  * @brief log << "LT_LL_INFO type";
  */
-#define log Log(LT_LL_INFO, __FILE__, __LINE__)
+#define clog Log(LT_LL_INFO, __FILE__, __LINE__)
 /**
  * @brief ilog << "LT_INFO type";
  */
