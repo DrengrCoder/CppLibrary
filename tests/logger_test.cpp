@@ -96,7 +96,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
     std::cout << "#########################################\n";
 
     LOG_SETTINGS.ls_selected_level = LT_LL_INFO;
-    log << "A test low level log line.";
+    clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
     wlog << "A test warn level log line.";
@@ -106,7 +106,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
     std::cout << "#########################################\n";
 
     LOG_SETTINGS.ls_selected_level = LT_INFO;
-    log << "A test low level log line.";
+    clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
     wlog << "A test warn level log line.";
@@ -116,7 +116,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
     std::cout << "#########################################\n";
 
     LOG_SETTINGS.ls_selected_level = LT_DEBUG;
-    log << "A test low level log line.";
+    clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
     wlog << "A test warn level log line.";
@@ -126,7 +126,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
     std::cout << "#########################################\n";
 
     LOG_SETTINGS.ls_selected_level = LT_WARN;
-    log << "A test low level log line.";
+    clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
     wlog << "A test warn level log line.";
@@ -136,7 +136,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
     std::cout << "#########################################\n";
 
     LOG_SETTINGS.ls_selected_level = LT_ERROR;
-    log << "A test low level log line.";
+    clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
     wlog << "A test warn level log line.";
@@ -146,7 +146,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
     std::cout << "#########################################\n";
 
     LOG_SETTINGS.ls_selected_level = LT_FATAL;
-    log << "A test low level log line.";
+    clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
     wlog << "A test warn level log line.";
