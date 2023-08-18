@@ -7,7 +7,7 @@
 
 ##### Terminal command list #####
 
-### Defualt commands from template makefile ###
+### Default commands from template makefile ###
 # make
 #	Builds the first target it finds, which should be declared under the 'Main 
 #	build recipe' heading. This command simply looks for the first command in
