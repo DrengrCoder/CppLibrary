@@ -187,7 +187,11 @@ rebuild_and_runtests: rebuild run_tests
 install:
 	@echo Installing C++ Files to \"$(src_at)\"
 	@mkdir -p $(src_at)
-	@cp src/* $(src_at)
+	@cp src/*.h* $(src_at)
+	@echo Installing third party libraries to local include directory
+	@cp src/RapidXML/* /usr/local/include
+	@cp -r src/nlohmann /usr/local/include
+	@cp -r src/catch2 /usr/local/include
 	@echo Installing custom binaries to \"$(bin_at)\"
 	@mkdir -p $(bin_at)
 	@cp bin/* $(bin_at)
