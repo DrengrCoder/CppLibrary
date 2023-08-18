@@ -191,6 +191,7 @@ install:
 	@echo Installing third party libraries to local include directory
 	@cp src/RapidXML/* /usr/local/include
 	@cp -r src/nlohmann /usr/local/include
+	@cp -r src/catch2 /usr/local/include
 	@echo Installing custom binaries to \"$(bin_at)\"
 	@mkdir -p $(bin_at)
 	@cp bin/* $(bin_at)
