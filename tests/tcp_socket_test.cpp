@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 
-#include "../src/catch.hpp"
+#include "../src/catch2/catch.hpp"
 #include "../src/tcp_client.h"
 #include "../src/tcp_server.h"
 
@@ -19,7 +19,7 @@ TEST_CASE("Initialise Logger", "[single-file]")
     LOG_SETTINGS.ls_print_to_file = false;
     LOG_SETTINGS.ls_selected_level = LT_INFO;
     TestLogInit;
-    log << "Logger initialised";
+    clog << "Logger initialised";
 }
 
 TEST_CASE("Initialising server object", "[single-file]")

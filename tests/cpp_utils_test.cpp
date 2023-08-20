@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 
-#include "../src/catch.hpp"
+#include "../src/catch2/catch.hpp"
 #include "../src/cpp_utilities.h"
 
 TEST_CASE("C++ Utilities elapsed time test", "[single-file]")
