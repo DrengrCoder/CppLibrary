@@ -51,28 +51,28 @@ extern class LogSettings LOG_SETTINGS;
 /**
  * @brief log << "LT_LL_INFO type";
  */
-#define clog Log(LT_LL_INFO, __FILE__, __LINE__)
+#define clog Log(LogType::LT_LL_INFO, __FILE__, __LINE__)
 /**
  * @brief ilog << "LT_INFO type";
  */
-#define ilog Log(LT_INFO, __FILE__, __LINE__)
+#define ilog Log(LogType::LT_INFO, __FILE__, __LINE__)
 /**
  * @brief dlog << "LT_DEBUG type";
  */
-#define dlog Log(LT_DEBUG, __FILE__, __LINE__)
+#define dlog Log(LogType::LT_DEBUG, __FILE__, __LINE__)
 /**
  * @brief wlog << "LT_WARN type";
  * 
  */
-#define wlog Log(LT_WARN, __FILE__, __LINE__)
+#define wlog Log(LogType::LT_WARN, __FILE__, __LINE__)
 /**
  * @brief elog << "LT_ERROR type";
  */
-#define elog Log(LT_ERROR, __FILE__, __LINE__)
+#define elog Log(LogType::LT_ERROR, __FILE__, __LINE__)
 /**
  * @brief flog << "LT_FATAL type";
  */
-#define flog Log(LT_FATAL, __FILE__, __LINE__)
+#define flog Log(LogType::LT_FATAL, __FILE__, __LINE__)
 
 /**
  * @brief   Logging levels enumerator, for label printing and including / 
@@ -80,7 +80,7 @@ extern class LogSettings LOG_SETTINGS;
  *          arguments.
  * 
  */
-enum LogType {
+enum class LogType {
 //  Level:             Brief description:          Examples:
     LT_LL_INFO,    //  Low-level, granular info.   This var set to this val
     LT_INFO,       //  Standard info.              Object successfully created
@@ -142,7 +142,7 @@ public:
      *          file (and the conosle when in an IDE). By default, LL_INFO for
      *          all log lines.
      */
-    LogType ls_selected_level = LT_LL_INFO;
+    LogType ls_selected_level = LogType::LT_LL_INFO;
 
     /**
      * @brief   True if you want to log to the working directory, false
@@ -446,7 +446,7 @@ private:
      * @brief   This Log instance's LogType level.
      * 
      */
-    LogType l_level = LT_LL_INFO;
+    LogType l_level = LogType::LT_LL_INFO;
 
     /**
      * @brief   Prefix the Date and Time as well as file name and line number
@@ -540,17 +540,17 @@ private:
      */
     std::string LevelLabel() {
         switch (l_level) {
-            case LT_LL_INFO:
+            case LogType::LT_LL_INFO:
                 return "LOW-INFO";
-            case LT_INFO:
+            case LogType::LT_INFO:
                 return "INFO";
-            case LT_DEBUG:
+            case LogType::LT_DEBUG:
                 return "DEBUG";
-            case LT_WARN:
+            case LogType::LT_WARN:
                 return "WARN";
-            case LT_ERROR:
+            case LogType::LT_ERROR:
                 return "ERROR";
-            case LT_FATAL:
+            case LogType::LT_FATAL:
                 return "FATAL";
             default:
                 return "";

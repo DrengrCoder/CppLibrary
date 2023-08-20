@@ -55,35 +55,35 @@ TEST_CASE("Set log type enum var", "[single-file]")
 {    
     //  Set logtype
 
-    LogType lt = LT_LL_INFO;
-    LOG_SETTINGS.ls_selected_level = LT_LL_INFO;
+    LogType lt = LogType::LT_LL_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_LL_INFO;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 
-    lt = LT_INFO;
-    LOG_SETTINGS.ls_selected_level = LT_INFO;
+    lt = LogType::LT_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_INFO;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 
-    lt = LT_DEBUG;
-    LOG_SETTINGS.ls_selected_level = LT_DEBUG;
+    lt = LogType::LT_DEBUG;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_DEBUG;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 
-    lt = LT_WARN;
-    LOG_SETTINGS.ls_selected_level = LT_WARN;
+    lt = LogType::LT_WARN;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_WARN;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 
-    lt = LT_ERROR;
-    LOG_SETTINGS.ls_selected_level = LT_ERROR;
+    lt = LogType::LT_ERROR;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_ERROR;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 
-    lt = LT_FATAL;
-    LOG_SETTINGS.ls_selected_level = LT_FATAL;
+    lt = LogType::LT_FATAL;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_FATAL;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 }
 
 TEST_CASE("Test log line macro's", "[single-file]")
 {
     //  Reset defaults
-    LOG_SETTINGS.ls_selected_level = LT_LL_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_LL_INFO;
     LOG_SETTINGS.ls_use_working_dir = false;
     LOG_SETTINGS.ls_overwrite = false;
     LOG_SETTINGS.ls_print_to_file = true;
@@ -95,7 +95,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LT_LL_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_LL_INFO;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -105,7 +105,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LT_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_INFO;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -115,7 +115,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LT_DEBUG;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_DEBUG;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -125,7 +125,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LT_WARN;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_WARN;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -135,7 +135,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LT_ERROR;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_ERROR;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -145,7 +145,7 @@ TEST_CASE("Test log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LT_FATAL;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_FATAL;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
