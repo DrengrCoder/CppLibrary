@@ -192,7 +192,7 @@ install:
 	@cp src/RapidXML/* /usr/local/include
 	@cp -r src/nlohmann /usr/local/include
 	@cp -r src/catch2 /usr/local/include
-	@echo Installing custom binaries to \"$(bin_at)\"
+	@echo Installing binaries to \"$(bin_at)\"
 	@mkdir -p $(bin_at)
 	@cp bin/* $(bin_at)
 	@echo Moving lint config files to \"$(lint_config_at)\"
