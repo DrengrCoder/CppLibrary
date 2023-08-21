@@ -7,7 +7,7 @@
 
 ##### Terminal command list #####
 
-### Defualt commands from template makefile ###
+### Default commands from template makefile ###
 # make
 #	Builds the first target it finds, which should be declared under the 'Main 
 #	build recipe' heading. This command simply looks for the first command in
@@ -187,8 +187,12 @@ rebuild_and_runtests: rebuild run_tests
 install:
 	@echo Installing C++ Files to \"$(src_at)\"
 	@mkdir -p $(src_at)
-	@cp src/* $(src_at)
-	@echo Installing custom binaries to \"$(bin_at)\"
+	@cp src/*.h* $(src_at)
+	@echo Installing third party libraries to local include directory
+	@cp src/RapidXML/* /usr/local/include
+	@cp -r src/nlohmann /usr/local/include
+	@cp -r src/catch2 /usr/local/include
+	@echo Installing binaries to \"$(bin_at)\"
 	@mkdir -p $(bin_at)
 	@cp bin/* $(bin_at)
 	@echo Moving lint config files to \"$(lint_config_at)\"

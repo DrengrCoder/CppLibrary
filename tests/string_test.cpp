@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 
-#include "../src/catch.hpp"
+#include "../src/catch2/catch.hpp"
 #include "../src/string.h"
 
 TEST_CASE("String assignment tests", "[single-file]")
