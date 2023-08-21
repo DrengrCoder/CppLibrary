@@ -958,8 +958,8 @@ namespace HTTP
             clog << "Initiating URI request...";
             const std::string requestData = EncodeHtml(uri, method.ToStdString(), body, headerFields);
 
-            clog << "Constructed request html: " << requestData
-                << ", beginning TCP Client initialisation and comms...";
+            clog << "Constructed request html: \"" << requestData
+                << "\", beginning TCP Client initialisation and comms...";
             TcpClient *client = new TcpClient();
             
             //  Capture the start time before a connection attempt is made for
