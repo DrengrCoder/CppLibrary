@@ -154,60 +154,6 @@ static int CountOccurrences(std::string stringToSearch, std::string target,
     return occurrences;
 }
 
-/**
- * @brief Handling POSIX signals
- * 
- * Include:
- *      #include <csignal>
- * 
- * Add handlers to POSIX signals:
- *      signal(SIGINT, signalHandler);
- *      signal(SIGILL, signalHandler);
- *      signal(SIGABRT, signalHandler);
- *      signal(SIGFPE, signalHandler);
- *      signal(SIGKILL, signalHandler);
- *      signal(SIGSEGV, signalHandler);
- *      signal(SIGTERM, signalHandler);
- * 
- * Signal handler function:
- *      bool __PROGRAM_RUNNING = true;
- *      void signalHandler(int signum){
- *
- *          if (signum == SIGINT){          //  2
- *              dlog << "SIGINT Received.";
- *              log << "Typically an interrupt key from keyboard.";
- *          }
- *          else if (signum == SIGILL){    //  4
- *              dlog << "SIGILL Received.";
- *          }
- *          else if (signum == SIGABRT){   //  6
- *              dlog << "SIGABRT Received.";
- *              log << "Typically a system or program error from unhandled exceptions.";
- *          }
- *          else if (signum == SIGFPE){    //  8
- *              dlog << "SIGFPE Received.";
- *              log << "Typically an erroneous arithmetic operation.";
- *          }
- *          else if (signum == SIGKILL){   //  9
- *              dlog << "SIGKILL Received.";
- *              log << "Typically a kill command received from outside the program.";
- *          }
- *          else if (signum == SIGSEGV){   //  11
- *              dlog << "SIGSEGV Received: EMERGENCY EXIT PROGRAM NOW.";
- *              log << "Segmentation fault, exiting program immediately.";
- *              exit(0);
- *          }
- *          else if (signum == SIGTERM){   //  15
- *              dlog << "SIGTERM Received.";
- *              log << "Typically a terminate command received from outside the program.";
- *          }
- *
- *          __PROGRAM_RUNNING = false;
- *      }
- *
- * 
- */
-
 #pragma GCC diagnostic pop
 
 #endif  //  __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_CPP_UTILITIES_H__
