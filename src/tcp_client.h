@@ -5,11 +5,11 @@
 #ifndef __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
 #define __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
 
-// #include <sys/socket.h>
-// #include <netdb.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #include <netinet/in.h>
-// #include <stdio.h>
-// #include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <arpa/inet.h>
 
 #include "log.h"

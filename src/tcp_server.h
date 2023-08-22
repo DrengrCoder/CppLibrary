@@ -5,8 +5,8 @@
 #ifndef __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_server_H__
 #define __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_server_H__
 
-// #include <sys/socket.h>
-// #include <netdb.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #include <netinet/in.h>
 
 #include "log.h"
