@@ -7,9 +7,9 @@
 #include <chrono>
 #include <algorithm>
 
-#include "dylanclibs/log.h"
-#include "dylanclibs/tcp_client.h"
-#include "dylanclibs/string.h"
+#include "log.h"
+#include "tcp_client.h"
+#include "string.h"
 
 namespace HTTP
 {
