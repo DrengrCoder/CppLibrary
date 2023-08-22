@@ -862,7 +862,7 @@ namespace HTTP
                 _uri(ParseUri(uriString.begin(), uriString.end())),
                 _ipv(ipv)
         { clog << "A HTTP Request object has been initiailised."; }
-        
+
         /**
          * @brief   Construct a new HTTP Request object.
          * 
@@ -871,7 +871,7 @@ namespace HTTP
         explicit Request(const TcpClient::InternetProtocol::Value ipv = TcpClient::InternetProtocol::Value::v4):
                 _ipv(ipv)
         { clog << "A HTTP Request object has been initiailised."; }
-        
+
         /**
          * Initiate a HTTP request to URISTRING at IP of type METHOD, optionally
          * sending a request BODY with configurable HEADERFIELDS and an optional
