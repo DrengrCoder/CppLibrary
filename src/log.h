@@ -51,28 +51,28 @@ extern class LogSettings LOG_SETTINGS;
 /**
  * @brief log << "LT_LL_INFO type";
  */
-#define clog Log(LogType::LT_LL_INFO, __FILE__, __LINE__)
+#define clog Log(LogType::Value::LT_LL_INFO, __FILE__, __LINE__)
 /**
  * @brief ilog << "LT_INFO type";
  */
-#define ilog Log(LogType::LT_INFO, __FILE__, __LINE__)
+#define ilog Log(LogType::Value::LT_INFO, __FILE__, __LINE__)
 /**
  * @brief dlog << "LT_DEBUG type";
  */
-#define dlog Log(LogType::LT_DEBUG, __FILE__, __LINE__)
+#define dlog Log(LogType::Value::LT_DEBUG, __FILE__, __LINE__)
 /**
  * @brief wlog << "LT_WARN type";
  * 
  */
-#define wlog Log(LogType::LT_WARN, __FILE__, __LINE__)
+#define wlog Log(LogType::Value::LT_WARN, __FILE__, __LINE__)
 /**
  * @brief elog << "LT_ERROR type";
  */
-#define elog Log(LogType::LT_ERROR, __FILE__, __LINE__)
+#define elog Log(LogType::Value::LT_ERROR, __FILE__, __LINE__)
 /**
  * @brief flog << "LT_FATAL type";
  */
-#define flog Log(LogType::LT_FATAL, __FILE__, __LINE__)
+#define flog Log(LogType::Value::LT_FATAL, __FILE__, __LINE__)
 
 /**
  * @brief   Logging levels enumerator, for label printing and including / 
@@ -80,14 +80,128 @@ extern class LogSettings LOG_SETTINGS;
  *          arguments.
  * 
  */
-enum class LogType {
-//  Level:             Brief description:          Examples:
-    LT_LL_INFO,    //  Low-level, granular info.   This var set to this val
-    LT_INFO,       //  Standard info.              Object successfully created
-    LT_DEBUG,      //  Debug informtion.           Return value of functions or conditions, reporting values of certain var's in certain places
-    LT_WARN,       //  Warning information.        Something occurred that probably shouldn't have, but has not caused any known issue at this point. Warning dialogs should be generated
-    LT_ERROR,      //  Error information.          Something bad happened that could have caused the program to crash, but was handled successfully. Error dialogs should be generated
-    LT_FATAL       //  Fatal error information.    Something happened that caused the program to crash, and we did not handle it.
+class LogType{
+public:
+    enum class Value : uint8_t { LT_LL_INFO, LT_INFO, LT_DEBUG, LT_WARN, LT_ERROR, LT_FATAL };
+    LogType() = default;
+    constexpr LogType(Value aState) : value(aState){}
+    /**
+     * Delete the default bool operator.
+     */
+    explicit operator bool() const = delete;
+    /**
+     * 'is equals' operator.
+     */
+    constexpr bool operator == (LogType a) const { return value == a.value; }
+    /**
+     * 'is not equals' operator.
+     */
+    constexpr bool operator != (LogType a) const { return value != a.value; }
+
+    /**
+     * Get the enumeration values in a std::vector.
+     */
+    static std::vector<Value> GetValues(){
+        std::vector<Value> result;
+        result.push_back(Value::LT_LL_INFO);
+        result.push_back(Value::LT_INFO);
+        result.push_back(Value::LT_DEBUG);
+        result.push_back(Value::LT_WARN);
+        result.push_back(Value::LT_ERROR);
+        result.push_back(Value::LT_FATAL);
+        return result;
+    }
+
+    /**
+     * Convert enumeration value to exact string representation.
+     */
+    const char* c_str() const{
+        switch (value){
+            case Value::LT_LL_INFO:
+                return "LT_LL_INFO";
+            case Value::LT_INFO:
+                return "LT_INFO";
+            case Value::LT_DEBUG:
+                return "LT_DEBUG";
+            case Value::LT_WARN:
+                return "LT_WARN";
+            case Value::LT_ERROR:
+                return "LT_ERROR";
+            case Value::LT_FATAL:
+                return "LT_FATAL";
+            default:
+                return "";
+        }
+    }
+
+    /**
+     * Convert enumeration value to exact string representation.
+     */
+    static const char* c_str(Value a){
+        switch (a){
+            case Value::LT_LL_INFO:
+                return "LT_LL_INFO";
+            case Value::LT_INFO:
+                return "LT_INFO";
+            case Value::LT_DEBUG:
+                return "LT_DEBUG";
+            case Value::LT_WARN:
+                return "LT_WARN";
+            case Value::LT_ERROR:
+                return "LT_ERROR";
+            case Value::LT_FATAL:
+                return "LT_FATAL";
+            default:
+                return "";
+        }
+    }
+
+    /**
+     * Convert enumeration value to custom string representation.
+     */
+    const char* custom_str() const{
+        switch (value){
+            case Value::LT_LL_INFO:
+                return "low info";
+            case Value::LT_INFO:
+                return "info";
+            case Value::LT_DEBUG:
+                return "debug";
+            case Value::LT_WARN:
+                return "warn";
+            case Value::LT_ERROR:
+                return "error";
+            case Value::LT_FATAL:
+                return "fatal";
+            default:
+                return "";
+        }
+    }
+
+    /**
+     * Convert enumeration value to custom string representation.
+     */
+    static const char* custom_str(Value a){
+        switch (a){
+            case Value::LT_LL_INFO:
+                return "low info";
+            case Value::LT_INFO:
+                return "info";
+            case Value::LT_DEBUG:
+                return "debug";
+            case Value::LT_WARN:
+                return "warn";
+            case Value::LT_ERROR:
+                return "error";
+            case Value::LT_FATAL:
+                return "fatal";
+            default:
+                return "";
+        }
+    }
+
+private:
+    Value value;
 };
 
 /**
@@ -142,7 +256,7 @@ public:
      *          file (and the conosle when in an IDE). By default, LL_INFO for
      *          all log lines.
      */
-    LogType ls_selected_level = LogType::LT_LL_INFO;
+    LogType::Value ls_selected_level = LogType::Value::LT_LL_INFO;
 
     /**
      * @brief   True if you want to log to the working directory, false
@@ -396,7 +510,7 @@ public:
      * @param file  The __FILE__ macro.
      * @param line  The __LINE__ macro.
      */
-    Log(LogType type, const std::string &file, const int line) {
+    Log(LogType::Value type, const std::string &file, const int line) {
         if (type >= LOG_SETTINGS.ls_selected_level) {
             l_level = type;
             operator<<(prefix(file, line));
@@ -446,7 +560,7 @@ private:
      * @brief   This Log instance's LogType level.
      * 
      */
-    LogType l_level = LogType::LT_LL_INFO;
+    LogType::Value l_level = LogType::Value::LT_LL_INFO;
 
     /**
      * @brief   Prefix the Date and Time as well as file name and line number
@@ -540,17 +654,17 @@ private:
      */
     std::string LevelLabel() {
         switch (l_level) {
-            case LogType::LT_LL_INFO:
+            case LogType::Value::LT_LL_INFO:
                 return "LOW-INFO";
-            case LogType::LT_INFO:
+            case LogType::Value::LT_INFO:
                 return "INFO";
-            case LogType::LT_DEBUG:
+            case LogType::Value::LT_DEBUG:
                 return "DEBUG";
-            case LogType::LT_WARN:
+            case LogType::Value::LT_WARN:
                 return "WARN";
-            case LogType::LT_ERROR:
+            case LogType::Value::LT_ERROR:
                 return "ERROR";
-            case LogType::LT_FATAL:
+            case LogType::Value::LT_FATAL:
                 return "FATAL";
             default:
                 return "";
