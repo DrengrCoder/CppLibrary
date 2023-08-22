@@ -102,7 +102,7 @@ public:
      * @throw runtime_error if the socket failed to initialise and we did not
      *                      receive a file descriptor.
      */
-    TcpClient(InternetProtocol::Value ipv){
+    TcpClient(InternetProtocol::Value ipv = InternetProtocol::Value::v4){
         clog << "Initialise new TCP client object...";
 
         _socketFd = socket((ipv == InternetProtocol::Value::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);

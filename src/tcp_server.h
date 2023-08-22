@@ -103,7 +103,7 @@ public:
      *                      receive a file descriptor or if the socket options
      *                      failed to set.
      */
-    TcpServer(InternetProtocol::Value ipv){
+    TcpServer(InternetProtocol::Value ipv = InternetProtocol::Value::v4){
         clog << "Initialise new TCP server object...";
 
         _serverFd = socket((ipv == InternetProtocol::Value::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
