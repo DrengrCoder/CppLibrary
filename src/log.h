@@ -200,6 +200,26 @@ public:
         }
     }
 
+    /**
+     * Convert custom string representation to enumeration value.
+     */
+    static Value custom_str_to_value(const char* a){
+        if (strcmp(a, "low info"))
+            return Value::LT_LL_INFO;
+        else if (strcmp(a, "info"))
+            return Value::LT_INFO;
+        else if (strcmp(a, "debug"))
+            return Value::LT_DEBUG;
+        else if (strcmp(a, "warn"))
+            return Value::LT_WARN;
+        else if (strcmp(a, "error"))
+            return Value::LT_ERROR;
+        else if (strcmp(a, "fatal"))
+            return Value::LT_FATAL;
+        else
+            return Value::LT_LL_INFO;
+    }
+
 private:
     Value value;
 };
