@@ -25,7 +25,7 @@ TEST_CASE("Initialise Logger", "[single-file]")
 TEST_CASE("Initialising server object", "[single-file]")
 {
     try { 
-        server = new TcpServer();
+        server = new TcpServer(TcpServer::InternetProtocol::Value::v4);
 
         REQUIRE(server->GetSocketFd() > -1);
 
@@ -39,7 +39,7 @@ TEST_CASE("Initialising server object", "[single-file]")
 TEST_CASE("Initialising socket object", "[single-file]")
 {
     try {
-        client = new TcpClient();
+        client = new TcpClient(TcpClient::InternetProtocol::Value::v4);
         REQUIRE(client->GetSocketFd() > -1);
     }
     catch (std::runtime_error &err){
