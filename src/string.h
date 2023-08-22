@@ -300,7 +300,7 @@ public:
     }
 
     /**
-     * @brief   Froce this String data to return as a const char*.
+     * @brief   Force this String data to return as a const char*.
      * 
      * @return  A const char* representation of this String data.
      */
