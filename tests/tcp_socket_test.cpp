@@ -17,7 +17,7 @@ TEST_CASE("Initialise Logger", "[single-file]")
 {
     //  TODO: Consider changing this for production
     LOG_SETTINGS.ls_print_to_file = false;
-    LOG_SETTINGS.ls_selected_level = LogType::LT_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_INFO;
     TestLogInit;
     clog << "Logger initialised";
 }
