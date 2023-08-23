@@ -16,6 +16,7 @@
 #include <chrono>       //  Time functions
 #include <ctime>
 #include <iomanip>
+#include <vector>
 
 extern class LogSettings LOG_SETTINGS;
 
