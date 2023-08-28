@@ -80,7 +80,7 @@ TEST_CASE("Set log type enum var", "[single-file]")
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 }
 
-TEST_CASE("Test log line macro's", "[single-file]")
+TEST_CASE("Log line macro's", "[single-file]")
 {
     //  Reset defaults
     LOG_SETTINGS.ls_selected_level = LogType::Value::LT_LL_INFO;
@@ -154,3 +154,134 @@ TEST_CASE("Test log line macro's", "[single-file]")
     flog << "A test fatal level log line.";
 }
 
+TEST_CASE("Log Type c_str functions", "[single-file]")
+{
+    const char* base_llinfo = "LT_LL_INFO";
+    const char* base_info = "LT_INFO";
+    const char* base_debug = "LT_DEBUG";
+    const char* base_warn = "LT_WARN";
+    const char* base_error = "LT_ERROR";
+    const char* base_fatal = "LT_FATAL";
+
+    //  Return object c_str
+
+    LogType test_value = LogType::Value::LT_LL_INFO;
+    REQUIRE(strcmp(test_value.c_str(), base_llinfo) == 0);
+
+    test_value = LogType::Value::LT_INFO;
+    REQUIRE(strcmp(test_value.c_str(), base_info) == 0);
+
+    test_value = LogType::Value::LT_DEBUG;
+    REQUIRE(strcmp(test_value.c_str(), base_debug) == 0);
+
+    test_value = LogType::Value::LT_WARN;
+    REQUIRE(strcmp(test_value.c_str(), base_warn) == 0);
+
+    test_value = LogType::Value::LT_ERROR;
+    REQUIRE(strcmp(test_value.c_str(), base_error) == 0);
+
+    test_value = LogType::Value::LT_FATAL;
+    REQUIRE(strcmp(test_value.c_str(), base_fatal) == 0);
+
+    //  Input value for c_str
+
+    const char* test_string = LogType::c_str(LogType::Value::LT_LL_INFO);
+    REQUIRE(strcmp(test_string, base_llinfo) == 0);
+
+    test_string = LogType::c_str(LogType::Value::LT_INFO);
+    REQUIRE(strcmp(test_string, base_info) == 0);
+
+    test_string = LogType::c_str(LogType::Value::LT_DEBUG);
+    REQUIRE(strcmp(test_string, base_debug) == 0);
+
+    test_string = LogType::c_str(LogType::Value::LT_WARN);
+    REQUIRE(strcmp(test_string, base_warn) == 0);
+
+    test_string = LogType::c_str(LogType::Value::LT_ERROR);
+    REQUIRE(strcmp(test_string, base_error) == 0);
+
+    test_string = LogType::c_str(LogType::Value::LT_FATAL);
+    REQUIRE(strcmp(test_string, base_fatal) == 0);
+
+}
+
+TEST_CASE("Log Type custom_str functions", "[single-file]")
+{
+    const char* custom_llinfo =  "low info";
+    const char* custom_info =  "info";
+    const char* custom_debug =  "debug";
+    const char* custom_warn =  "warn";
+    const char* custom_error =  "error";
+    const char* custom_fatal =  "fatal";
+    
+    //  Return object custom str
+    
+    LogType test_value = LogType::Value::LT_LL_INFO;
+    REQUIRE(strcmp(test_value.custom_str(), custom_llinfo) == 0);
+
+    test_value = LogType::Value::LT_INFO;
+    REQUIRE(strcmp(test_value.custom_str(), custom_info) == 0);
+
+    test_value = LogType::Value::LT_DEBUG;
+    REQUIRE(strcmp(test_value.custom_str(), custom_debug) == 0);
+
+    test_value = LogType::Value::LT_WARN;
+    REQUIRE(strcmp(test_value.custom_str(), custom_warn) == 0);
+
+    test_value = LogType::Value::LT_ERROR;
+    REQUIRE(strcmp(test_value.custom_str(), custom_error) == 0);
+
+    test_value = LogType::Value::LT_FATAL;
+    REQUIRE(strcmp(test_value.custom_str(), custom_fatal) == 0);
+
+    //  Input value for custom_str
+
+    const char* test_string = LogType::custom_str(LogType::Value::LT_LL_INFO);
+    REQUIRE(strcmp(test_string, custom_llinfo) == 0);
+
+    test_string = LogType::custom_str(LogType::Value::LT_INFO);
+    REQUIRE(strcmp(test_string, custom_info) == 0);
+
+    test_string = LogType::custom_str(LogType::Value::LT_DEBUG);
+    REQUIRE(strcmp(test_string, custom_debug) == 0);
+
+    test_string = LogType::custom_str(LogType::Value::LT_WARN);
+    REQUIRE(strcmp(test_string, custom_warn) == 0);
+
+    test_string = LogType::custom_str(LogType::Value::LT_ERROR);
+    REQUIRE(strcmp(test_string, custom_error) == 0);
+
+    test_string = LogType::custom_str(LogType::Value::LT_FATAL);
+    REQUIRE(strcmp(test_string, custom_fatal) == 0);
+
+}
+
+TEST_CASE("Log Type custom_str_to_value function", "[single-file]")
+{
+    const char* custom_llinfo =  "low info";
+    const char* custom_info =  "info";
+    const char* custom_debug =  "debug";
+    const char* custom_warn =  "warn";
+    const char* custom_error =  "error";
+    const char* custom_fatal =  "fatal";
+    
+    //  Input custom_str for value
+    
+    LogType test_value = LogType::custom_str_to_value(custom_llinfo);
+    REQUIRE(test_value == LogType::Value::LT_LL_INFO);
+
+    test_value = LogType::custom_str_to_value(custom_info);
+    REQUIRE(test_value == LogType::Value::LT_INFO);
+
+    test_value = LogType::custom_str_to_value(custom_debug);
+    REQUIRE(test_value == LogType::Value::LT_DEBUG);
+
+    test_value = LogType::custom_str_to_value(custom_warn);
+    REQUIRE(test_value == LogType::Value::LT_WARN);
+
+    test_value = LogType::custom_str_to_value(custom_error);
+    REQUIRE(test_value == LogType::Value::LT_ERROR);
+
+    test_value = LogType::custom_str_to_value(custom_fatal);
+    REQUIRE(test_value == LogType::Value::LT_FATAL);
+}
