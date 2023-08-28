@@ -205,17 +205,17 @@ public:
      * Convert custom string representation to enumeration value.
      */
     static Value custom_str_to_value(const char* a){
-        if (strcmp(a, "low info"))
+        if (strcmp(a, "low info") == 0)
             return Value::LT_LL_INFO;
-        else if (strcmp(a, "info"))
+        else if (strcmp(a, "info") == 0)
             return Value::LT_INFO;
-        else if (strcmp(a, "debug"))
+        else if (strcmp(a, "debug") == 0)
             return Value::LT_DEBUG;
-        else if (strcmp(a, "warn"))
+        else if (strcmp(a, "warn") == 0)
             return Value::LT_WARN;
-        else if (strcmp(a, "error"))
+        else if (strcmp(a, "error") == 0)
             return Value::LT_ERROR;
-        else if (strcmp(a, "fatal"))
+        else if (strcmp(a, "fatal") == 0)
             return Value::LT_FATAL;
         else
             return Value::LT_LL_INFO;
