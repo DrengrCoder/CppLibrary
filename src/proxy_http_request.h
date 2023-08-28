@@ -7,9 +7,9 @@
 #include <chrono>
 #include <algorithm>
 
-#include "dylanclibs/log.h"
-#include "dylanclibs/tcp_client.h"
-#include "dylanclibs/string.h"
+#include "log.h"
+#include "tcp_client.h"
+#include "string.h"
 
 namespace HTTP
 {
@@ -854,18 +854,24 @@ namespace HTTP
          * 
          * @param uriString     The URI string to use.
          * @param ip            The IP address the request is going to.
+         * @param ipv           The Internet Protocol Version Number.
          */
-        explicit Request(const std::string& uriString, const std::string& ip):
+        explicit Request(const std::string& uriString, const std::string& ip, 
+                            const TcpClient::InternetProtocol::Value ipv = TcpClient::InternetProtocol::Value::v4):
                 _ipAddress(ip),
-                _uri(ParseUri(uriString.begin(), uriString.end()))
+                _uri(ParseUri(uriString.begin(), uriString.end())),
+                _ipv(ipv)
         { clog << "A HTTP Request object has been initiailised."; }
-        
+
         /**
-         * Construct a new HTTP Request object.
+         * @brief   Construct a new HTTP Request object.
+         * 
+         * @param ipv   The Internet Protocol Version Number.
          */
-        explicit Request()
+        explicit Request(const TcpClient::InternetProtocol::Value ipv = TcpClient::InternetProtocol::Value::v4):
+                _ipv(ipv)
         { clog << "A HTTP Request object has been initiailised."; }
-        
+
         /**
          * Initiate a HTTP request to URISTRING at IP of type METHOD, optionally
          * sending a request BODY with configurable HEADERFIELDS and an optional
@@ -960,7 +966,7 @@ namespace HTTP
 
             clog << "Constructed request html: \"" << requestData
                 << "\", beginning TCP Client initialisation and comms...";
-            TcpClient *client = new TcpClient();
+            TcpClient *client = new TcpClient(_ipv);
             
             //  Capture the start time before a connection attempt is made for
             //      later processing
@@ -1244,6 +1250,7 @@ namespace HTTP
         }
 
     private:
+        TcpClient::InternetProtocol::Value _ipv = TcpClient::InternetProtocol::Value::v4;
         std::string _ipAddress;
         Uri _uri;
     };

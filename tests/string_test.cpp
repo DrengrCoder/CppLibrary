@@ -354,6 +354,8 @@ TEST_CASE("String plus-equals operator tests", "[single-file]")
 
 TEST_CASE("String trim test", "[single-file]")
 {
+    //  ################ ltrim, rtrim and trim ################
+
     String _string = "   This is a string with leading and trailing spaces    ";
     String _result = _string.ltrim();
     REQUIRE(strcmp(_result.c_str(), "This is a string with leading and trailing spaces    ") == 0);
@@ -369,6 +371,8 @@ TEST_CASE("String trim test", "[single-file]")
 
 TEST_CASE("String to lower and to upper test", "[single-file]")
 {
+    //  ################ to lower and to upper ################
+
     String _string = "ThIs is A string WitH UPPER AnD lower CaSe ChArS";
     String _result = _string.to_lower();
     REQUIRE(strcmp(_result.c_str(), "this is a string with upper and lower case chars") == 0);

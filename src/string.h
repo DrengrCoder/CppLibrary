@@ -14,7 +14,7 @@
  *              for the custom String class so it can be used in iterator-based
  *              methods.
  * 
- * @tparam T    The type of data to iterate through.
+ * @tparam T
  */
 template < typename T >
 class Iterator{
@@ -56,7 +56,9 @@ public:
 class String {
 private:
 
-    //  ##### Variables #####
+    //  ##############################################################
+    //  ######################### Variables ##########################
+    //  ##############################################################
 
     /**
      * @brief   The string (C strings are stored as char arrays - a char pointer
@@ -68,7 +70,9 @@ private:
 
     const std::string WHITESPACE = " \n\r\t\f\v";
  
-    //  ##### Match to other overloading operators #####
+    //  ##############################################################
+    //  ############ Match to other overloading operators ############
+    //  ##############################################################
 
     /**
      * @brief   Prototype for stream insertion operator so this can be used with
@@ -150,7 +154,9 @@ private:
 
 public:
 
+    //  ##############################################################
     //  ##### Constructors / initialisation assignment operators #####
+    //  ##############################################################
 
     /**
      * @brief   Construct a new String.
@@ -226,7 +232,9 @@ public:
      */
     ~String(){ delete _str; }
 
-    //  ##### Common overloaded assignment operators #####
+    //  ##############################################################
+    //  ########### Common overloaded assignment operators ###########
+    //  ##############################################################
 
     /**
      * @brief   Overload the standard 'equal' assignment operator to assign a
@@ -277,7 +285,9 @@ public:
      */
     operator char*() { return _str; }
 
-    //  ##### Existing string functions to mimic std::string #####
+    //  ##############################################################
+    //  ####### Existing string functions to mimic std::string #######
+    //  ##############################################################
 
     /**
      * @brief   The definition for the 'begin' iterator function.
@@ -300,7 +310,7 @@ public:
     }
 
     /**
-     * @brief   Froce this String data to return as a const char*.
+     * @brief   Force this String data to return as a const char*.
      * 
      * @return  A const char* representation of this String data.
      */
@@ -325,7 +335,9 @@ public:
         return String(str.substr(start, len).c_str());
     }
 
-    //  ##### Existing string functions but modified #####
+    //  ##############################################################
+    //  ########### Existing string functions but modified ###########
+    //  ##############################################################
 
     /**
      * @brief   Returns a new String with all occurrences of a specified Unicode
@@ -472,7 +484,9 @@ public:
         return replace(a, b.c_str());
     }
 
-    //  ##### Custom string functions #####
+    //  ##############################################################
+    //  ################## Custom string functions ###################
+    //  ##############################################################
 
     /**
      * @brief   Split this String into substrings based on the input delimiter

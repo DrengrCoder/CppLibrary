@@ -5,12 +5,13 @@
 #ifndef __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
 #define __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
 
-// #include <sys/socket.h>
-// #include <netdb.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #include <netinet/in.h>
-// #include <stdio.h>
-// #include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <arpa/inet.h>
+#include <vector>
 
 #include "log.h"
 
@@ -29,6 +30,69 @@
  */
 class TcpClient {
 public:
+   class InternetProtocol{
+    public:
+        /**
+         * The enumeration values.
+         */
+        enum class Value : uint8_t { v4, v6 };
+        InternetProtocol() = default;
+        constexpr InternetProtocol(Value aState) : value(aState){}
+        /**
+         * Delete the default bool operator.
+         */
+        explicit operator bool() const = delete;
+        /**
+         * 'is equals' operator.
+         */
+        constexpr bool operator == (InternetProtocol a) const { return value == a.value; }
+        /**
+         * 'is not equals' operator.
+         */
+        constexpr bool operator != (InternetProtocol a) const { return value != a.value; }
+
+        /**
+         * Get the enumeration values in a std::vector.
+         */
+        static std::vector<Value> GetValues(){
+            std::vector<Value> result;
+            result.push_back(Value::v4);
+            result.push_back(Value::v6);
+            return result;
+        }
+
+        /**
+         * Convert enumeration value to exact string representation.
+         */
+        const char* c_str() const{
+            switch (value){
+                case Value::v4:
+                    return "IPv4";
+                case Value::v6:
+                    return "IPv6";
+                default:
+                    return "";
+            }
+        }
+
+        /**
+         * Convert enumeration value to exact string representation.
+         */
+        static const char* c_str(Value a){
+            switch (a){
+                case Value::v4:
+                    return "IPv4";
+                case Value::v6:
+                    return "IPv6";
+                default:
+                    return "";
+            }
+        }
+
+    private:
+        Value value;
+    };
+
     /**
      * @brief   Construct a new Tcp Client object with a socket file descriptor
      *          and some default parameters for a TCP type connection.
@@ -38,10 +102,10 @@ public:
      * @throw runtime_error if the socket failed to initialise and we did not
      *                      receive a file descriptor.
      */
-    TcpClient(){
+    TcpClient(InternetProtocol::Value ipv = InternetProtocol::Value::v4){
         clog << "Initialise new TCP client object...";
 
-        _socketFd = socket(AF_INET, SOCK_STREAM, 0);
+        _socketFd = socket((ipv == InternetProtocol::Value::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
         if (_socketFd < 0){
             std::stringstream msg;
             msg << "Client socket creation failed: _socketFd: " << _socketFd
@@ -51,7 +115,7 @@ public:
             throw std::runtime_error(msg.str());
         }
 
-        _address.sin_family = AF_INET;
+        _address.sin_family = (ipv == InternetProtocol::Value::v4 ? AF_INET : AF_INET6);
 
         clog << "TCP socket object initialised.";
     }
