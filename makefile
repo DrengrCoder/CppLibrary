@@ -192,6 +192,7 @@ install:
 	@cp src/RapidXML/* /usr/local/include
 	@cp -r src/nlohmann /usr/local/include
 	@cp -r src/catch2 /usr/local/include
+	@cp -r src/HTTPRequest /usr/local/include
 	@echo Installing binaries to \"$(bin_at)\"
 	@mkdir -p $(bin_at)
 	@cp bin/* $(bin_at)
