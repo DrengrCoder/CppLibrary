@@ -1,3 +1,7 @@
+//
+// Created by Dylan Andrew McAdam on 21/08/23.
+//
+
 #ifndef __HI_POINTER_INTERFACE_HTTP_REQUEST__
 #define __HI_POINTER_INTERFACE_HTTP_REQUEST__
 
