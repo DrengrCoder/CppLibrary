@@ -52,28 +52,28 @@ extern class LogSettings LOG_SETTINGS;
 /**
  * @brief log << "LT_LL_INFO type";
  */
-#define clog Log(LogType::Value::LT_LL_INFO, __FILE__, __LINE__)
+#define clog Log(LogType::LT_LL_INFO, __FILE__, __LINE__)
 /**
  * @brief ilog << "LT_INFO type";
  */
-#define ilog Log(LogType::Value::LT_INFO, __FILE__, __LINE__)
+#define ilog Log(LogType::LT_INFO, __FILE__, __LINE__)
 /**
  * @brief dlog << "LT_DEBUG type";
  */
-#define dlog Log(LogType::Value::LT_DEBUG, __FILE__, __LINE__)
+#define dlog Log(LogType::LT_DEBUG, __FILE__, __LINE__)
 /**
  * @brief wlog << "LT_WARN type";
  * 
  */
-#define wlog Log(LogType::Value::LT_WARN, __FILE__, __LINE__)
+#define wlog Log(LogType::LT_WARN, __FILE__, __LINE__)
 /**
  * @brief elog << "LT_ERROR type";
  */
-#define elog Log(LogType::Value::LT_ERROR, __FILE__, __LINE__)
+#define elog Log(LogType::LT_ERROR, __FILE__, __LINE__)
 /**
  * @brief flog << "LT_FATAL type";
  */
-#define flog Log(LogType::Value::LT_FATAL, __FILE__, __LINE__)
+#define flog Log(LogType::LT_FATAL, __FILE__, __LINE__)
 
 /**
  * @brief   Logging levels enumerator, for label printing and including / 
@@ -83,7 +83,7 @@ extern class LogSettings LOG_SETTINGS;
  */
 class LogType{
 public:
-    enum class Value : uint8_t { LT_LL_INFO, LT_INFO, LT_DEBUG, LT_WARN, LT_ERROR, LT_FATAL };
+    enum Value : uint8_t { LT_LL_INFO, LT_INFO, LT_DEBUG, LT_WARN, LT_ERROR, LT_FATAL };
     LogType() = default;
     constexpr LogType(Value aState) : value(aState){}
     /**
@@ -104,12 +104,12 @@ public:
      */
     static std::vector<Value> GetValues(){
         std::vector<Value> result;
-        result.push_back(Value::LT_LL_INFO);
-        result.push_back(Value::LT_INFO);
-        result.push_back(Value::LT_DEBUG);
-        result.push_back(Value::LT_WARN);
-        result.push_back(Value::LT_ERROR);
-        result.push_back(Value::LT_FATAL);
+        result.push_back(LT_LL_INFO);
+        result.push_back(LT_INFO);
+        result.push_back(LT_DEBUG);
+        result.push_back(LT_WARN);
+        result.push_back(LT_ERROR);
+        result.push_back(LT_FATAL);
         return result;
     }
 
@@ -118,17 +118,17 @@ public:
      */
     const char* c_str() const{
         switch (value){
-            case Value::LT_LL_INFO:
+            case LT_LL_INFO:
                 return "LT_LL_INFO";
-            case Value::LT_INFO:
+            case LT_INFO:
                 return "LT_INFO";
-            case Value::LT_DEBUG:
+            case LT_DEBUG:
                 return "LT_DEBUG";
-            case Value::LT_WARN:
+            case LT_WARN:
                 return "LT_WARN";
-            case Value::LT_ERROR:
+            case LT_ERROR:
                 return "LT_ERROR";
-            case Value::LT_FATAL:
+            case LT_FATAL:
                 return "LT_FATAL";
             default:
                 return "";
@@ -140,17 +140,17 @@ public:
      */
     static const char* c_str(Value a){
         switch (a){
-            case Value::LT_LL_INFO:
+            case LT_LL_INFO:
                 return "LT_LL_INFO";
-            case Value::LT_INFO:
+            case LT_INFO:
                 return "LT_INFO";
-            case Value::LT_DEBUG:
+            case LT_DEBUG:
                 return "LT_DEBUG";
-            case Value::LT_WARN:
+            case LT_WARN:
                 return "LT_WARN";
-            case Value::LT_ERROR:
+            case LT_ERROR:
                 return "LT_ERROR";
-            case Value::LT_FATAL:
+            case LT_FATAL:
                 return "LT_FATAL";
             default:
                 return "";
@@ -162,17 +162,17 @@ public:
      */
     const char* custom_str() const{
         switch (value){
-            case Value::LT_LL_INFO:
+            case LT_LL_INFO:
                 return "low info";
-            case Value::LT_INFO:
+            case LT_INFO:
                 return "info";
-            case Value::LT_DEBUG:
+            case LT_DEBUG:
                 return "debug";
-            case Value::LT_WARN:
+            case LT_WARN:
                 return "warn";
-            case Value::LT_ERROR:
+            case LT_ERROR:
                 return "error";
-            case Value::LT_FATAL:
+            case LT_FATAL:
                 return "fatal";
             default:
                 return "";
@@ -184,17 +184,17 @@ public:
      */
     static const char* custom_str(Value a){
         switch (a){
-            case Value::LT_LL_INFO:
+            case LT_LL_INFO:
                 return "low info";
-            case Value::LT_INFO:
+            case LT_INFO:
                 return "info";
-            case Value::LT_DEBUG:
+            case LT_DEBUG:
                 return "debug";
-            case Value::LT_WARN:
+            case LT_WARN:
                 return "warn";
-            case Value::LT_ERROR:
+            case LT_ERROR:
                 return "error";
-            case Value::LT_FATAL:
+            case LT_FATAL:
                 return "fatal";
             default:
                 return "";
@@ -206,19 +206,19 @@ public:
      */
     static Value custom_str_to_value(const char* a){
         if (strcmp(a, "low info") == 0)
-            return Value::LT_LL_INFO;
+            return LT_LL_INFO;
         else if (strcmp(a, "info") == 0)
-            return Value::LT_INFO;
+            return LT_INFO;
         else if (strcmp(a, "debug") == 0)
-            return Value::LT_DEBUG;
+            return LT_DEBUG;
         else if (strcmp(a, "warn") == 0)
-            return Value::LT_WARN;
+            return LT_WARN;
         else if (strcmp(a, "error") == 0)
-            return Value::LT_ERROR;
+            return LT_ERROR;
         else if (strcmp(a, "fatal") == 0)
-            return Value::LT_FATAL;
+            return LT_FATAL;
         else
-            return Value::LT_LL_INFO;
+            return LT_LL_INFO;
     }
 
 private:
@@ -277,7 +277,7 @@ public:
      *          file (and the conosle when in an IDE). By default, LL_INFO for
      *          all log lines.
      */
-    LogType::Value ls_selected_level = LogType::Value::LT_LL_INFO;
+    LogType::Value ls_selected_level = LogType::LT_LL_INFO;
 
     /**
      * @brief   True if you want to log to the working directory, false
@@ -581,7 +581,7 @@ private:
      * @brief   This Log instance's LogType level.
      * 
      */
-    LogType::Value l_level = LogType::Value::LT_LL_INFO;
+    LogType::Value l_level = LogType::LT_LL_INFO;
 
     /**
      * @brief   Prefix the Date and Time as well as file name and line number
@@ -675,17 +675,17 @@ private:
      */
     std::string LevelLabel() {
         switch (l_level) {
-            case LogType::Value::LT_LL_INFO:
+            case LogType::LT_LL_INFO:
                 return "LOW-INFO";
-            case LogType::Value::LT_INFO:
+            case LogType::LT_INFO:
                 return "INFO";
-            case LogType::Value::LT_DEBUG:
+            case LogType::LT_DEBUG:
                 return "DEBUG";
-            case LogType::Value::LT_WARN:
+            case LogType::LT_WARN:
                 return "WARN";
-            case LogType::Value::LT_ERROR:
+            case LogType::LT_ERROR:
                 return "ERROR";
-            case LogType::Value::LT_FATAL:
+            case LogType::LT_FATAL:
                 return "FATAL";
             default:
                 return "";

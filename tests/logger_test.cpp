@@ -55,35 +55,35 @@ TEST_CASE("Set log type enum var", "[single-file]")
 {    
     //  Set logtype
 
-    LogType::Value lt = LogType::Value::LT_LL_INFO;
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_LL_INFO;
+    LogType::Value lt = LogType::LT_LL_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_LL_INFO;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 
-    lt = LogType::Value::LT_INFO;
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_INFO;
+    lt = LogType::LT_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_INFO;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 
-    lt = LogType::Value::LT_DEBUG;
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_DEBUG;
+    lt = LogType::LT_DEBUG;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_DEBUG;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 
-    lt = LogType::Value::LT_WARN;
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_WARN;
+    lt = LogType::LT_WARN;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_WARN;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 
-    lt = LogType::Value::LT_ERROR;
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_ERROR;
+    lt = LogType::LT_ERROR;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_ERROR;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 
-    lt = LogType::Value::LT_FATAL;
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_FATAL;
+    lt = LogType::LT_FATAL;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_FATAL;
     REQUIRE(LOG_SETTINGS.ls_selected_level == lt);
 }
 
 TEST_CASE("Log line macro's", "[single-file]")
 {
     //  Reset defaults
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_LL_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_LL_INFO;
     LOG_SETTINGS.ls_use_working_dir = false;
     LOG_SETTINGS.ls_overwrite = false;
     LOG_SETTINGS.ls_print_to_file = true;
@@ -95,7 +95,7 @@ TEST_CASE("Log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_LL_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_LL_INFO;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -105,7 +105,7 @@ TEST_CASE("Log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_INFO;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_INFO;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -115,7 +115,7 @@ TEST_CASE("Log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_DEBUG;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_DEBUG;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -125,7 +125,7 @@ TEST_CASE("Log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_WARN;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_WARN;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -135,7 +135,7 @@ TEST_CASE("Log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_ERROR;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_ERROR;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -145,7 +145,7 @@ TEST_CASE("Log line macro's", "[single-file]")
 
     std::cout << "#########################################\n";
 
-    LOG_SETTINGS.ls_selected_level = LogType::Value::LT_FATAL;
+    LOG_SETTINGS.ls_selected_level = LogType::LT_FATAL;
     clog << "A test low level log line.";
     ilog << "A test info level log line.";
     dlog << "A test debug level log line.";
@@ -165,42 +165,42 @@ TEST_CASE("Log Type c_str functions", "[single-file]")
 
     //  Return object c_str
 
-    LogType test_value = LogType::Value::LT_LL_INFO;
+    LogType test_value = LogType::LT_LL_INFO;
     REQUIRE(strcmp(test_value.c_str(), base_llinfo) == 0);
 
-    test_value = LogType::Value::LT_INFO;
+    test_value = LogType::LT_INFO;
     REQUIRE(strcmp(test_value.c_str(), base_info) == 0);
 
-    test_value = LogType::Value::LT_DEBUG;
+    test_value = LogType::LT_DEBUG;
     REQUIRE(strcmp(test_value.c_str(), base_debug) == 0);
 
-    test_value = LogType::Value::LT_WARN;
+    test_value = LogType::LT_WARN;
     REQUIRE(strcmp(test_value.c_str(), base_warn) == 0);
 
-    test_value = LogType::Value::LT_ERROR;
+    test_value = LogType::LT_ERROR;
     REQUIRE(strcmp(test_value.c_str(), base_error) == 0);
 
-    test_value = LogType::Value::LT_FATAL;
+    test_value = LogType::LT_FATAL;
     REQUIRE(strcmp(test_value.c_str(), base_fatal) == 0);
 
     //  Input value for c_str
 
-    const char* test_string = LogType::c_str(LogType::Value::LT_LL_INFO);
+    const char* test_string = LogType::c_str(LogType::LT_LL_INFO);
     REQUIRE(strcmp(test_string, base_llinfo) == 0);
 
-    test_string = LogType::c_str(LogType::Value::LT_INFO);
+    test_string = LogType::c_str(LogType::LT_INFO);
     REQUIRE(strcmp(test_string, base_info) == 0);
 
-    test_string = LogType::c_str(LogType::Value::LT_DEBUG);
+    test_string = LogType::c_str(LogType::LT_DEBUG);
     REQUIRE(strcmp(test_string, base_debug) == 0);
 
-    test_string = LogType::c_str(LogType::Value::LT_WARN);
+    test_string = LogType::c_str(LogType::LT_WARN);
     REQUIRE(strcmp(test_string, base_warn) == 0);
 
-    test_string = LogType::c_str(LogType::Value::LT_ERROR);
+    test_string = LogType::c_str(LogType::LT_ERROR);
     REQUIRE(strcmp(test_string, base_error) == 0);
 
-    test_string = LogType::c_str(LogType::Value::LT_FATAL);
+    test_string = LogType::c_str(LogType::LT_FATAL);
     REQUIRE(strcmp(test_string, base_fatal) == 0);
 
 }
@@ -216,42 +216,42 @@ TEST_CASE("Log Type custom_str functions", "[single-file]")
     
     //  Return object custom str
     
-    LogType test_value = LogType::Value::LT_LL_INFO;
+    LogType test_value = LogType::LT_LL_INFO;
     REQUIRE(strcmp(test_value.custom_str(), custom_llinfo) == 0);
 
-    test_value = LogType::Value::LT_INFO;
+    test_value = LogType::LT_INFO;
     REQUIRE(strcmp(test_value.custom_str(), custom_info) == 0);
 
-    test_value = LogType::Value::LT_DEBUG;
+    test_value = LogType::LT_DEBUG;
     REQUIRE(strcmp(test_value.custom_str(), custom_debug) == 0);
 
-    test_value = LogType::Value::LT_WARN;
+    test_value = LogType::LT_WARN;
     REQUIRE(strcmp(test_value.custom_str(), custom_warn) == 0);
 
-    test_value = LogType::Value::LT_ERROR;
+    test_value = LogType::LT_ERROR;
     REQUIRE(strcmp(test_value.custom_str(), custom_error) == 0);
 
-    test_value = LogType::Value::LT_FATAL;
+    test_value = LogType::LT_FATAL;
     REQUIRE(strcmp(test_value.custom_str(), custom_fatal) == 0);
 
     //  Input value for custom_str
 
-    const char* test_string = LogType::custom_str(LogType::Value::LT_LL_INFO);
+    const char* test_string = LogType::custom_str(LogType::LT_LL_INFO);
     REQUIRE(strcmp(test_string, custom_llinfo) == 0);
 
-    test_string = LogType::custom_str(LogType::Value::LT_INFO);
+    test_string = LogType::custom_str(LogType::LT_INFO);
     REQUIRE(strcmp(test_string, custom_info) == 0);
 
-    test_string = LogType::custom_str(LogType::Value::LT_DEBUG);
+    test_string = LogType::custom_str(LogType::LT_DEBUG);
     REQUIRE(strcmp(test_string, custom_debug) == 0);
 
-    test_string = LogType::custom_str(LogType::Value::LT_WARN);
+    test_string = LogType::custom_str(LogType::LT_WARN);
     REQUIRE(strcmp(test_string, custom_warn) == 0);
 
-    test_string = LogType::custom_str(LogType::Value::LT_ERROR);
+    test_string = LogType::custom_str(LogType::LT_ERROR);
     REQUIRE(strcmp(test_string, custom_error) == 0);
 
-    test_string = LogType::custom_str(LogType::Value::LT_FATAL);
+    test_string = LogType::custom_str(LogType::LT_FATAL);
     REQUIRE(strcmp(test_string, custom_fatal) == 0);
 
 }
@@ -268,20 +268,20 @@ TEST_CASE("Log Type custom_str_to_value function", "[single-file]")
     //  Input custom_str for value
     
     LogType test_value = LogType::custom_str_to_value(custom_llinfo);
-    REQUIRE(test_value == LogType::Value::LT_LL_INFO);
+    REQUIRE(test_value == LogType::LT_LL_INFO);
 
     test_value = LogType::custom_str_to_value(custom_info);
-    REQUIRE(test_value == LogType::Value::LT_INFO);
+    REQUIRE(test_value == LogType::LT_INFO);
 
     test_value = LogType::custom_str_to_value(custom_debug);
-    REQUIRE(test_value == LogType::Value::LT_DEBUG);
+    REQUIRE(test_value == LogType::LT_DEBUG);
 
     test_value = LogType::custom_str_to_value(custom_warn);
-    REQUIRE(test_value == LogType::Value::LT_WARN);
+    REQUIRE(test_value == LogType::LT_WARN);
 
     test_value = LogType::custom_str_to_value(custom_error);
-    REQUIRE(test_value == LogType::Value::LT_ERROR);
+    REQUIRE(test_value == LogType::LT_ERROR);
 
     test_value = LogType::custom_str_to_value(custom_fatal);
-    REQUIRE(test_value == LogType::Value::LT_FATAL);
+    REQUIRE(test_value == LogType::LT_FATAL);
 }
