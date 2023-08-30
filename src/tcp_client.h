@@ -45,19 +45,27 @@ public:
      *                      receive a file descriptor.
      */
     TcpClient(InternetProtocol ipv = InternetProtocol::v4){
+        __errno = 0;
+        __errmsg = "";
+
         clog << "Initialise new TCP client object...";
 
-        _socketFd = socket((ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
+        _ipv = ipv;
+        _socketFd = socket((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, -90);
         if (_socketFd < 0){
+            __errno = 10000 + errno;
+
             std::stringstream msg;
-            msg << "Client socket creation failed: _socketFd: " << _socketFd
-                << ", errno: " << errno;
+            msg << "Client socket creation failed: _socketFd: " 
+                << _socketFd << ". ERROR CODE: " << __errno << ".";
 
             flog << msg.str();
+            //  This prevents the object being initialised and throws seg fault
+            //  if attempting to call the object.
             throw std::runtime_error(msg.str());
         }
 
-        _address.sin_family = (ipv == InternetProtocol::v4 ? AF_INET : AF_INET6);
+        _address.sin_family = (_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6);
 
         clog << "TCP socket object initialised.";
     }
@@ -111,29 +119,34 @@ public:
      * @return false        otherwise.
      */
     bool Connect(const int portNumber, const char *ip = "127.0.0.1"){
+        __errno = 0;
+        __errmsg = "";
+
         clog << "Connecting to " << ip << ":" << portNumber << "...";
 
         _address.sin_port = htons(portNumber);
 
-        const int inet_result = inet_pton(AF_INET, ip, &_address.sin_addr);
+        const int inet_result = inet_pton((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), ip, &_address.sin_addr);
         if (inet_result <= 0){
             std::stringstream msg;
             msg << "Address invalid / not supported: inet_result: "
-                << inet_result << ", errno: " << errno;
+                << inet_result << ".";
 
             flog << msg.str();
-            __err_msg = msg.str();
+            __errmsg = msg.str();
+            __errno = 11000 + errno;
             return false;
         }
 
         _serverFd = connect(_socketFd, (struct sockaddr*)&_address, _addressLength);
         if (_serverFd < 0){
             std::stringstream msg;
-            msg << "Connection failed: _serverFd: " << _serverFd << ", errno: "
-                << errno;
+            msg << "Connection failed: _serverFd: " 
+                << _serverFd << ".";
 
             flog << msg.str();
-            __err_msg = msg.str();
+            __errmsg = msg.str();
+            __errno = 12000 + errno;
             return false;
         }
 
@@ -149,23 +162,31 @@ public:
      * @return          The number of bytes read on the socket, or -1 on error.
      */
     int Read(void *buff, size_t n_bytes){
+        __errmsg = "";
+        __errno = 0;
+
         if (_socketFd < 0){
-            elog << "Socket read error, tried reading without valid socket file descriptor: "
-                << _socketFd;
+            std::stringstream msg;
+            msg << "Socket read error, tried reading without valid socket file "
+                << "descriptor: " << _socketFd << ".";
+            elog << msg.str();
+            __errmsg = msg.str();
+            __errno = 101;
             return -1;
         }
 
-        memset(buff, '\0', n_bytes);
+        memset(buff, 0, n_bytes);
         int bytes = read(_socketFd, buff, n_bytes);
         if (bytes < 0){
             std::stringstream msg;
             msg << "Error reading bytes, _socketFd: " << _socketFd << ", bytes: "
-                << bytes << ", errno: " << errno;
+                << bytes << ".";
 
             elog << msg.str();
-            __err_msg = msg.str();
+            __errmsg = msg.str();
+            __errno = 13000 + errno;
         } else if (bytes == 0){
-            wlog << "No bytes were read.";
+            dlog << "No bytes were read.";
         } else {
             clog << bytes << " bytes read.";
         }
@@ -180,9 +201,16 @@ public:
      * @return          The number of bytes sent, or -1 on error.
      */
     int Send(const char *input){
+        __errmsg = "";
+        __errno = 0;
+        
         if (_socketFd < 0){
-            elog << "Socket send error, tried sending without valid socket file descriptor: "
-                << _socketFd;
+            std::stringstream msg;
+            msg << "Socket send error, tried sending without valid socket file "
+                << "descriptor: " << _socketFd << ".";
+            elog << msg.str();
+            __errmsg = msg.str();
+            __errno = 101;
             return -1;
         }
 
@@ -190,10 +218,11 @@ public:
         if (bytes < 0){
             std::stringstream msg;
             msg << "Error sending bytes, _socketFd: " << _socketFd << ", bytes: "
-                << bytes << ", errno: " << errno;
+                << bytes << ".";
 
             elog << msg.str();
-            __err_msg = msg.str();
+            __errmsg = msg.str();
+            __errno = 13000 + errno;
         } else if (bytes == 0){
             wlog << "No bytes were sent.";
         } else {
@@ -223,9 +252,12 @@ public:
      * @return  The last error message when an error occurs on this object. This
      *          variable will contain the 'errno' value.
      */
-    std::string ERROR_MSG(){
-        return __err_msg;
-    }
+    std::string ERR_MSG(){ return __errmsg; }
+
+    /**
+     * Get the error code that has been set.
+     */
+    int ERR_NO(){ return __errno; }
 
 protected:
     /**
@@ -240,6 +272,11 @@ private:
     int _serverFd = -1;
 
     /**
+     * The set Internet Protocol version number (or IPv number).
+     */
+    InternetProtocol _ipv = InternetProtocol::v4;
+
+    /**
      * @brief   This client socket's address structure.
      */
     struct sockaddr_in _address;
@@ -252,7 +289,12 @@ private:
     /**
      * @brief   The last error message.
      */
-    std::string __err_msg;
+    std::string __errmsg;
+
+    /**
+     * The error code.
+     */
+    int __errno;
 };
 
 #endif // __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
