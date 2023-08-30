@@ -46,30 +46,42 @@ public:
      *                      failed to set.
      */
     TcpServer(InternetProtocol ipv = InternetProtocol::v4){
+        __errmsg = "";
+        __errno = 0;
+        
         clog << "Initialise new TCP server object...";
 
-        _serverFd = socket((ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
+        _ipv = ipv;
+        _serverFd = socket((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
         if (_serverFd < 0){
+            __errno = 10000 + errno;
+
             std::stringstream msg;
-            msg << "Server socket creation failed: _serverFd: " << _serverFd
-                << ", errno: " << errno << ".";
+            msg << "Server socket creation failed: _serverFd: "
+                << _serverFd << ". ERROR CODE: " << __errno << ".";
 
             flog << msg.str();
+            //  This prevents the object being initialised and throws seg fault
+            //  if attempting to call the object.
             throw std::runtime_error(msg.str());
         }
 
         const int sockOptResult =
             setsockopt(_serverFd, SOL_SOCKET, SO_REUSEADDR, &_opt, sizeof(_opt));
         if (sockOptResult < 0){
+            __errno = 14000 + errno;
+
             std::stringstream msg;
-            msg << "Socket options failed: sockOptResult: " << sockOptResult
-                << ", errno: " << errno << ".";
+            msg << "Socket options failed: sockOptResult: " 
+                << sockOptResult << ". ERROR CODE: " << __errno << ".";
 
             flog << msg.str();
+            //  This prevents the object being initialised and throws seg fault
+            //  if attempting to call the object.
             throw std::runtime_error(msg.str());
         }
 
-        _address.sin_family = (ipv == InternetProtocol::v4 ? AF_INET : AF_INET6);
+        _address.sin_family = (_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6);
         _address.sin_addr.s_addr = INADDR_ANY;
 
         clog << "TCP server object initialised.";
@@ -104,6 +116,9 @@ public:
      * @throw runtime_error if binding the address to the socket fails.
      */
     bool StartListening(const int portNumber){
+        __errmsg = "";
+        __errno = 0;
+        
         clog << "Start listening on " << portNumber << "...";
 
         _address.sin_port = htons(portNumber);
@@ -112,21 +127,23 @@ public:
             bind(_serverFd, (struct sockaddr*)&_address, _addressLength);
         if (bindResult < 0){
             std::stringstream msg;
-            msg << "Binding failed: bindResult: " << bindResult << ", errno: "
-                << errno << ".";
+            msg << "Binding failed: bindResult: " << bindResult << ".";
 
             elog << msg.str();
-            throw std::runtime_error(msg.str());
+            __errmsg = msg.str();
+            __errno = 15000 + errno;
+            return false;
         }
 
         const int listenResult = listen(_serverFd, _maxQueueLength);
         if (listenResult < 0){
             std::stringstream msg;
             msg << "Listen failed on port " << portNumber << ": listenResult: "
-                << listenResult << ", errno: " << errno << ".";
+                << listenResult << ".";
 
             elog << msg.str();
-            __err_msg = msg.str();
+            __errmsg = msg.str();
+            __errno = 16000 + errno;
             return false;
         }
 
@@ -141,6 +158,9 @@ public:
      *          to accept the new connection.
      */
     int NextConnection(){
+        __errmsg = "";
+        __errno = 0;
+        
         clog << "Accepting next connection in queue...";
 
 #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
@@ -150,11 +170,12 @@ public:
 
         if (newSocket < 0){
             std::stringstream msg;
-            msg << "Failed to accept new connection: _serverFd: " << _serverFd
-                << ", errno: " << errno << ".";
+            msg << "Failed to accept new connection: _serverFd: " 
+                << _serverFd << ".";
 
             flog << msg.str();
-            __err_msg = msg.str();
+            __errmsg = msg.str();
+            __errno = 17000 + errno;
             return -1;
         }
 
@@ -184,13 +205,23 @@ public:
      * @return  The last error message when an error occurs on this object. This
      *          variable will contain the 'errno' value.
      */
-    std::string ERROR_MSG(){ return __err_msg; }
+    std::string ERR_MSG(){ return __errmsg; }
+
+    /**
+     * Get the error code that has been set.
+     */
+    int ERR_NO(){ return __errno; }
 
 private:
     /**
      * @brief   This TCP server instance's socket file descriptor.
      */
     int _serverFd = -1;
+
+    /**
+     * The set Internet Protocol version number (or IPv number).
+     */
+    InternetProtocol _ipv = InternetProtocol::v4;
 
     /**
      * @brief   This server socket's address structure.
@@ -216,7 +247,12 @@ private:
     /**
      * @brief   The last error message.
      */
-    std::string __err_msg;
+    std::string __errmsg;
+
+    /**
+     * The error code.
+     */
+    int __errno;
 };
 
 #endif // __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_server_H__
