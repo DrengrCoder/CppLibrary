@@ -547,12 +547,8 @@ public:
     bool IsUsingChoices() { return _usingChoices; }
 
     /**
-     * @brief   Check if a given string is a valid choice from the list of
-     *          choices on this Parser Option.
-     * 
-     * @param value     The string value to check.
-     * @return true     if VALUE exists in the list of choices,
-     * @return false    otherwise.
+     * Return true if VALUE is a valid choice from the list of choices
+     * on this Parser Option, false otherwise.
      */
     bool ValueIsValidChoice(std::string value) {
         for (std::string choice : _choicesList) {
@@ -602,42 +598,34 @@ public:
 class Parser{
 private:
     /**
-     * @brief The list of arguments can has been pulled in from the command line.
+     * The list of arguments that from the command line.
      */
     std::vector<std::string> _args;
     /**
-     * @brief The program version number, stored locally as a string.
+     * The program version number.
      */
     std::string _version = "-1.-1.-1";
 
     /**
-     * @brief   The list of Parser Options added to be Parsed by this class
-     *          instance.
+     *The list of Parser Options to be Parsed.
      */
     std::vector<ParserOption> _options;
     
     /**
-     * @brief   Bool flag to denote if the help option has been added. The help
-     *          argument flag should be added by the built-in function in this
-     *          class.
+     * Bool flag to denote if the help option has been added. The help
+     * argument flag should be added by the built-in function in this
+     * class.
      */
     bool _usingHelpOption = false;
     /**
-     * @brief   Bool flag to denote if the version option has been added. The
-     *          version argument flag should be added by the built-in function
-     *          in this class.
+     * Bool flag to denote if the version option has been added. The
+     * version argument flag should be added by the built-in function
+     * in this class.
      */
     bool _usingVersionOption = false;
 
     /**
-     * @brief   Return whether this option has already been added to the this
-     *          Parser instance. Called in the 'AddOptions' function to prevent
-     *          duplicate options from being added.
-     * 
-     * @param opt       The Parser Option to check for.
-     * @return true     if the Parser Option already exists in this Parser
-     *                  instance,
-     * @return false    otherwise.
+     * Return true if OPT has been added to this Parser already, false otherwise.
      */
     bool ContainsOption(ParserOption opt) {
         for (ParserOption o : _options) {
@@ -649,15 +637,11 @@ private:
     }
 
     /**
-     * @brief   Calculate the exact number of tab spaces (4 white space char's)
-     *          required to reach the required width of the Parser Option flag
-     *          portion of the Help information print out. This is called in the
-     *          'PrintHelpInfo' function and is used to help format the text
-     *          printed out by the help option flag.
-     * 
-     * @return int  The number of tabs required to format the help info properly,
-     *              based on the length the flags of every Parser Option
-     *              requires.
+     * Calculate the exact number of tab spaces (4 white space char's)
+     * required to reach the required width of the Parser Option flag
+     * portion of the Help information print out. This is called in the
+     * 'PrintHelpInfo' function and is used to help format the text
+     * printed out by the help option flag.
      */
     int CalculateMaximumTabCount(){
         //  init counter
@@ -709,8 +693,8 @@ private:
     }
 
     /**
-     * @brief   Print the version information to std::cout/
-     * 
+     * Print the version information to std::cout. Triggered if
+     * the version arg is found in the command line args list.
      */
     void PrintVersionInfo() {
         std::cout << this->_name 
@@ -718,10 +702,10 @@ private:
     }
 
     /**
-     * @brief   Formats text to be printed to the console. Loops through all
-     *          Parser Option objects that were added to this Parser before
-     *          calling 'Process' and formats the help info text with the
-     *          correct number of spaces and indentations for the console.
+     * Formats text to be printed to the console. Loops through all
+     * Parser Option objects that were added to this Parser before
+     * calling 'Process' and formats the help info text with the
+     * correct number of spaces and indentations for the console.
      */
     void PrintHelpInfo(){
         //  The maximum width of the screen for a new line should be entered
@@ -849,13 +833,13 @@ private:
     }
 
     /**
-     * @brief   Returns a Parser Option object based on the string tag argument
-     *          found in the command line args.
+     * @brief   Returns a Parser Option based on a string TAG argument found in
+     *          the command line args.
      * 
-     * @param tag   The std::string tag to look for.
+     * @param tag   The string tag to look for.
      * @return      A ParserOption object that has been identified with the
-     *              std::string tag.
-     * @throw       InvalidArgument if a Parser Option using the specified tag
+     *              std::string TAG.
+     * @throw       invalid_argument if a Parser Option using the specified tag
      *              could not be found. This is used for catching errors and
      *              escaping portions of a function loop.
      */
@@ -873,15 +857,15 @@ private:
 
 public:
     /**
-     * @brief   The program name. This can be set manually or pulled in
-     *          automatically based on the execution path variable, which is the
-     *          first argument in any command line argument list.
+     * The program name. This can be set manually or pulled in
+     * automatically based on the execution path variable, which
+     * is the first argument in any command line argument list.
      */
     std::string _name = "Default Name.";
     /**
-     * @brief   The description of the program. This can be adjusted after
-     *          calling the contructor to set it, and should be a general brief
-     *          description of what the program is doing and how.
+     * The description of the program. This can be adjusted after
+     * calling the contructor to set it, and should be a general brief
+     * description of what the program is doing and how.
      */
     std::string _description = "Default Description.";
 
@@ -924,7 +908,7 @@ public:
      * @param name      A name for the program.
      * @param descr     A description of the program.
      * @param vers      The version number for the project.
-     * @throw           InvalidArgument if the name string is empty.
+     * @throw           invalid_argument if the name string is empty.
      */
     Parser(int &argc, char **argv, std::string name, std::string descr, std::string vers) noexcept
     {
@@ -959,7 +943,7 @@ public:
     }
 
     /**
-     * @brief Add a predefined Parser Option for the help flag.
+     * Add a predefined Parser Option for the help flag.
      */
     void AddHelpOption() {
         ParserOption po({"h", "help"}, "Show this help.");
@@ -971,7 +955,7 @@ public:
     }
 
     /**
-     * @brief Add a predefined Parser Option for the version flag.
+     * Add a predefined Parser Option for the version flag.
      */
     void AddVersionOption() {
         ParserOption po({"v", "version"}, "Show current version.");
@@ -986,9 +970,10 @@ public:
      * @brief   Add a list of Parser Options to this Parser class instance.
      *          Accepts a brace-initiailised list.
      * 
-     * @param options   The list of Parser Option objects to add.
-     * @return          An integer that represents the number of Parser Options
-     *                  that failed to be added, or an error code where
+     * @param options   The list of Parser Options to add.
+     * @return          Zero (0) if successfully added all Parser Options,
+     *                  otherwise returns an integer for the number of Parser
+     *                  Options that failed to be added, or an error code where
      *                  appropriate.
      */
     int AddOptions(std::initializer_list<ParserOption> options) {
@@ -1010,19 +995,17 @@ public:
     }
 
     /**
-     * @brief   Returns whether the Parser Option supplied as a parameter has a
-     *          tag that has been found in the list of command line arguments.
+     * @brief   Check if OPTION is found in the list of command line args,
+     *          false otherwise.
      * 
-     * @param option    The Parser Option to check the arguments against.
+     * @param option    The Parser Option to check for matching flags.
      * @return true     if one of the Parser Option's tags has been found in the
      *                  list of args,
      * @return false    otherwise.
-     * @throw           InvalidArgument if the Parser Option was not added to
+     * @throw           invalid_argument if the Parser Option was not added to
      *                  this Parser instance. This function has been marked
-     *                  'noexcept' so it cannot be caught and will terminate the
-     *                  program, as this is considered to be badly written code
-     *                  (You should not be checking for Parser Option's that
-     *                  were not added to the Parser).
+     *                  'noexcept' so it cannot be caught and will forcibly 
+     *                  terminate the program (bad code).
      */
     bool IsSet(ParserOption option) noexcept
     {
@@ -1055,6 +1038,17 @@ public:
         return false;
     }
 
+    /**
+     * @brief   Get the value for the OPTION tag that has been set in the
+     *          command line args.
+     * 
+     * @param option        The Parser Option to get the value for.
+     * @return              The data following the Parser Option tag, as a string.
+     * @throw               invalid_argument if the Parser Option was not added
+     *                      to this Parser instance, or if a value could not be
+     *                      found and a default value was not specified (bad 
+     *                      code or input args).
+     */
     std::string GetValue(ParserOption option) noexcept
     {
         bool optionExists = false;
@@ -1117,14 +1111,14 @@ public:
     }
 
     /**
-     * @brief   Single function to handle processing of all command line
-     *          arguments passed in to this Parser class instance. This function
-     *          will parse all the args and handle error output and enforce
-     *          strict checks against the argument and accompanying data where
-     *          applicable.
+     * @brief   Handle processing of all command line args passed in to this
+     *          Parser class instance. Prints out detailed information if there
+     *          is a problem with the arguments or their data.
      * 
      * @return true     if args were successfully parsed,
      * @return false    otherwise.
+     * @throw           invalid_argument if there is a runtime_error in
+     *                  processing.
      */
     bool Process(){
 
