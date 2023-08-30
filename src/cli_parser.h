@@ -24,10 +24,21 @@
  * args list:
  * - Flag-type: (Optional flags, they exist or they don't, used to
  * define 'true' or 'false' parameters).
- * - Flag-data: (Optional flags, and optionally append data)
+ * - Flag-data: (Optional flags, and optionally append data).
  * - Flag-data-req: (Optional flags, but data must follow them
- * because they have no default)
- * - Req-data: (Required flags, and data must follow them)
+ * because they have no default).
+ * - Req-data: (Required flags, and data must follow them).
+ * 
+ * Leading and trailing white space is removed from all TAG and
+ * CHOICE strings, and any remaining white space is replaced
+ * with hyphons. At least one TAG must be added to each option,
+ * and the resulting Parser Option object should be added to a
+ * Parser Object for parsing incoming command line args.
+ * 
+ * Due to the nature of the constructor methods in this class, it is
+ * advised to surround string literals with 'std::string()' to avoid
+ * confusing a 'char' variable with the 'bool' variable in the input
+ * parameters.
  */
 class ParserOption {
 private:
@@ -115,32 +126,15 @@ public:
     const bool _isRequired;
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags or choices with hyphons and duplicate tags and
-     *          choices or empty strings will not be added to the lists. An
-     *          object must be created with at least one or many tags and a
-     *          description. This will default the 'is mandatory' field to
-     *          false.
+     * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
      * 
-     * @param tag               The string argument to identify this Parser 
-     *                          Option.
-     * @param descr             The description for this Parser Option.
-     * @param choices           The list of choices for this Parser Option.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags or choices were added to this Parser
-     *                          Option because they did not satisfy entry
-     *                          conditions. This function has been marked
-     *                          'noexcept' so it cannot be caught and will
-     *                          terminate the program, as this is considered to
-     *                          be badly written code (Every Parser Option needs
-     *                          at least 1 tag, and 1 choice where applicable).
+     * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::string tag, std::string descr, 
             std::initializer_list<std::string> choices,
@@ -151,34 +145,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags or choices with hyphons and duplicate tags and
-     *          choices or empty strings will not be added to the lists. An
-     *          object must be created with at least one or many tags and a
-     *          description. This ctor takes in an 'is mandatory' bool flag to
-     *          set the local bool flag in this object.
+     * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
      * 
-     * @param tag               The string argument to identify this Parser 
-     *                          Option.
-     * @param descr             The description for this Parser Option.
-     * @param choices           The list of choices for this Parser Option.
-     * @param required          True if this argument must exist in the list of
-     *                          args, false otherwise.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags or choices were added to this Parser
-     *                          Option because they did not satisfy entry
-     *                          conditions. This function has been marked
-     *                          'noexcept' so it cannot be caught and will
-     *                          terminate the program, as this is considered to
-     *                          be badly written code (Every Parser Option needs
-     *                          at least 1 tag, and 1 choice where applicable).
+     * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::string tag, std::string descr, 
             std::initializer_list<std::string> choices, bool required,
@@ -189,32 +164,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags or choices with hyphons and duplicate tags and
-     *          choices or empty strings will not be added to the lists. An
-     *          object must be created with at least one or many tags and a
-     *          description. This will default the 'is mandatory' field to
-     *          false.
+     * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
      * 
-     * @param tags              The list of string arguments to identify this
-     *                          Parser Option.
-     * @param descr             The description for this Parser Option.
-     * @param choices           The list of choices for this Parser Option.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags or choices were added to this Parser
-     *                          Option because they did not satisfy entry
-     *                          conditions. This function has been marked
-     *                          'noexcept' so it cannot be caught and will
-     *                          terminate the program, as this is considered to
-     *                          be badly written code (Every Parser Option needs
-     *                          at least 1 tag, and 1 choice where applicable).
+     * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::initializer_list<std::string> tags, std::string descr,
             std::initializer_list<std::string> choices, 
@@ -225,34 +183,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags or choices with hyphons and duplicate tags and
-     *          choices or empty strings will not be added to the lists. An
-     *          object must be created with at least one or many tags and a
-     *          description. This ctor takes in an 'is mandatory' bool flag to
-     *          set the local bool flag in this object.
+     * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
      * 
-     * @param tags              The list of string arguments to identify this
-     *                          Parser Option.
-     * @param descr             The description for this Parser Option.
-     * @param choices           The list of choices for this Parser Option.
-     * @param required          True if this argument must exist in the list of
-     *                          args, false otherwise.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags or choices were added to this Parser
-     *                          Option because they did not satisfy entry
-     *                          conditions. This function has been marked
-     *                          'noexcept' so it cannot be caught and will
-     *                          terminate the program, as this is considered to
-     *                          be badly written code (Every Parser Option needs
-     *                          at least 1 tag, and 1 choice where applicable).
+     * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::initializer_list<std::string> tags, std::string descr, 
             std::initializer_list<std::string> choices, bool required,
@@ -266,32 +205,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags or choices with hyphons and duplicate tags and
-     *          choices or empty strings will not be added to the lists. An
-     *          object must be created with at least one or many tags and a
-     *          description. This will default the 'is mandatory' field to
-     *          false.
+     * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
      * 
-     * @param tags              The list of string arguments to identify this
-     *                          Parser Option.
-     * @param descr             The description for this Parser Option.
-     * @param choices           The list of choices for this Parser Option.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags or choices were added to this Parser
-     *                          Option because they did not satisfy entry
-     *                          conditions. This function has been marked
-     *                          'noexcept' so it cannot be caught and will
-     *                          terminate the program, as this is considered to
-     *                          be badly written code (Every Parser Option needs
-     *                          at least 1 tag, and 1 choice where applicable).
+     * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::vector<std::string> tags, std::string descr, 
             std::initializer_list<std::string> choices,
@@ -302,34 +224,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags or choices with hyphons and duplicate tags and
-     *          choices or empty strings will not be added to the lists. An
-     *          object must be created with at least one or many tags and a
-     *          description. This ctor takes in an 'is mandatory' bool flag to
-     *          set the local bool flag in this object.
+     * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
      * 
-     * @param tags              The list of string arguments to identify this
-     *                          Parser Option.
-     * @param descr             The description for this Parser Option.
-     * @param choices           The list of choices for this Parser Option.
-     * @param required          True if this argument must exist in the list of
-     *                          args, false otherwise.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags or choices were added to this Parser
-     *                          Option because they did not satisfy entry
-     *                          conditions. This function has been marked
-     *                          'noexcept' so it cannot be caught and will
-     *                          terminate the program, as this is considered to
-     *                          be badly written code (Every Parser Option needs
-     *                          at least 1 tag, and 1 choice where applicable).
+     * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::vector<std::string> tags, std::string descr, 
             std::initializer_list<std::string> choices, bool required,
@@ -439,36 +342,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags with hyphons and duplicate tags or empty
-     *          strings will not be added to the list. An object must be created
-     *          with at least one or many tags and a description. This will
-     *          default the 'is mandatory' field to false.
+     * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
      * 
-     * @param tags              The list of string arguments to identify this
-     *                          Parser Option.
-     * @param descr             The description for this Parser Option.
-     * @param valueName         The value name for argument following this
-     *                          Option's tags, acting as a brief description for
-     *                          the data. If you want to specify this parameter
-     *                          in the constructor with a string literal,
-     *                          surround the string in brackets with
-     *                          'std::string()'.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags were added to this Parser Option
-     *                          because they did not satisfy entry conditions.
-     *                          This function has been marked 'noexcept' so it
-     *                          cannot be caught and will terminate the program,
-     *                          as this is considered to be badly written code
-     *                          (Every Parser Option needs at least 1 tag, and 1
-     *                          choice where applicable).
+     * Define VALUENAME if this arg is expecting data after it.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::string tag, std::string descr, std::string valueName = "", 
             std::string defaultValue = "") 
@@ -478,39 +360,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags with hyphons and duplicate tags or empty
-     *          strings will not be added to the list. An object must be created
-     *          with at least one or many tags and a description. This ctor
-     *          takes in an 'is mandatory' bool flag to set the local bool flag
-     *          in this object.
+     * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
      * 
-     * @param tag               The string argument to identify this Parser 
-     *                          Option.
-     * @param descr             The description for this Parser Option.
-     * @param required          True if this argument must exist in the list of
-     *                          args, false otherwise.
-     * @param valueName         The value name for argument following this
-     *                          Option's tags, acting as a brief description for
-     *                          the data. If you want to specify this parameter
-     *                          in the constructor with a string literal,
-     *                          surround the string in brackets with
-     *                          'std::string()'.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags were added to this Parser Option
-     *                          because they did not satisfy entry conditions.
-     *                          This function has been marked 'noexcept' so it
-     *                          cannot be caught and will terminate the program,
-     *                          as this is considered to be badly written code
-     *                          (Every Parser Option needs at least 1 tag, and 1
-     *                          choice where applicable).
+     * Define VALUENAME if this arg is expecting data after it.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::string tag, std::string descr, bool required,
             std::string valueName, std::string defaultValue = "")
@@ -520,36 +378,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags with hyphons and duplicate tags or empty
-     *          strings will not be added to the list. An object must be created
-     *          with at least one or many tags and a description. This will
-     *          default the 'is mandatory' field to false.
+     * onstruct a new Parser Option object. This ctor marks the option as NOT mandatory.
      * 
-     * @param tags              The list of string arguments to identify this
-     *                          Parser Option.
-     * @param descr             The description for this Parser Option.
-     * @param valueName         The value name for argument following this
-     *                          Option's tags, acting as a brief description for
-     *                          the data. If you want to specify this parameter
-     *                          in the constructor with a string literal,
-     *                          surround the string in brackets with
-     *                          'std::string()'.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags were added to this Parser Option
-     *                          because they did not satisfy entry conditions.
-     *                          This function has been marked 'noexcept' so it
-     *                          cannot be caught and will terminate the program,
-     *                          as this is considered to be badly written code
-     *                          (Every Parser Option needs at least 1 tag, and 1
-     *                          choice where applicable).
+     * Define VALUENAME if this arg is expecting data after it.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::initializer_list<std::string> tags, std::string descr, 
             std::string valueName = "", std::string defaultValue = "")
@@ -559,39 +396,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags with hyphons and duplicate tags or empty
-     *          strings will not be added to the list. An object must be created
-     *          with at least one or many tags and a description. This ctor
-     *          takes in an 'is mandatory' bool flag to set the local bool flag
-     *          in this object.
+     * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
      * 
-     * @param tags              The list of string arguments to identify this
-     *                          Parser Option.
-     * @param descr             The description for this Parser Option.
-     * @param required          True if this argument must exist in the list of
-     *                          args, false otherwise.
-     * @param valueName         The value name for argument following this
-     *                          Option's tags, acting as a brief description for
-     *                          the data. If you want to specify this parameter
-     *                          in the constructor with a string literal,
-     *                          surround the string in brackets with
-     *                          'std::string()'.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags were added to this Parser Option
-     *                          because they did not satisfy entry conditions.
-     *                          This function has been marked 'noexcept' so it
-     *                          cannot be caught and will terminate the program,
-     *                          as this is considered to be badly written code
-     *                          (Every Parser Option needs at least 1 tag, and 1
-     *                          choice where applicable).
+     * Define VALUENAME if this arg is expecting data after it.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::initializer_list<std::string> tags, std::string descr,
             bool required, std::string valueName, std::string defaultValue = "")
@@ -604,36 +417,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags with hyphons and duplicate tags or empty
-     *          strings will not be added to the list. An object must be created
-     *          with at least one or many tags and a description. This will
-     *          default the 'is mandatory' field to false.
+     * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
      * 
-     * @param tags              The list of string arguments to identify this
-     *                          Parser Option.
-     * @param descr             The description for this Parser Option.
-     * @param valueName         The value name for argument following this
-     *                          Option's tags, acting as a brief description for
-     *                          the data. If you want to specify this parameter
-     *                          in the constructor with a string literal,
-     *                          surround the string in brackets with
-     *                          'std::string()'.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags were added to this Parser Option
-     *                          because they did not satisfy entry conditions.
-     *                          This function has been marked 'noexcept' so it
-     *                          cannot be caught and will terminate the program,
-     *                          as this is considered to be badly written code
-     *                          (Every Parser Option needs at least 1 tag, and 1
-     *                          choice where applicable).
+     * Define VALUENAME if this arg is expecting data after it.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::vector<std::string> tags, std::string descr, 
             std::string valueName = "", std::string defaultValue = "")
@@ -643,39 +435,15 @@ public:
     }
 
     /**
-     * @brief   Construct a new Parser Option object. This object should be
-     *          added to the Parser class instance so the Parser can perform
-     *          strict checks against and for this Parser Option argument tags
-     *          and argument data. Removes leading and trailing white space
-     *          characters from all strings, replaces any white space characters
-     *          remaining in tags with hyphons and duplicate tags or empty
-     *          strings will not be added to the list. An object must be created
-     *          with at least one or many tags and a description. This ctor
-     *          takes in an 'is mandatory' bool flag to set the local bool flag
-     *          in this object.
+     * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
      * 
-     * @param tags              The list of string arguments to identify this
-     *                          Parser Option.
-     * @param descr             The description for this Parser Option.
-     * @param required          True if this argument must exist in the list of
-     *                          args, false otherwise.
-     * @param valueName         The value name for argument following this
-     *                          Option's tags, acting as a brief description for
-     *                          the data. If you want to specify this parameter
-     *                          in the constructor with a string literal,
-     *                          surround the string in brackets with
-     *                          'std::string()'.
-     * @param defaultValue      The default value for this Parser Option. If you
-     *                          want to specify this parameter in the
-     *                          constructor with a string literal, surround the
-     *                          string in brackets with 'std::string()'.
-     * @throw InvalidArgument   If no tags were added to this Parser Option
-     *                          because they did not satisfy entry conditions.
-     *                          This function has been marked 'noexcept' so it
-     *                          cannot be caught and will terminate the program,
-     *                          as this is considered to be badly written code
-     *                          (Every Parser Option needs at least 1 tag, and 1
-     *                          choice where applicable).
+     * Define VALUENAME if this arg is expecting data after it.
+     * 
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     * 
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::vector<std::string> tags, std::string descr,
             bool required, std::string valueName, 
