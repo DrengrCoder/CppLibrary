@@ -79,7 +79,7 @@ private:
     bool _usingChoices = false;
 
     /**
-     * @brief   Determine if a choice is a duplicate of one that already exists.
+     * @brief   Determine if CHOICE is a duplicate of one that already exists.
      * 
      * @param choice    The string to check against the other existing choices.
      * @return true     if CHOICE is a duplicate,
@@ -95,7 +95,7 @@ private:
     }
 
     /**
-     * @brief   Determine if a tag is a duplicate of one that already exists.
+     * @brief   Determine if TAG is a duplicate of one that already exists.
      * 
      * @param tag       The string to check against the other existing tags.
      * @return true     if TAG is a duplicate,
@@ -516,45 +516,33 @@ public:
     }
 
     /**
-     * @brief   Get the Value Name. This parameter is optional and may be empty.
-     * 
-     * @return  A std::string for the Value Name variable.
+     * Get the Value Name.
      */
     std::string GetValueName() { return _valueName; }
 
     /**
-     * @brief   Get the Default Value. This parameter is optional and may be
-     *          empty.
-     * 
-     * @return  A std::string for the Default Value variable.
+     * Get the Default Value.
      */
     std::string GetDefaultValue() { return _defaultValue; }
 
     /**
-     * @brief   Get the vector of Tags. There will always be at least 1 tag.
+     * @brief   Get the vector of Tags.
      * 
-     * @return  A std::vector<std::string> containing all the tags added to this
-     *          Parser Option.
+     * @return  A std::vector<std::string> containing all the tags.
      */
     std::vector<std::string> GetTags() { return _tags; }
 
     /**
-     * @brief   Get the vector of Choices. There should be at least 1 choice if
-     *          choices are being used.
+     * @brief   Get the vector of Choices. At least 1 choice if choices are
+     *          being used.
      * 
-     * @return  A std::vector<std::string> containing all the choices added to
-     *          this Parser Option.
+     * @return  A std::vector<std::string> containing all the choices.
      */
     std::vector<std::string> GetChoices() { return _choicesList; }
 
     /**
-     * @brief   Return whether this Parser Option is using a list of choices.
-     *          This variable is set in the ctor's if the ctor is used that
-     *          allows you to define a list of choices with a brace-initialised
-     *          list.
-     * 
-     * @return true     if there are a list of choices on this object,
-     * @return false    otherwise.
+     * Return true if there are a list of choices on this object,
+     * false otherwise.
      */
     bool IsUsingChoices() { return _usingChoices; }
 
@@ -562,8 +550,8 @@ public:
      * @brief   Check if a given string is a valid choice from the list of
      *          choices on this Parser Option.
      * 
-     * @param value     The string value to check for.
-     * @return true     if 'value' exists in the list of choices,
+     * @param value     The string value to check.
+     * @return true     if VALUE exists in the list of choices,
      * @return false    otherwise.
      */
     bool ValueIsValidChoice(std::string value) {
@@ -576,9 +564,9 @@ public:
     }
 
     /**
-     * @brief   Print the list of choices on this Parser Option. This function
-     *          is triggered when the help flag follows a Parser Option tag for
-     *          this option.
+     * Print the list of choices on this Parser Option. This function
+     * is triggered when the help flag follows a Parser Option tag
+     * for this option, but can be triggered manually if desired.
      */
     void PrintOptionChoiceInfo() {
         std::stringstream baseOss;
@@ -590,15 +578,9 @@ public:
     }
 
     /**
-     * @brief   Override the equals sign operator for this object. Two objects
-     *          of this type are said to be "equal" when all variable fields are
-     *          identical across both of them.
-     * 
-     * @param p1        The first object to compare, left side of the statement. 
-     * @param p2        The second object to compare, right side of the statement.
-     * @return true     if both objects are said to be equal, defined in this
-     *                  function,
-     * @return false    otherwise.
+     * Override the equals sign operator for this object. Two objects
+     * of this type are said to be "equal" when all variable fields are
+     * identical across both of them.
      */
     friend bool operator==(const ParserOption &p1, const ParserOption &p2) {
         return p1._tags == p2._tags &&
