@@ -861,7 +861,7 @@ namespace HTTP
          * @param ipv           The Internet Protocol Version Number.
          */
         explicit Request(const std::string& uriString, const std::string& ip, 
-                            const TcpClient::InternetProtocol::Value ipv = TcpClient::InternetProtocol::Value::v4):
+                            const TcpClient::InternetProtocol ipv = TcpClient::InternetProtocol::v4):
                 _ipAddress(ip),
                 _uri(ParseUri(uriString.begin(), uriString.end())),
                 _ipv(ipv)
@@ -872,7 +872,7 @@ namespace HTTP
          * 
          * @param ipv   The Internet Protocol Version Number.
          */
-        explicit Request(const TcpClient::InternetProtocol::Value ipv = TcpClient::InternetProtocol::Value::v4):
+        explicit Request(const TcpClient::InternetProtocol ipv = TcpClient::InternetProtocol::v4):
                 _ipv(ipv)
         { clog << "A HTTP Request object has been initiailised."; }
 
@@ -1254,7 +1254,7 @@ namespace HTTP
         }
 
     private:
-        TcpClient::InternetProtocol::Value _ipv = TcpClient::InternetProtocol::Value::v4;
+        TcpClient::InternetProtocol _ipv = TcpClient::InternetProtocol::v4;
         std::string _ipAddress;
         Uri _uri;
     };
