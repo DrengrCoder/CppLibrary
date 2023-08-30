@@ -53,6 +53,9 @@
 ################################################################################
 ########################## Basic variable definition ###########################
 
+# Make directory with -p flag
+MKDIR_P := mkdir -p
+
 # Removal flags
 RM := rm -rf
 
@@ -186,7 +189,7 @@ rebuild_and_runtests: rebuild run_tests
 # Install the files into the includes directory
 install:
 	@echo Installing C++ Files to \"$(src_at)\"
-	@mkdir -p $(src_at)
+	@$(MKDIR_P) $(src_at)
 	@cp src/*.h* $(src_at)
 	@echo Installing third party libraries to local include directory
 	@cp src/RapidXML/* /usr/local/include
@@ -194,10 +197,10 @@ install:
 	@cp -r src/catch2 /usr/local/include
 	@cp -r src/HTTPRequest /usr/local/include
 	@echo Installing binaries to \"$(bin_at)\"
-	@mkdir -p $(bin_at)
+	@$(MKDIR_P) $(bin_at)
 	@cp bin/* $(bin_at)
 	@echo Moving lint config files to \"$(lint_config_at)\"
-	@mkdir -p $(lint_config_at)
+	@$(MKDIR_P) $(lint_config_at)
 	@cp lint_config/* $(lint_config_at)
 
 # Run test files
