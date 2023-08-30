@@ -81,7 +81,7 @@ TEST_CASE("Send data across a server and socket object", "[single=file]")
 
     usleep(1000000);
 
-    memset(output_buffer, '\0', 1000);
+    memset(output_buffer, 0, 1000);
 
     REQUIRE(client->Read(output_buffer, 1000) == server_msg_size);
 
