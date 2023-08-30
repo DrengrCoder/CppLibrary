@@ -15,67 +15,63 @@
 #include "cpp_utilities.h"
 
 /**
- * @brief   The Parser Option class is used to quickly define CLI argument input
- *          with strict data validation and type checking when CLI arguments are
- *          parsed into the program. This also assists in generating help
- *          information with the help flags are found. 
+ * The Parser Option class is used to quickly define CLI argument
+ * input with strict data validation and type checking when CLI
+ * arguments are parsed into the program. This also assists in
+ * generating help information with the help flags are found. 
  * 
- * @paragraph   There are 4 types of arguments that can be found in the CLI args
- *              list:
- *                  Flag-type       (Optional flags, they exist or they don't, 
- *                                  used to define 'true' or 'false' parameters).
- *                  Flag-data       (Optional flags, and optionally append data)
- *                  Flag-data-req   (Optional flags, but data must follow them 
- *                                  because they have no default)
- *                  Req-data        (Required flags, and data must follow them)
+ * There are 4 types of arguments that can be found in the CLI
+ * args list:
+ * - Flag-type: (Optional flags, they exist or they don't, used to
+ * define 'true' or 'false' parameters).
+ * - Flag-data: (Optional flags, and optionally append data)
+ * - Flag-data-req: (Optional flags, but data must follow them
+ * because they have no default)
+ * - Req-data: (Required flags, and data must follow them)
  */
 class ParserOption {
 private:
     /**
-     * @brief
      * The list of tags this Parser Option can be identified with.
      */
     std::vector<std::string> _tags;
 
     /**
-     * @brief   The name of the value expected to follow a Parser Option tag
-     *          argument. If this variable has data, this Parser Option is made
-     *          mandatory, unless a Default Value is specified in the ctor. The
-     *          value name can be supplied with a single string, or it takes the
-     *          first option in a list of choices.
+     * The name of the value expected to follow a Parser Option tag
+     * argument. If this variable has data, this Parser Option is made
+     * mandatory, unless a Default Value is specified in the ctor. The
+     * value name can be supplied with a single string, or it takes the
+     * first option in a list of choices.
      */
     std::string _valueName = "";
 
     /**
-     * @brief   The default value for this Parser Option if a value name has
-     *          been specified. If this variable has data, this Parser Option is
-     *          not considered to be mandatory.
+     * The default value for this Parser Option if a value name has
+     * been specified. If this variable has data, this Parser Option is
+     * not considered to be mandatory.
      */
     std::string _defaultValue = "";
 
     /**
-     * @brief   The list of options that is expected to follow this Parser 
-     *          Option tag argument. This is only used when the Parser Option
-     *          must force a set list of choices, and the first choice in the
-     *          list will set the Value Name variable.
+     * The list of options that is expected to follow this Parser
+     * Option tag argument. This is only used when the Parser
+     * Option must force a set list of choices, and the first
+     * choice in the list will set the Value Name variable.
      */
     std::vector<std::string> _choicesList;
     /**
-     * @brief   True if one of the ctor's was used that specifies using a forced
-     *          list of choices for the Parser Option, false otherwise. This
-     *          variable gets set automatically if one of the specific ctors is
-     *          used.
+     * True if one of the ctor's was used that specifies using a
+     * forced list of choices for the Parser Option, false otherwise.
+     * This variable gets set automatically if one of the specific
+     * ctors is used.
      */
     bool _usingChoices = false;
 
     /**
-     * @brief   Determine if a choice is a duplicate of one that already exists
-     *          on this Parser Option. This function is only called in the
-     *          ctor's when initialising this object instance.
+     * @brief   Determine if a choice is a duplicate of one that already exists.
      * 
-     * @param choice    The input string to check against the other existing
-     *                  choices.
-     * @return true     if the input string is a duplicate,
+     * @param choice    The string to check against the other existing choices.
+     * @return true     if CHOICE is a duplicate,
      * @return false    otherwise.
      */
     bool ChoiceIsDuplicate(std::string choice) {
@@ -88,13 +84,10 @@ private:
     }
 
     /**
-     * @brief   Determine if a tag is a duplicate of one that already exists on
-     *          this Parser Option. This function is only called in the ctor's
-     *          when initialising this object instance.
+     * @brief   Determine if a tag is a duplicate of one that already exists.
      * 
-     * @param tag       The input string to check against the other existing 
-     *                  tags.
-     * @return true     if the input string is a duplicate,
+     * @param tag       The string to check against the other existing tags.
+     * @return true     if TAG is a duplicate,
      * @return false    otherwise.
      */
     bool TagIsDuplicate(std::string tag) {
@@ -108,16 +101,16 @@ private:
 
 public:
     /**
-     * @brief   The description for this Parser Option. This is also printed out
-     *          when generating the help information.
+     * The description for this Parser Option. This is also printed
+     * out when generating the help information.
      */
     std::string _description = "Default Description";
 
     /**
-     * @brief   A flag to show whether this Parser Option is required. This is
-     *          initialised in the ctor's initialisation list and is set to TRUE
-     *          if a Value Name or Choice's list was set but a Default Value was
-     *          not, otherwise this variable will be false.
+     * A flag to show whether this Parser Option is required. This is
+     * initialised in the ctor's initialisation list and is set to TRUE if a
+     * Value Name or Choice's list was set but a Default Value was
+     * not, otherwise this variable will be false.
      */
     const bool _isRequired;
 
