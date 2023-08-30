@@ -1,37 +1,35 @@
 ################################################################################
 ########################## Make command instructions ###########################
 
-##### Template #####
-# command
-#	description / defintiion
-
-##### Terminal command list #####
-
-### Default commands from template makefile ###
 # make
-#	Builds the first target it finds, which should be declared under the 'Main 
-#	build recipe' heading. This command simply looks for the first command in
-#	the file and starts trying to build it, further building any prerequisites
-#	defined for the target. Only one recipe should exist under this heading.
+#	The default target recipe for this project is uniquely just for test files,
+#	as there is no main executable that can be built in this project. 'make' and
+#	'make tests' have the same effect. See further make recipes below.
 
 # make tests
-#	Builds all test files into executables and stores them in the build folder.
-#	This function additionally calls 'build' first to make sure any detected
-#	changes are built before building new tests, but nothing will happen if no
-#	changes have been detected to save compilation time.
+#	As mentioned above.
 
 # make tests_and_runtests
-#	Calls the 'tests' command defined above and then the 'run_tests' command
-#	defined below.
+#	Calls the 'make tests' command defined above and then the 'make run_tests'
+#	command defined below.
 
 # make clean
 #	Removes all files from the 'build/tests' directory.
 
 # make rebuild
-#	Calls 'clean' and 'build' defined above.
+#	Calls 'make clean' and 'make tests' defined above.
 
 # make rebuild_and_runtests
-#	Calls 'rebuild_tests' defined above, and 'run_tests' defined below.
+#	Calls 'make rebuild_tests' defined above, and 'make run_tests' defined
+#	below.
+
+# make install
+#	This command needs to be called with 'sudo' as it will try to make
+#	directories in restricted locations and copy files to the direcotries it
+#	creates. Follow 'sudo make install' with a space delimited list to further
+#	define the 'src_at', 'bin_at' and 'lint_config_at' variables to copy source
+#	files to the 'src_at' direcotry, binary files to the 'bin_at' directory, and
+#	any cppnamelint config files to the 'lint_config_at' directory.
 
 # make run_tests
 #	Loops through all test executables in the 'build/tests' directory and runs
@@ -49,6 +47,10 @@
 # make announce_compiling_tests
 #	Prints echo information to display when things are happening. Defined as a
 #	prerequisite to the recipe that starts compiling test files.
+
+# make validate_cpp_lint (EXPERIMENTAL)
+#	Validates the code in all source files using the defined .toml file in the
+#	recipe command.
 
 ################################################################################
 ########################## Basic variable definition ###########################
@@ -122,7 +124,7 @@ CPPFLAGS := $(INC_FLAGS) -MMD -MP
 ########################################
 
 ################################################################################
-############################ Other target recipe's #############################
+############################# Main Target Recipe ###############################
 
 target: tests
 
@@ -137,12 +139,12 @@ $(TEST_EXECS): make_directories announce_compiling_tests
 # Define these custom commands
 .PHONY: tests tests_and_runtests \
 	clean \
-	rebuild \
-	rebuild_and_runtests \
+	rebuild rebuild_and_runtests \
 	install \
 	run_tests make_directories clear_log_files \
 	announce_compiling_tests \
 	validate_cpp_lint
+
 
 ################################################################################
 ############################ Build command recipe's ############################
@@ -216,11 +218,11 @@ run_tests:
 	@echo "####################################################################"
 
 make_directories:
-	@mkdir -p $(BLD_DIR)
-	@mkdir -p $(BLD_DIR)/dbg
-	@mkdir -p $(BLD_SRC_DIR)
-	@mkdir -p $(BLD_SRC_DIR)/obj
-	@mkdir -p $(BLD_TEST_DIR)
+	@$(MKDIR_P) $(BLD_DIR)
+	@$(MKDIR_P) $(BLD_DIR)/dbg
+	@$(MKDIR_P) $(BLD_SRC_DIR)
+	@$(MKDIR_P) $(BLD_SRC_DIR)/obj
+	@$(MKDIR_P) $(BLD_TEST_DIR)
 
 # Remove all the log files to clean the project folders.
 clear_log_files:
@@ -235,6 +237,7 @@ announce_compiling_tests:
 	@echo "####################################################################"
 	@echo Compiling tests...
 
+# Validate the source code against the .toml config files.
 validate_cpp_lint:
 	@echo "####################################################################"
 	@echo Validating C++ code via \"cppnamelint\"...
