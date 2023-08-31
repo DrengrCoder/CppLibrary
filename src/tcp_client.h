@@ -16,19 +16,34 @@
 #include "log.h"
 
 /**
- * The custom TCP Socket class is designed to simplify the process of
- * using and setting up network sockets for a TCP data stream in C++.
- * A std::runtime_error is thrown in places where an unrecoverable
- * error occurs, along with a log message printed. 'ERR_NO' and
- * 'ERR_MSG' are set.
+ * The custom TCP Socket class is designed to simplify the process of using and
+ * setting up network sockets for a TCP data stream in C++. A std::runtime_error
+ * is thrown in places where an unrecoverable error occurs, along with a log
+ * message printed. 'ERR_NO' and 'ERR_MSG' are set.
  * 
- * This TCP Client object holds a reference to the configured socket
- * file descriptor that is used for sending and reading data over the
- * network socket, as well as storing the server file descriptor this
- * client connected to.
+ * This TCP Client object holds a reference to the configured socket file
+ * descriptor that is used for sending and reading data over the network socket,
+ * as well as storing the server file descriptor this client connected to.
  * 
- * __errno and __errmsg are local private variables that are set upon
- * error, and can be accessed using ERR_NO() and ERR_MSG() functions.
+ * __errno and __errmsg are local private variables that are set upon error, and
+ * can be accessed using ERR_NO() and ERR_MSG() functions.
+ * 
+ * NOTE:
+ * There is a unique error code numbering system implemented for this class.
+ * The error code system is a combination of custom error codes (between 100
+ * and 9999) and partial custom error codes combined with the ‘errno’ macro
+ * to produce values 10000 and over.
+ * 
+ * Custom error codes between 100 and 9999 denote some sort of usage
+ * error and have been documented in the readme. Error codes 10000 and
+ * over follow the pattern YYXXX where YY is a 2 digit custom code I have
+ * given it, and XXX is the 'errno' macro error code added to the value.
+ * Examples:
+ * - '12047' is the custom error code '12' and the errno code '047' or just '47'.
+ * - '10111' is the custom error code '10' and the errno code '111'.
+ * 
+ * The custom codes are documented in this readme. 'errno' code meaning
+ * will change depending on what caused the errno code to be set.
  */
 class TcpClient {
 public:
