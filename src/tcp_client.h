@@ -51,7 +51,7 @@ public:
         clog << "Initialise new TCP client object...";
 
         _ipv = ipv;
-        _socketFd = socket((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, -90);
+        _socketFd = socket((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
         if (_socketFd < 0){
             __errno = 10000 + errno;
 
