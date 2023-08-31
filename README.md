@@ -2,13 +2,49 @@
 
 ## Table of contents
 
+Brief
+Project Contents and Overview
+    Custom code contents
+    Custom binary programs
+    Third-party code contents
+    Third-party binary programs
+Code Descriptions
+    Catch.hpp (third-party)
+        Credit
+    Command line interface parser (cli_parser.h)
+        The constructors and input parameters
+        The types of options
+        Credit
+        Dependencies
+    C++ Utilities
+    HTTPRequest.hpp (third-party)
+        Credit
+    Log - A custom and configurable logger
+        Credit
+    Nlohmann JSON (third-party)
+        Credit
+    Proxy-based HTTP Request header
+        Credit
+        Dependencies
+    RapidXML (third-party)
+        Credit
+    String - A custom String class
+        Credit
+    TCP Client network socket class
+        Error codes
+        Dependencies
+    TCP Server network socket class
+        Error codes
+        Dependencies
+Installation and Build steps
+
 ## Brief
 
 Custom C++ header files to simplify a number of common functions and operations. To be installed in the includes folder.
 
 This project also includes a number of third-party classes and binary programs that are extremely useful for most projects and developers. Their respective license files are included under the Licenses folder, appended with their project name, and the git repository they can be accessed from (at time of writing on 31/08/2023) at the top of the file.
 
-## Project Contents
+## Project Contents and Overview
 
 ### Custom code contents
 
@@ -37,7 +73,7 @@ This project also includes a number of third-party classes and binary programs t
 
 ## Code Descriptions
 
-This library of classes can be used standalone for the most part (dependancies listed) and allows a developer to quickly write fast, efficient and manageable code for all types of C/C++ projects (C compatibility will need to be tested on a case-by-case basis, but all classes developed for C++ compatibility).
+This library of classes can be used standalone for the most part (dependencies listed) and allows a developer to quickly write fast, efficient and manageable code for all types of C/C++ projects (C compatibility will need to be tested on a case-by-case basis, but all classes developed for C++ compatibility).
 
 ### Catch.hpp (third-party)
 
@@ -89,7 +125,7 @@ This class allows a developer to quickly define and manage arguments that can be
 
 #### Dependencies
 
-This class requires the custom logger class and the custom C++ utilities class for some additional functions.
+This class requires the custom [logger class](#log---a-custom-and-configurable-logger) and the custom [C++ utilities class](#c-utilities) for some additional functions.
 
 ### C++ Utilities
 
@@ -131,7 +167,7 @@ This file has been heavily influenced by the [HTTPRequest project](https://githu
 
 #### Dependencies
 
-This class requires the custom logger class, the custom TCP Client class and the custom String class for some additional functions.
+This class requires the custom [logger class](#log---a-custom-and-configurable-logger), the custom [TCP Client class](#tcp-client-network-socket-class) and the custom [String class](#string---a-custom-string-class) for some additional functions.
 
 ### RapidXML (third-party)
 
@@ -182,7 +218,7 @@ The custom codes are documented here, but the 'errno' code meaning will change d
 
 #### Dependencies
 
-This class requires the custom logger class to log unique errors.
+This class requires the custom [logger class](#log---a-custom-and-configurable-logger) to log unique errors.
 
 ### TCP Server network socket class
 
@@ -204,6 +240,24 @@ The custom codes are documented here, but the 'errno' code meaning will change d
 - 15xxx = Binding the socket failed, the last 3 digits will be 'errno' and will provide more specific details.
 - 16xxx = Starting to listen on a network port failed, the last 3 digits will be 'errno' and will provide more specific details.
 - 17xxx = Attempting to accept the next connection in the queue failed, the last 3 digits will be 'errno' and will provide more specific details.
+
+## Binary descriptions
+
+Binary programs have been included in this project, but are not built in this project. They have been included here as common tools used across all systems I develop on and may have limited use for most users.
+
+### cppnamelint (third-party)
+
+The [CppNameLint project](https://github.com/dougpuob/cppnamelint/tree/master) was created as a way of defining custom naming conventions and applying them to your code. '.toml' files are used in conjunction with this binary file and a source file (or multiple source files) to quickly produce a report of what is and is not obeying the defined conventions.
+
+This has been included for testing, along with a custom config file.
+
+### Automated Version Incrementor program
+
+The Version Incrementor program has been created to quickly manage automated version number incrementation when building with GNU make. A make recipe should be defined that triggers the build commands and this binary program.
+
+This program accepts a file path to the header file that is being incremented, and a flag to denote which version number is being incremented. This version numbering system follows [semantic versioning 2.0.0](https://semver.org/) system, with the added number for BUILD that is automatically incremented if a flag is omitted from the Version Incrementor command line args list.
+
+The header file is created if it does not exist, and behaviour is undefined is passing in a directory as the argument for the file path. Use the -h flag with the Version Incrementor to see the list of arguments and their expected formats.
 
 ## Installation and Build steps
 
