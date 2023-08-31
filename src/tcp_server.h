@@ -13,19 +13,20 @@
 #include "log.h"
 
 /**
- * The custom TCP Socket class is designed to simplify the process of using and
- * setting up network sockets for a TCP data stream in C++. A std::runtime_error
- * is thrown in places where an unrecoverable error occurs, along with a log
- * message printed and 'errno' being set and printed int he message as well,
- * otherwise the function will either return false or -1 where appropriate along
- * with a custom error message set that can be accessed via the ERROR_MSG string
- * function.
+ * The custom TCP Socket class is designed to simplify the process of
+ * using and setting up network sockets for a TCP data stream in C++.
+ * A std::runtime_error is thrown in places where an unrecoverable
+ * error occurs, along with a log message printed. 'ERR_NO' and
+ * 'ERR_MSG' are set.
  * 
- * This class specifically and only listens for connect requests on a given port
- * number, if you need to write data back to that socket, the 'NextConnection'
- * function will return an integer for the socket file descriptor value, and
- * this should be used to initialise a custom TCP Client class object or to send
- * bytes via your own commands.
+ * This class specifically and only listens for connection requests on a
+ * given port number, if you need to write data back to that socket,
+ * the 'NextConnection' function will return an integer for the socket
+ * file descriptor value, and this should be used to initialise a custom
+ * TCP Client class object or to send bytes via your own commands.
+ * 
+ * __errno and __errmsg are local private variables that are set upon
+ * error, and can be accessed using ERR_NO() and ERR_MSG() functions.
  */
 class TcpServer{
 public:
@@ -36,7 +37,7 @@ public:
 
     /**
      * @brief   Construct a new Tcp Server object with a socket file descriptor
-     *          and some default parameters for a TCP type connection.
+     *          and some default parameters for a TCP type connection:
      *          'socket(AF_INET, SOCK_STREAM, 0)' and 'setsockopt(_serverFd,
      *          SOL_SOCKET, SO_REUSEADDR, &_opt, sizeof(_opt))'. Address Options:
      *          AF_INET family, INADDR_ANY s_addr.
@@ -88,7 +89,7 @@ public:
     }
 
     /**
-     * @brief   Destroy the Tcp Server object and perform necessary clean up.
+     * Destroy the Tcp Server object and perform necessary clean up.
      */
     ~TcpServer(){
         dlog << "TCP Server destruction...";
@@ -96,8 +97,8 @@ public:
     }
 
     /**
-     * @brief   Shuts down server socket file descriptor and resets the file
-     *          descriptor value.
+     * Shuts down server socket file descriptor and resets the file
+     * descriptor value.
      */
     void Shutdown(){
         dlog << "Shutting down TCP Server...";
@@ -106,14 +107,13 @@ public:
     }
 
     /**
-     * @brief   Start listening to the socket on a given port number.
+     * @brief   Start listening to the socket on a given port number. Sets
+     *          __errmsg and __errno on error.
      * 
-     * @param portNumber    The port number for this TCP server instance to
-     *                      listen on.
+     * @param portNumber    The port number for this TCP server to listen on.
      * @return true         if the socket successfully started listening to the
      *                      port,
      * @return false        otherwise.
-     * @throw runtime_error if binding the address to the socket fails.
      */
     bool StartListening(const int portNumber){
         __errmsg = "";
@@ -151,11 +151,10 @@ public:
     }
 
     /**
-     * @brief   Gets the next pending connection in the queue for the server
-     *          socket file descriptor.
+     * Return the file descriptor value for the next
+     * pending connection in the queue.
      * 
-     * @return  The connected socket file descriptor value, or -1 if it failed
-     *          to accept the new connection.
+     * Sets __errmsg and __errno on error.
      */
     int NextConnection(){
         __errmsg = "";
@@ -183,38 +182,30 @@ public:
     }
 
     /**
-     * @brief   Set the maximum queue size for this TCP server listener. This
-     *          value should be set before 'StartListening' is called.
-     * 
-     * @param len   The size to set as an integer. 50 is the specified maximum
-     *              for this class object, setting anything over 50 will forcibly
-     *              set it to 50.
+     * Set the maximum queue size for this TCP server listener. This
+     * value should be set before 'StartListening' is called. Must be
+     * less than 50, recommended it is at least 2.
      */
     void SetMaximumQueueSize(int len){ _maxQueueLength = (len > 50 ? 50 : len); }
 
     /**
-     * @brief   Get this server socket's file descriptor value.
-     * 
-     * @return  The ID for the server socket file descriptor as an integer.
+     * Get this server socket's file descriptor value.
      */
     int GetSocketFd(){ return _serverFd; }
 
     /**
-     * @brief   Get the last error message that occurred on this object.
-     * 
-     * @return  The last error message when an error occurs on this object. This
-     *          variable will contain the 'errno' value.
+     * Get the last error message set on this object.
      */
     std::string ERR_MSG(){ return __errmsg; }
 
     /**
-     * Get the error code that has been set.
+     * Get the last error code set on this object.
      */
     int ERR_NO(){ return __errno; }
 
 private:
     /**
-     * @brief   This TCP server instance's socket file descriptor.
+     * The file descriptor for this server-side socket.
      */
     int _serverFd = -1;
 
@@ -224,33 +215,33 @@ private:
     InternetProtocol _ipv = InternetProtocol::v4;
 
     /**
-     * @brief   This server socket's address structure.
+     * This server socket's address structure.
      */
     struct sockaddr_in _address;
 
     /**
-     * @brief   The byte length of the address in memory.
+     * The byte length of the address in memory.
      */
     const int _addressLength = sizeof(_address);
 
     /**
-     * @brief   For setting socket option value. Specified as a const integer so
-     *          it can be used as a reference parameter.
+     * For setting socket option value. Specified as a const integer so
+     * it can be used as a reference parameter.
      */
     const int _opt = 1;
 
     /**
-     * @brief   The maximum queue length for this server socket listener.
+     * The maximum queue length for this server socket listener.
      */
     int _maxQueueLength = 10;
     
     /**
-     * @brief   The last error message.
+     * The last error message set.
      */
     std::string __errmsg;
 
     /**
-     * The error code.
+     * The last error code set.
      */
     int __errno;
 };
