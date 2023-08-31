@@ -57,7 +57,7 @@ namespace HTTP
         }
 
         /**
-         * Convert this instance to predefined string.
+         * Convert enumeration value to exact string representation.
          */
         std::string ToStdString() const {
             switch (value){
@@ -321,10 +321,9 @@ namespace HTTP
     //  ##############################################################
 
     /**
-     * Check the input is a valid Version major and minor number. The
-     * HTTP version comes out in the fields line of the header fields.
+     * @brief   Check the input is a valid Version major and minor number.
      * 
-     * Throws runtime_error if the HTTP version string is invalid.
+     * @throw   runtime_error if the HTTP version string is invalid.
      */
     inline Version ParseVersion(String input){
         clog << "Parsing version...";
@@ -356,11 +355,9 @@ namespace HTTP
     }
 
     /**
-     * Check the input is a valid status code value. The status
-     * code is a uint16 variable type and can be matched up
-     * to a HTTP::Status::Code enum value.
+     * @brief   Check the input is a valid status code value. See HTTP::Status::Code enum.
      * 
-     * Throws runtime_error if the status code value is invalid.
+     * @throw   runtime_error if the status code value is invalid.
      */
     inline uint16_t ParseStatusCode(String input){
         clog << "Parsing status code...";
@@ -383,11 +380,11 @@ namespace HTTP
     }
 
     /**
-     * Returns true if the input is a valid string, that is, if the
-     * input only contains white space, visible, and obsolete
-     * char's
+     * Check INPUT is a valid HTTP string, that is, if the input
+     * only contains white space, visible, and obsolete char's
      * 
-     * Throws runtime_error if any of the characters are invalid.
+     * Throws runtime_error if any of the characters are
+     * invalid.
      * 
      * See 'IsWhiteSpaceChar', 'IsVisibleChar' and
      * 'IsObsoleteTextChar' for details.
@@ -404,17 +401,13 @@ namespace HTTP
     }
 
     /**
-     * Parse the full status line portion of the header fields and
-     * return a HTTP::Status struct object with a Status::Code,
-     * the HTTP Version number and a reason phrase. Returns
-     * Status::Code::InternalProgramError if an error was thrown
-     * and caught from another function.
+     * Parse the full status line portion of the header fields. Returns
+     * Status::Code::InternalProgramError if an error was thrown and
+     * caught from another function.
      * 
-     * The reason phrase may be empty with Status::Code 200
-     * for OK.
+     * The reason phrase may be empty with Status::Code 200 for OK.
      * 
-     * See 'ParseVersion', 'ParseStatusCode' and 'ParseReason'
-     * for details.
+     * See 'ParseVersion', 'ParseStatusCode' and 'ParseReason' for details.
      */
     inline Status ParseStatusLine(String headerLine){
         clog << "Parsing status line...";
