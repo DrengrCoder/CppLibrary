@@ -44,46 +44,35 @@ public:
 };
 
 /**
- * @brief   The custom String class has been created to replicate high-level
- *          functionality that you might expect when using C# strings such
- *          as '.contains', '.split' and '.replace', although the 'replace'
- *          function already exists on C++ strings, this implementation has been
- *          rewritten to be more simple and more like C# functionality. All
- *          String class objects are null-terminated to prevent stack overflow
- *          errors.
- * 
+ * The custom String class has been created to replicate high-level
+ * functionality that you might expect when using C# strings such
+ * as '.contains', '.split' and '.replace', although the 'replace'
+ * function already exists on C++ strings, this implementation has
+ * been rewritten to be more simple and more like C# functionality.
+ * All String class objects are null-terminated to prevent stack
+ * overflow errors.
  */
 class String {
 private:
 
-    //  ##############################################################
     //  ######################### Variables ##########################
     //  ##############################################################
 
     /**
-     * @brief   The string (C strings are stored as char arrays - a char pointer
-     *          is a char array). This is not exposed as the String class object
-     *          itself can be returned as a std::string and char pointer (or a
-     *          const char pointer if using the 'c_str()' function).
+     * The string (C strings are stored as char arrays - a char pointer
+     * is a char array). This is not exposed as the String class object
+     * itself can be returned as a std::string and char pointer (or a
+     * const char pointer if using the 'c_str()' function).
      */
     char *_str;
 
     const std::string WHITESPACE = " \n\r\t\f\v";
  
-    //  ##############################################################
     //  ############ Match to other overloading operators ############
     //  ##############################################################
 
     /**
-     * @brief   Prototype for stream insertion operator so this can be used with
-     *          stream insertion functions, such as those used by string stream
-     *          and file stream objects.
-     * 
-     * @param os    The output stream to insert this String in to.
-     * @param obj   This String.
-     * @return      The std::ostream& object the String data is inserted to so
-     *              continuous insertion operators can be appended to one
-     *              another.
+     * Prototype insertion operator override.
      */
     friend std::ostream& operator << (std::ostream& os, const String& obj) {
         os << obj._str;
@@ -91,12 +80,7 @@ private:
     }
 
     /**
-     * @brief   Prototype for the plus ( + ) operator so this allows Strings to
-     *          be concatenated to other Strings.
-     * 
-     * @param lhs   The left hand side of the operator.
-     * @param rhs   The right hand side of the operator.
-     * @return      The concatenated String data.
+     * Prototype plus ( + ) operator to concatenate String and String.
      */
     friend String operator + (const String& lhs, const String& rhs) {
         int length = strlen(lhs._str) + strlen(rhs._str);
@@ -111,12 +95,7 @@ private:
     }
 
     /**
-     * @brief   Prototype for the plus ( + ) operator so this allows char's to
-     *          be concatenated to Strings.
-     * 
-     * @param lhs   The left hand side of the operator, a String object.
-     * @param rhs   The right hand side of the operator, a char object.
-     * @return      The concatenated String data.
+     * Prototype plus ( + ) operator to concatenate String and const char.
      */
     friend String operator + (const String& lhs, const char& rhs){
         int length = strlen(lhs._str) + 1;
@@ -132,12 +111,7 @@ private:
     }
 
     /**
-     * @brief   Prototype for the plus ( + ) operator so this allows Strings to
-     *          be concatenated to char's.
-     * 
-     * @param lhs   The left hand side of the operator, a char object.
-     * @param rhs   The right hand side of the operator, a String object.
-     * @return      The concatenated String data.
+     * Prototype plus ( + ) operator to concatenate const char and String.
      */
     friend String operator + (const char& lhs, const String& rhs){
         int length = strlen(rhs._str) + 1;
@@ -154,12 +128,11 @@ private:
 
 public:
 
-    //  ##############################################################
     //  ##### Constructors / initialisation assignment operators #####
     //  ##############################################################
 
     /**
-     * @brief   Construct a new String.
+     * Construct a blank String.
      */
     String()
         : _str{nullptr}
@@ -169,9 +142,7 @@ public:
     }
 
     /**
-     * @brief   Construct a new String object from a std::string variable.
-     * 
-     * @param source    The std::string object being assigned to this String.
+     * Construct a new String object from a std::string variable.
      */
     String(const std::string &source){
         _str = new char[strlen(source.c_str()) + 1];
@@ -180,9 +151,7 @@ public:
     }
 
     /**
-     * @brief   Construct a new String object from a const char* variable.
-     * 
-     * @param source    The const char pointer being assigned to this String.
+     * Construct a new String object from a const char* variable.
      */
     String(const char *source) {
         if (source == nullptr){
@@ -196,9 +165,7 @@ public:
     }
 
     /**
-     * @brief   Construct a new String object from a single char variable.
-     * 
-     * @param source    The char being assigned to this String.
+     * Construct a new String object from a single char variable.
      */
     String(const char source){
         _str = new char[2];
@@ -207,9 +174,7 @@ public:
     }
 
     /**
-     * @brief   The copy constructor for String class objects.
-     * 
-     * @param source    The String object being copied, in memory to this String.
+     * The copy constructor for String class objects.
      */
     String(const String &source) {
         _str = new char[strlen(source._str) + 1];
@@ -218,9 +183,7 @@ public:
     }
 
     /**
-     * @brief   The move constructor for String class objects.
-     * 
-     * @param source    The String object being moved, in memory, to this String.
+     * The move constructor for String class objects.
      */
     String(String &&source) {
         _str = source._str;
@@ -228,20 +191,15 @@ public:
     }
 
     /**
-     * @brief   Destroy this String object. Destructor for the String class.
+     * Destroy this String object. Destructor for the String class.
      */
     ~String(){ delete _str; }
 
-    //  ##############################################################
     //  ########### Common overloaded assignment operators ###########
     //  ##############################################################
 
     /**
-     * @brief   Overload the standard 'equal' assignment operator to assign a
-     *          String object to this String object.
-     * 
-     * @param rhs   The right hand side of the operator.
-     * @return      The resulting String& object after being assigned new data.
+     * The standard 'equal' assignment operator.
      */
     String& operator = (const String& rhs) {
         if (this == &rhs)
@@ -254,11 +212,7 @@ public:
     }
 
     /**
-     * @brief   Overloading the plus-equals ( += ) assignment operator to
-     *          concatenate Strings to this String object.
-     * 
-     * @param rhs   The right hand side of the operator.
-     * @return      The resulting String& object after data is concatenated
+     * The plus-equals ( += ) assignment operator.
      */
     String& operator += (const String& rhs) {
         if (this == &rhs)
@@ -273,26 +227,19 @@ public:
     }
 
     /**
-     * @brief   Allow return data type to be std::string.
-     * 
-     * @return  A std::string representation of this String data.
+     * Allow return data type to be std::string.
      */
     operator std::string() { return _str; }
     /**
-     * @brief   Allow return data type to char*.
-     * 
-     * @return  A char* representation of this String data.
+     * Allow return data type to char*.
      */
     operator char*() { return _str; }
 
-    //  ##############################################################
     //  ####### Existing string functions to mimic std::string #######
     //  ##############################################################
 
     /**
-     * @brief   The definition for the 'begin' iterator function.
-     * 
-     * @return  An Iterator<char> for the start of this String data.
+     * The definition for the 'begin' iterator function.
      */
     Iterator<char> begin() {
         Iterator<char> iter(_str);
@@ -300,9 +247,7 @@ public:
     }
 
     /**
-     * @brief   The definition for the 'end' iterator function.
-     * 
-     * @return  An Iterator<char> for the end of this String data.
+     * The definition for the 'end' iterator function.
      */
     Iterator<char> end() {
         Iterator<char> iter(_str + strlen(_str));
@@ -310,16 +255,12 @@ public:
     }
 
     /**
-     * @brief   Force this String data to return as a const char*.
-     * 
-     * @return  A const char* representation of this String data.
+     * Return this String as a const char*.
      */
     const char *c_str() const { return _str; }
 
     /**
-     * @brief   Get the length of the String data.
-     * 
-     * @return  An integer for the character count.
+     * Get the character length of the String data.
      */
     const int length() { return strlen(_str); }
 
@@ -335,7 +276,6 @@ public:
         return String(str.substr(start, len).c_str());
     }
 
-    //  ##############################################################
     //  ########### Existing string functions but modified ###########
     //  ##############################################################
 
@@ -484,7 +424,6 @@ public:
         return replace(a, b.c_str());
     }
 
-    //  ##############################################################
     //  ################## Custom string functions ###################
     //  ##############################################################
 
@@ -533,12 +472,7 @@ public:
     }
 
     /**
-     * @brief   Returns a value indicating whether a specified character occurs
-     *          within this String.
-     * 
-     * @param content   The character to look for.
-     * @return true     if the character appears within this String,
-     * @return false    otherwise.
+     * Returns true if CONTENT appears in this String.
      */
     bool contains(const char content) {
         std::string str = _str;
@@ -546,12 +480,7 @@ public:
     }
 
     /**
-     * @brief   Returns a value indicating whether the specified string occurs
-     *          within this String.
-     * 
-     * @param content   The string to look for.
-     * @return true     if the string appears within this String,
-     * @return false    otherwise.
+     * Returns true if CONTENT appears in this String.
      */
     bool contains(const std::string content) {
         std::string str = _str;
