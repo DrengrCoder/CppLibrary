@@ -69,7 +69,7 @@ file ?=
 ############################# Directory variables ##############################
 
 # Install directory
-src_at ?= /usr/local/include/DrengrCoder
+src_at ?= /usr/local/include/DrengrCode
 bin_at ?= /usr/bin/
 lint_config_at ?= /usr/local/bin/lint_config
 
