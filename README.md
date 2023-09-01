@@ -91,7 +91,7 @@ This header file allows you to write unit tests for C++ programs and comes from 
 
 ### Credit
 
-Disclaimer: The 'catch.hpp' is not something I own or developed, and is part of the [Catch2](https://github.com/catchorg/Catch2) library to help developers build and run unit tests in C++ programs. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
+The 'catch.hpp' is not something I own or developed, and is part of the [Catch2](https://github.com/catchorg/Catch2) library to help developers build and run unit tests in C++ programs. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
 ### Usage
 
@@ -101,8 +101,6 @@ Create a new C++ file and add the `#define CATCH_CONFIG_MAIN` macro at the top o
 - There is an example recipe for building test files in the makefile in this project.
 
 ## Command line interface parser (cli_parser.h)
-
-Most of this code is completely unique, and I have developed everything from scratch (to an extent), but the original implementation was influenced by the functionality of the command line argument parser and parser option class found in the [QT libraries](https://www.qt.io/).
 
 This class allows a developer to quickly define and manage arguments that can be passed in on the command line for binary file execution. This will probably not do everything you want it to, but it does everything I want it to, and has been developed in a way to minimise the code I need to write. You should carefully examine the constructor list and their input parameters and code docs for detailed instructions on how to use this class:
 
@@ -137,6 +135,8 @@ This class allows a developer to quickly define and manage arguments that can be
 
 ### Credit
 
+Most of this code is completely unique, and I have developed everything from scratch (to an extent), but the original implementation was influenced by the functionality of the command line argument parser and parser option class found in the [QT libraries](https://www.qt.io/).
+
 - The [Qt Library Command Line Parser Class](https://doc.qt.io/qt-6/qcommandlineparser.html).
 - The [Qt Library Command Line Option Class](https://doc.qt.io/qt-6/qcommandlineoption.html).
 
@@ -146,10 +146,74 @@ This class requires the custom [logger class](#log---a-custom-and-configurable-l
 
 ### Usage
 
-- You can declare Parser Options with a single string for a tag and a description for the simplest command line args like `ParserOption opt = ParserOption("tag", "description");`.
-- You can create as many as you like before adding them to a Parser. A Parser can be created by passing in the `argc` and `argv` variable pulled in by int main: `Parser parser = Parser(argc, argc, "Description");`.
-- Parser Options can be added in a brace-initialiser list: `parser.AddOptions({opt});`.
-- And the arguments can be parsed compared to the Parser Options: `parser.Process();`.
+- Declare a basic Parser Options, minimum requirements are one tag and a description for a FLAG-based option (it either exists or it doesn't, used to set boolean variables):
+```
+ParserOption _option = ParserOption("tag", "description");
+```
+- Delcaring Parser Options with vectors and brace-initialiser lists (NOTE: We do not cover what a brace-initialised list is, and you should google this for yourself. The Parser Option class accepting brace-initialised lists as an input parameter shows you how to create your own functions using them):
+```
+std::vector<std::string> string_tags;
+_option = ParserOption(string_tags, "Description");
+_option = ParserOption({"t", "tag", "tag 2}, "Description");
+```
+- Parser Options can be defined to accept a data argument after the flag has been found in the command line (NOTE: Because string literals and const char's can be recognised as a bool variable, and due to how the constructor params lists need to be declared for the Parser Option class, it is advised to set a `std::string` object, or surround a string literal is `std::string("your literal here")` when entering value name's and default value's into the list of parameters):
+```
+_option = ParserOption("tag", "descr", std::string("value name"));
+```
+- Parser Options that expect values after it can have a default value:
+```
+_option = ParserOption("tag", "descr", std::string("value name"), std::string("default value"));
+```
+- There is an input parameter that flags the Parser Option has being required, and the Parser class will expect this argument flag and it's data to exist in the command line args list; under these conditions, it expects that a default value will not be required, but be aware the default value param still exists in the parameter list to avoid errors and conflictions with duplicate constructors, and specifying a default value ultimately has no effect as the parser is expecting this flag and it's argument data in the list anyway:
+```
+bool required;
+_option = ParserOption("tag", "descr", required, std::string("value name"));
+```
+- The Parser Option can be defined to expect a subset list of choices, and the Parser class checks the input arg data matches an option in this subset list before passing (NOTE: To simplify the constructor list, choices can **only** be set using an inline brace-initialiser list):
+```
+_option = ParserOption("tag", "descr", {"choic1", "choice2"});
+```
+- A default value can be specified when using a list of subset choices too, but is not required. Setting the Parser Option to expect a list of choices without a default has undefined behaviour, but most often be the first choice in the list will be the default, depending on how you're processing the output list of choices when pulling in the arg data:
+```
+_option = ParserOption("tag", "descr", {"choic1", "choice2"}, std::string("default choice"));
+```
+- You can define a Parser Option expecting a subset list of choices to also be required, so the argument flag is expected to exist in the list of command line args (NOTE: As above, the default value param still exists in the parameter list to avoid errors and conflictions with duplicate constructors, and specifying a default value ultimately has no effect as the parser is expecting this flag and it's argument data in the list anyway):
+```
+bool required;
+_option = ParserOption("tag", "descr", {"choic1", "choice2"}, required);
+```
+- Once you have a well-defined and structured list of Parser Options, you will need to declare a Parser object before being able to process them. the first constructor accepts `argc` and `argv` as the first two input params, followed by a description, and optionally a version number string. The second constructor differs only slightly, with the program name being the third argument and the version number string argument at the end being required. This second constructor is called automatically from the first constructor, and the program name is automatically pulled in from the binary program name, as this is the first argument in the `argv` list (NOTE: `int main` should be declared with two input params for `argc` and `argv` so the command line arguments are pulled in automatically):
+```
+Parser _parser = Parser(argc, argv, "description");
+Parser _parser = Parser(argc, argv, "description", "version string");
+Parser _parser = Parser(argc, argv, "name", "description", "version string");
+```
+- The program name, description and version number string are important when using the command line to print help and version information for a binary program. This Parser class comes with two built-in functions to create Parser Options and should be preferred over creating your own, and these arguments are parsed first and print the relevant information to a console output:
+```
+_parser.AddHelpOption();
+_parser.AddVersionOption();
+```
+- Any number of Parser Options can be added to the Parser class object using a brace-initialiser list. This function returns an integer for the number of options that failed to be added, and should be checked for before proceeding:
+```
+ParserOption opt1;
+ParserOption opt2;
+ParserOption opt3;
+int r = _parser.AddOptions({opt1, opt2, opt3});
+if (r != 0) throw error; 
+```
+- After adding options to the Parser object, you can call `.Process()` to validate the input command line arg data. This function returns a bool for success or failure and should be checked for before proceeeding. Returns false or error (not exhaustive list): if the argument was required but was not found, if the argument had a specific subset list of choices but the arg data following it did not match one of those choices, or if some argument expected data after it but was not found:
+```
+if (!_parser.Process()) throw error;
+```
+- The Parser class comes with two functions to quickly check the existance of flags and retrieve argument data, if applicable. A command line arg will need to exist before attempting to retrieve argument data, so it is advised to check for the option being set using `.IsSet` first before `.GetValue`. All data is a `std::string` by default, and after retrieving the specific string data, you should convert it to another data type as required:
+```
+ParserOption flag_opt;
+ParserOption value_opt;
+bool val_is_set = _parser.IsSet(flag_opt);
+std::string value = _parser.GetValue(value_opt);
+int i = std::stoi(value);
+double d = std::stod(value);
+```
 
 ## C++ Utilities
 
@@ -163,7 +227,7 @@ Usage examples can be found on the git repository documentation.
 
 ### Credit
 
-Disclaimer: The 'HTTPRequest.hpp' is not something I own or developed, and is part of the [HTTPRequest](https://github.com/elnormous/HTTPRequest/tree/master) project. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
+The 'HTTPRequest.hpp' is not something I own or developed, and is part of the [HTTPRequest](https://github.com/elnormous/HTTPRequest/tree/master) project. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
 ## Log - A custom and configurable logger
 
@@ -177,18 +241,35 @@ This class has been modified from an original forum post I found [here](https://
 
 ### Usage
 
-- Declare the Log Settings extern at the top of main and **Only main**: `LogSettings LOG_SETTINGS;`.
-- Set the settings on this object in the int main function: 
-    - `LOG_SETTINGS.ls_selected_level = LogType::LT_LL_INFO;`.
-    - `LOG_SETTINGS.ls_print_to_file = false;`.
-- Initialise the logger: `LogInit(argv);`.
+Be sure to check the log settings class inside the `log.h` file for a full list of public variables to set.
+
+- Must declare the `LOG_SETTINGS` extern above the `int main` function in your `main.cpp` file that is the main entry point for a program (NOTE: This should only be declared once):
+```
+// Your include statements for header files
+
+LogSettings LOG_SETTINGS;
+
+int main(argc, argv){}
+```
+- Set the settings on this object in the int main function:
+```
+LOG_SETTINGS.ls_selected_level = LogType::LT_LL_INFO;.
+LOG_SETTINGS.ls_print_to_file = false;.
+```
+- Initialise the logger after settings params on `LOG_SETTINGS`: `LogInit(argv);`.
 - Start calling the logger macro's:
-    - `clog << "Basic log line";`.
-    - `flog << "Fatal log line";`.
+```
+clog << "Lowest level. For the least insignificant logging information but will be useful to know in extreme circumstances, such as when objects are created and destroyed, and when certain functions are triggered.";
+ilog << "Information level. When data is being set on an object and will be useful for debugging.";
+dlog << "Debug level. When something useful is worth knowing and logging, but is nothing to worry about. This should be the minimum level a program is set to by default when building a binary for production.";
+wlog << "Warning level. When something happened that probably should not have happened, but is not out of the ordinary and can be handled without throwing errors";
+elog << "Error level. When something really bad happened that could or would usually cause a program to crash, but has been manually handled.";
+flog << "Fatal level. Worst level of logging information. Used when something very bad has happened, should not have happened, and should be unrecoverable. Even if you can handle an exception thrown when a fatal log line is triggered, avoid doing so as this is typically due to ill-formed code and some other type of system error that you need to be aware of before trying to rerun the program.";
+```
 
 ## Nlohmann JSON (third-party)
 
-The entire library folder and its contents are required but the single json.hpp file can be used as an include statement in any file that needs JSON objects.
+The entire library folder and its contents are required but the single json.hpp file can be used as an include statement in any file that needs JSON objects. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
 Usage examples can be found on the git repository documentation.
 
@@ -210,14 +291,36 @@ This class requires the custom [logger class](#log---a-custom-and-configurable-l
 
 ### Usage
 
-- Optionally decide whether you need the default `HTTP::Method::GET` or some other HTTP Request type.
 - Declare the http request object:
-    - `HTTP::Request request{};`.
-    - `HTTP::Request request("uri string", "ip address");`.
-- Send the HTTP Request and read a response: `HTTP::Response response = request.send("uri string", "ip address");`.
-- And read the body: `std::string body = std::string(response._body.begin(), response._body.end());`.
-
-You can optionally send additional header fields, for example if you need to set a different content type: `HTTP::HeaderField fields = { ._name = Content-Type", ._value = "text/xml"};` and include them in the `HTTP::Request` object when calling `.send`.
+```
+HTTP::Request request{};
+HTTP::Request request("uri string", "ip address");.
+```
+- You can specify the IPv6 address type, otherwise it defaults to IPv4:
+```
+HTTP::Request request(TcpClient::InternetProtocol::v6);.
+HTTP::Request request("uri string", "ip address", TcpClient::InternetProtocol::v6);.
+```
+- If you have not declared the request object with a URI and IP, you will need to call the `.send` function with the constructors that accept those parameters:
+```
+request.send("uri string", "ip address");
+```
+- You can optionally add the `HTTP::Method`, a `http body` to send, any additional `HeaderFields` and an optional timeout period (NOTE: timeout is used to signify whether a process exceeded an expected time frame and is currently only used for reporting purposes. The timeout is intended to be later implemented into cancelling the request if it takes too long to respond):
+```
+std::string body;
+HeaderFields headerFields;
+request.send("uri string", "ip address", HTTP::Method::POST, body, headerFields, 12345);
+```
+- If you declare the request object with a URI and IP, you can use the `.send` function that does not require it:
+```
+request.send(HTTP::Method::POST, body, headerFields, 12345);
+```
+- The third constructor accepts the `body` parameter as a `std::vector<uint8_t>` which is essentially a vector of bytes. This is the primary function containing the logic code and all other functions call this one.
+- The `.send` function returns a `HTTP::Response` object and you can retrieve the body returned by the response (NOTE: the body is a `std::vector<uint8_t>` object):
+```
+HTTP::Response response = request.send();
+std::string body = std::string(response._body.begin(), response._body.end());
+```
 
 ## RapidXML (third-party)
 
@@ -225,7 +328,7 @@ The rapid XML project includes 3 header files but only 2 are required: the base 
 
 ### Credit
 
-The [original project](https://github.com/Fe-Bell/RapidXML) and the [forked repository](https://github.com/viriw/rapidxml) contain these files, although the forked repository derivatives are easier and simpler to use.
+The [original project](https://github.com/Fe-Bell/RapidXML) and the [forked repository](https://github.com/viriw/rapidxml) contain these files, although the forked repository derivatives are easier and simpler to use. I own no rights to these files and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
 ## String - A custom String class
 
@@ -447,7 +550,7 @@ Binary programs have been included in this project, but are not built in this pr
 
 The [CppNameLint project](https://github.com/dougpuob/cppnamelint/tree/master) was created as a way of defining custom naming conventions and applying them to your code. '.toml' files are used in conjunction with this binary file and a source file (or multiple source files) to quickly produce a report of what is and is not obeying the defined conventions.
 
-This has been included for testing, along with a custom config file.
+This has been included for testing, along with a custom config file. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
 ### Automated Version Incrementor program
 
@@ -463,4 +566,4 @@ The header file is created if it does not exist, and behaviour is undefined is p
 - Running `make` will build the test files.
 - Run `sudo make install` and the files will be copied into the required or specified folders.
 - The C++ source files will be copied to the local include's directory, the binary files will be copied to `/usr/bin` and the cppnamelint config files will be copied to `/usr/local/bin/lint_config` by default. You can alternatively specify their include directories by appending the `sudo make install` command with `src_at`, `bin_at` and `lint_config_at`, followed by the desired file paths, for example: `sudo make install src_at="/my/source/file/path" bin_at="/my/bin/file/path" lint_config_at="/my/lint/config/path"`.
-- The install location should not be directly in the base includes folder as some files could clash with existing file names in the C++ language or other installed libraries, so make sure to install them in a sub directory within the includes directory.
+- The install location should not be directly in the base includes folder as some files could clash with existing file names in the C++ language or other installed libraries, so make sure to install them in a sub directory within the includes directory if you're installing them in custom locations.
