@@ -13,25 +13,25 @@
 #pragma GCC diagnostic ignored "-Wunused-function"
 
 /**
- * @brief   Defines the start time of the application, based on the current
- *          system clock. This value cannot be changed.
+ * The start time of the application, based on the std::chrono high resolution
+ * clock for the current system time. This value cannot be changed. This value
+ * is set when this header is included in another file.
  */
 static const auto __START = std::chrono::high_resolution_clock::now();
 /**
- * @brief   Defines a point in time the current running time was requested by
- *          another function. Called and converted into seconds in the following
- *          functions: CurrentProgramRunningTime_Microseconds, 
- *          CurrentProgramRunningTime_Milliseconds, CurrentProgramRunningTime.
+ * The current running time, based on the std::chrono high resolution
+ * clock for the current system time. This is updated in
+ * 'CurrentProgramRunningTime_Microseconds',
+ * 'CurrentProgramRunningTime_Milliseconds', and
+ * 'CurrentProgramRunningTime' functions to calculate elapsed running
+ * time for the program. These variables simply make it quick and easy
+ * to define elapsed running time.
  */
 static auto __END = std::chrono::high_resolution_clock::now();
 
 /**
- * @brief   Retrieve the current running time of the program since it started,
- *          defined by the '__START' variable, returned as an 'auto' variable
- *          type (At time of writing, the return type is int64_t).
- * 
- * @return  An 'auto' variable type representing the current running time in
- *          microseconds (1 / 1,000,000 seconds).
+ * Calculate and return the current running time of the program in 
+ * microseconds, as int64_t (1,000,000 microseconds (us) = 1 second (s)).
  */
 static auto CurrentProgramRunningTime_Microseconds(){
     __END = std::chrono::high_resolution_clock::now();
@@ -40,12 +40,8 @@ static auto CurrentProgramRunningTime_Microseconds(){
 }
 
 /**
- * @brief   Retrieve the current running time of the program since it started,
- *          defined by the '__START' variable, returned as an 'auto' variable
- *          type (At time of writing, the return type is double).
- * 
- * @return  An 'auto' variable type representing the current running time in
- *          microseconds (1 / 1,000 seconds).
+ * Calculate and return the current running time of the program in
+ * milliseconds, as double (1,000 milliseconds (ms) = 1 second (s)).
  */
 static auto CurrentProgramRunningTime_Milliseconds(){
     __END = std::chrono::high_resolution_clock::now();
@@ -55,14 +51,10 @@ static auto CurrentProgramRunningTime_Milliseconds(){
 }
 
 /**
- * @brief   Retrieve the current running time of the program since it started,
- *          defined by the '__START' variable, returned as a std::string. This
- *          string is return as: "Current running time: 'X' Microseconds ( 'X'
- *          milliseconds )"
- * 
- * @return  A std::string printing the current running time of the program in
- *          microseconds and either seconds or milliseconds if the running time
- *          was less than 1 second.
+ * Calculate and return the current running time of the
+ * program as a string, printing microseconds and either
+ * seconds or milliseconds, depending on numeric size
+ * (1,000,000 us = 1,000 ms = 1 s).
  */
 static std::string CurrentProgramRunningTime(){
     __END = std::chrono::high_resolution_clock::now();
@@ -77,11 +69,7 @@ static std::string CurrentProgramRunningTime(){
 }
 
 /**
- * @brief   Determine if the input string is a valid integer number.
- * 
- * @param str       The std::string to validate.
- * @return true     if the string is a valid integer,
- * @return false    otherwise.
+ * Return true if STR is a valid integer number, false otherwise.
  */
 static bool StringIsInteger(std::string &str){
     //  Make sure the string isn't empty and only contains numbers
@@ -90,11 +78,7 @@ static bool StringIsInteger(std::string &str){
 }
 
 /**
- * @brief   Determine if the input string is valid as an IPv4 IP Adress.
- * 
- * @param str       The std::string to validate.
- * @return true     if the string is valid as an IPv4 IP address,
- * @return false    otherwise.
+ * Return true if STR is valid as an IPv4 IP Address, false otherwise.
  */
 static bool StringIsValidIp(std::string &str){
     //  Spliting the string using native C++ code
@@ -119,27 +103,24 @@ static bool StringIsValidIp(std::string &str){
 }
 
 /**
- * @brief   Counts the number of occurrences a specific 'target' string appears
- *          in a 'string to search'.
+ * @brief   Counts the number of occurrences TARGET appears in SEARCH.
  * 
- * @param stringToSearch    The string to search through.
- * @param target            The target string to search for.
- * @param caseSensitive     True if you want the search to be case sensitive,
- *                          false otherwise.
- * @return                  An integer for the number of times the 'target' 
- *                          appeared in the 'string to search' 
+ * @param search            The string to search through.
+ * @param target            The target to search for.
+ * @param caseSensitive     True if you want the search to be case sensitive.
+ * @return                  The number of times TARGET appears in SEARCH.
  */
-static int CountOccurrences(std::string stringToSearch, std::string target, 
+static int CountOccurrences(std::string search, std::string target, 
         bool caseSensitive = true){
     int occurrences = 0;
     std::string::size_type pos = 0;
 
     if (!caseSensitive){
         std::stringstream oss;
-        for (char c : stringToSearch){
+        for (char c : search){
             oss << char(tolower(c));
         }
-        stringToSearch = oss.str();
+        search = oss.str();
         oss.str(std::string());
         for (char c : target){
             oss << char(tolower(c));
@@ -147,66 +128,12 @@ static int CountOccurrences(std::string stringToSearch, std::string target,
         target = oss.str();
     }
 
-    while ((pos = stringToSearch.find(target, pos)) != std::string::npos) {
+    while ((pos = search.find(target, pos)) != std::string::npos) {
             ++occurrences;
             pos += target.length();
     }
     return occurrences;
 }
-
-/**
- * @brief Handling POSIX signals
- * 
- * Include:
- *      #include <csignal>
- * 
- * Add handlers to POSIX signals:
- *      signal(SIGINT, signalHandler);
- *      signal(SIGILL, signalHandler);
- *      signal(SIGABRT, signalHandler);
- *      signal(SIGFPE, signalHandler);
- *      signal(SIGKILL, signalHandler);
- *      signal(SIGSEGV, signalHandler);
- *      signal(SIGTERM, signalHandler);
- * 
- * Signal handler function:
- *      bool __PROGRAM_RUNNING = true;
- *      void signalHandler(int signum){
- *
- *          if (signum == SIGINT){          //  2
- *              dlog << "SIGINT Received.";
- *              log << "Typically an interrupt key from keyboard.";
- *          }
- *          else if (signum == SIGILL){    //  4
- *              dlog << "SIGILL Received.";
- *          }
- *          else if (signum == SIGABRT){   //  6
- *              dlog << "SIGABRT Received.";
- *              log << "Typically a system or program error from unhandled exceptions.";
- *          }
- *          else if (signum == SIGFPE){    //  8
- *              dlog << "SIGFPE Received.";
- *              log << "Typically an erroneous arithmetic operation.";
- *          }
- *          else if (signum == SIGKILL){   //  9
- *              dlog << "SIGKILL Received.";
- *              log << "Typically a kill command received from outside the program.";
- *          }
- *          else if (signum == SIGSEGV){   //  11
- *              dlog << "SIGSEGV Received: EMERGENCY EXIT PROGRAM NOW.";
- *              log << "Segmentation fault, exiting program immediately.";
- *              exit(0);
- *          }
- *          else if (signum == SIGTERM){   //  15
- *              dlog << "SIGTERM Received.";
- *              log << "Typically a terminate command received from outside the program.";
- *          }
- *
- *          __PROGRAM_RUNNING = false;
- *      }
- *
- * 
- */
 
 #pragma GCC diagnostic pop
 

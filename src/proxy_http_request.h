@@ -1,3 +1,7 @@
+//
+// Created by Dylan Andrew McAdam on 21/08/23.
+//
+
 #ifndef __HI_POINTER_INTERFACE_HTTP_REQUEST__
 #define __HI_POINTER_INTERFACE_HTTP_REQUEST__
 
@@ -7,9 +11,9 @@
 #include <chrono>
 #include <algorithm>
 
-#include "dylanclibs/log.h"
-#include "dylanclibs/tcp_client.h"
-#include "dylanclibs/string.h"
+#include "log.h"
+#include "tcp_client.h"
+#include "string.h"
 
 namespace HTTP
 {
@@ -53,7 +57,7 @@ namespace HTTP
         }
 
         /**
-         * Convert this instance to predefined string.
+         * Convert enumeration value to exact string representation.
          */
         std::string ToStdString() const {
             switch (value){
@@ -317,10 +321,9 @@ namespace HTTP
     //  ##############################################################
 
     /**
-     * Check the input is a valid Version major and minor number. The
-     * HTTP version comes out in the fields line of the header fields.
+     * @brief   Check the input is a valid Version major and minor number.
      * 
-     * Throws runtime_error if the HTTP version string is invalid.
+     * @throw   runtime_error if the HTTP version string is invalid.
      */
     inline Version ParseVersion(String input){
         clog << "Parsing version...";
@@ -352,11 +355,9 @@ namespace HTTP
     }
 
     /**
-     * Check the input is a valid status code value. The status
-     * code is a uint16 variable type and can be matched up
-     * to a HTTP::Status::Code enum value.
+     * @brief   Check the input is a valid status code value. See HTTP::Status::Code enum.
      * 
-     * Throws runtime_error if the status code value is invalid.
+     * @throw   runtime_error if the status code value is invalid.
      */
     inline uint16_t ParseStatusCode(String input){
         clog << "Parsing status code...";
@@ -379,11 +380,11 @@ namespace HTTP
     }
 
     /**
-     * Returns true if the input is a valid string, that is, if the
-     * input only contains white space, visible, and obsolete
-     * char's
+     * Check INPUT is a valid HTTP string, that is, if the input
+     * only contains white space, visible, and obsolete char's
      * 
-     * Throws runtime_error if any of the characters are invalid.
+     * Throws runtime_error if any of the characters are
+     * invalid.
      * 
      * See 'IsWhiteSpaceChar', 'IsVisibleChar' and
      * 'IsObsoleteTextChar' for details.
@@ -400,17 +401,13 @@ namespace HTTP
     }
 
     /**
-     * Parse the full status line portion of the header fields and
-     * return a HTTP::Status struct object with a Status::Code,
-     * the HTTP Version number and a reason phrase. Returns
-     * Status::Code::InternalProgramError if an error was thrown
-     * and caught from another function.
+     * Parse the full status line portion of the header fields. Returns
+     * Status::Code::InternalProgramError if an error was thrown and
+     * caught from another function.
      * 
-     * The reason phrase may be empty with Status::Code 200
-     * for OK.
+     * The reason phrase may be empty with Status::Code 200 for OK.
      * 
-     * See 'ParseVersion', 'ParseStatusCode' and 'ParseReason'
-     * for details.
+     * See 'ParseVersion', 'ParseStatusCode' and 'ParseReason' for details.
      */
     inline Status ParseStatusLine(String headerLine){
         clog << "Parsing status line...";
@@ -854,18 +851,24 @@ namespace HTTP
          * 
          * @param uriString     The URI string to use.
          * @param ip            The IP address the request is going to.
+         * @param ipv           The Internet Protocol Version Number.
          */
-        explicit Request(const std::string& uriString, const std::string& ip):
+        explicit Request(const std::string& uriString, const std::string& ip, 
+                            const TcpClient::InternetProtocol ipv = TcpClient::InternetProtocol::v4):
                 _ipAddress(ip),
-                _uri(ParseUri(uriString.begin(), uriString.end()))
+                _uri(ParseUri(uriString.begin(), uriString.end())),
+                _ipv(ipv)
         { clog << "A HTTP Request object has been initiailised."; }
-        
+
         /**
-         * Construct a new HTTP Request object.
+         * @brief   Construct a new HTTP Request object.
+         * 
+         * @param ipv   The Internet Protocol Version Number.
          */
-        explicit Request()
+        explicit Request(const TcpClient::InternetProtocol ipv = TcpClient::InternetProtocol::v4):
+                _ipv(ipv)
         { clog << "A HTTP Request object has been initiailised."; }
-        
+
         /**
          * Initiate a HTTP request to URISTRING at IP of type METHOD, optionally
          * sending a request BODY with configurable HEADERFIELDS and an optional
@@ -960,7 +963,7 @@ namespace HTTP
 
             clog << "Constructed request html: \"" << requestData
                 << "\", beginning TCP Client initialisation and comms...";
-            TcpClient *client = new TcpClient();
+            TcpClient *client = new TcpClient(_ipv);
             
             //  Capture the start time before a connection attempt is made for
             //      later processing
@@ -1244,6 +1247,7 @@ namespace HTTP
         }
 
     private:
+        TcpClient::InternetProtocol _ipv = TcpClient::InternetProtocol::v4;
         std::string _ipAddress;
         Uri _uri;
     };
