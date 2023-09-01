@@ -43,6 +43,9 @@ Code Descriptions
         Error codes
         Dependencies
         Usage
+Binary descriptions
+    cppnamelint (third-party)
+    Automated Version Incrementor program
 Installation and Build steps
 
 ## Brief
@@ -337,6 +340,8 @@ r = "upper to lower";
 
 Network sockets are originally very basic and must be configured for TCP or UDP type data streams. You do not need to be familiar with how network sockets work to use this class, but this class makes it simple to implement client-side functionality, with appropriate functions to initialise and connect to network sockets, applying some common functions and argument options that would be expected to configure a socket for a TCP-based data stream connection.
 
+Network socket objects are easier to manipulate if they are pointer objects.
+
 Nothing here is especially unique and can be learned after a few google searches and looking at the right forum posts, but the simplest implementations have been created. This class can be inherited to provide more advanced functionality. If you need to rewrite these classes for your own purposes, I suggest learning more about network sockets and network programming theory and practice before attempting to do something too complex.
 
 #### Error codes
@@ -360,6 +365,30 @@ This class requires the custom [logger class](#log---a-custom-and-configurable-l
 
 #### Usage
 
+- Initialise a TCP Client object:
+```
+TcpClient *client = new TcpClient();
+TcpClient *client = new TcpClient(TcpClient::InternetProtocol::v6);
+```
+- Connect to an IP address and port (127.0.0.1 for IP if connecting to port of current device):
+```
+client->Connect("127.0.0.1", 1234);
+```
+- Send and Read bytes on the socket:
+```
+int n_sent = client->Send("Sending this string");
+```
+```
+char buff[1024];
+int n_read = client->Read(buff, 1024);
+// buff contains the bytes read from socket
+```
+- Retrieve error message and codes:
+```
+std::string errmsg = client->ERR_MSG();
+int errcode = client->ERR_NO();
+```
+
 ### TCP Server network socket class
 
 Network sockets are originally very basic and must be configured for TCP or UDP type data streams. You do not need to be familiar with how network sockets work to use this class, but this class makes it simple to implement server-side functionality, with appropriate functions to initialise and listen to network socket ports, applying some common functions and argument options that would be expected to configure a socket for a TCP-based data stream connection.
@@ -380,6 +409,35 @@ The custom codes are documented here, but the 'errno' code meaning will change d
 - 15xxx = Binding the socket failed, the last 3 digits will be 'errno' and will provide more specific details.
 - 16xxx = Starting to listen on a network port failed, the last 3 digits will be 'errno' and will provide more specific details.
 - 17xxx = Attempting to accept the next connection in the queue failed, the last 3 digits will be 'errno' and will provide more specific details.
+
+#### Dependencies
+
+This class requires the custom [logger class](#log---a-custom-and-configurable-logger) to log unique errors.
+
+#### Usage
+
+- Initialise TCP Server object:
+```
+TcpServer *server = new TcpServer();
+TcpServer *server = new TcpServer(TcpServer::InternetProtocol::v6);
+```
+- Listen to a specific port number:
+```
+server->StartListening(1234);
+```
+- Get the next connection in the queue (Blocking call):
+```
+int fd = server->NextConnection();
+```
+- Use the returned fd integer to store reference to a client socket:
+```
+TcpClient *client = new TcpClient(server->NextConnection());
+```
+- Retrieve error message and codes:
+```
+std::string errmsg = client->ERR_MSG();
+int errcode = client->ERR_NO();
+```
 
 ## Binary descriptions
 
