@@ -1,5 +1,5 @@
 //
-// Created by Dylan Andrew McAdam on 28/11/22.
+// Created by Dylan Andrew McAdam (DrengrCoder) on 28/11/22.
 //
 
 #ifndef __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_LOG_H__

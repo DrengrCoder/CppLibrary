@@ -1,5 +1,5 @@
 //
-// Created by Dylan Andrew McAdam on 23/05/23.
+// Created by Dylan Andrew McAdam (DrengrCoder) on 23/05/23.
 //
 
 #ifndef __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_CPP_UTILITIES_H__

@@ -1,5 +1,5 @@
 //
-// Created by Dylan Andrew McAdam on 21/08/23.
+// Created by Dylan Andrew McAdam (DrengrCoder) on 21/08/23.
 //
 
 #ifndef __HI_POINTER_INTERFACE_HTTP_REQUEST__

@@ -1,5 +1,5 @@
 //
-// Created by Dylan Andrew McAdam on 05/12/22.
+// Created by Dylan Andrew McAdam (DrengrCoder) on 05/12/22.
 //
 
 #ifndef __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
