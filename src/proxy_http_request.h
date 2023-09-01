@@ -1,9 +1,9 @@
 //
-// Created by Dylan Andrew McAdam on 21/08/23.
+// Created by Dylan Andrew McAdam (DrengrCoder) on 21/08/23.
 //
 
-#ifndef __HI_POINTER_INTERFACE_HTTP_REQUEST__
-#define __HI_POINTER_INTERFACE_HTTP_REQUEST__
+#ifndef __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_PROXY_HTTP_REQUEST__
+#define __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_PROXY_HTTP_REQUEST__
 
 #include <cstdint>
 #include <string>
@@ -1253,4 +1253,4 @@ namespace HTTP
     };
 };
 
-#endif // __HI_POINTER_INTERFACE_HTTP_REQUEST__
+#endif // __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_PROXY_HTTP_REQUEST__
