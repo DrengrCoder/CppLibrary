@@ -69,7 +69,7 @@ file ?=
 ############################# Directory variables ##############################
 
 # Install directory
-src_at ?= /usr/local/include/dylanclibs
+src_at ?= /usr/local/include/DrengrCoder
 bin_at ?= /usr/bin/
 lint_config_at ?= /usr/local/bin/lint_config
 
