@@ -447,7 +447,7 @@ Binary programs have been included in this project, but are not built in this pr
 
 The [CppNameLint project](https://github.com/dougpuob/cppnamelint/tree/master) was created as a way of defining custom naming conventions and applying them to your code. '.toml' files are used in conjunction with this binary file and a source file (or multiple source files) to quickly produce a report of what is and is not obeying the defined conventions.
 
-This has been included for testing, along with a custom config file.
+This has been included for testing, along with a custom config file. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
 ### Automated Version Incrementor program
 
