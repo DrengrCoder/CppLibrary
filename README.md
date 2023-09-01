@@ -2,51 +2,51 @@
 
 ## Table of contents
 
-Brief
-Project Contents and Overview
-    Custom code contents
-    Custom binary programs
-    Third-party code contents
-    Third-party binary programs
-Code Descriptions
-    Catch.hpp (third-party)
-        Credit
-        Usage
-    Command line interface parser (cli_parser.h)
-        The constructors and input parameters
-        The types of options
-        Credit
-        Dependencies
-        Usage
-    C++ Utilities
-    HTTPRequest.hpp (third-party)
-        Credit
-    Log - A custom and configurable logger
-        Credit
-        Usage
-    Nlohmann JSON (third-party)
-        Credit
-    Proxy-based HTTP Request header
-        Credit
-        Dependencies
-        Usage
-    RapidXML (third-party)
-        Credit
-    String - A custom String class
-        Credit
-        Usage
-    TCP Client network socket class
-        Error codes
-        Dependencies
-        Usage
-    TCP Server network socket class
-        Error codes
-        Dependencies
-        Usage
-Binary descriptions
-    cppnamelint (third-party)
-    Automated Version Incrementor program
-Installation and Build steps
+[Brief](#brief)
+[Project Contents and Overview](#project-contents-and-overview)
+    [Custom code contents](#custom-code-contents)
+    [Custom binary programs](#custom-binary-programs)
+    [Third-party code contents](#third-party-code-contents)
+    [Third-party binary programs](#third-party-binary-programs)
+[Code Descriptions](#code-descriptions)
+    [Catch.hpp (third-party)](#catchhpp-third-party)
+        [Credit](#credit)
+        [Usage](#usage)
+    [Command line interface parser (cli_parser.h)](#command-line-interface-parser-cli_parserh)
+        [The constructors and input parameters](#the-constructors-and-input-parameters)
+        [The types of options](#the-types-of-options)
+        [Credit](#credit-1)
+        [Dependencies](#dependencies)
+        [Usage](#usage-1)
+    [C++ Utilities](#c-utilities)
+    [HTTPRequest.hpp (third-party)](#httprequesthpp-third-party)
+        [Credit](#credit-2)
+    [Log - A custom and configurable logger](#log---a-custom-and-configurable-logger)
+        [Credit](#credit-3)
+        [Usage](#usage-2)
+    [Nlohmann JSON (third-party)](#nlohmann-json-third-party)
+        [Credit](#credit-4)
+    [Proxy-based HTTP Request header](#proxy-based-http-request-header)
+        [Credit](#credit-5)
+        [Dependencies](#dependencies-1)
+        [Usage](#usage-3)
+    [RapidXML (third-party)](#rapidxml-third-party)
+        [Credit](#credit-6)
+    [String - A custom String class](#string---a-custom-string-class)
+        [Credit](#credit-7)
+        [Usage](#usage-4)
+    [TCP Client network socket class](#tcp-client-network-socket-class)
+        [Error codes](#error-codes)
+        [Dependencies](#dependencies-2)
+        [Usage](#usage-5)
+    [TCP Server network socket class](#tcp-server-network-socket-class)
+        [Error codes](#error-codes-1)
+        [Dependencies](#dependencies-3)
+        [Usage](#usage-6)
+[Binary descriptions](#binary-descriptions)
+    [cppnamelint (third-party)](#cppnamelint-third-party)
+    [Automated Version Incrementor program](#automated-version-incrementor-program)
+[Installation and Build steps](#installation-and-build-steps)
 
 ## Brief
 
