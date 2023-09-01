@@ -2,8 +2,8 @@
 // Created by Dylan Andrew McAdam (DrengrCoder) on 28/11/22.
 //
 
-#ifndef __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_LOG_H__
-#define __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_LOG_H__
+#ifndef __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_LOG_H__
+#define __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_LOG_H__
 
 #include <limits.h>
 #include <fstream>      //  File stream objects
@@ -696,4 +696,4 @@ private:
     }
 };
 
-#endif //__DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_LOG_H__
+#endif //__DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_LOG_H__

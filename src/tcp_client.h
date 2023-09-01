@@ -2,8 +2,8 @@
 // Created by Dylan Andrew McAdam (DrengrCoder) on 05/12/22.
 //
 
-#ifndef __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
-#define __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
+#ifndef __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
+#define __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
 
 #include <sys/socket.h>
 #include <netdb.h>
@@ -307,4 +307,4 @@ private:
     int __errno;
 };
 
-#endif // __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__
+#endif // __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_TCP_CLIENT_H__

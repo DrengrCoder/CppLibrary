@@ -2,8 +2,8 @@
 // Created by Dylan Andrew McAdam (DrengrCoder) on 23/05/23.
 //
 
-#ifndef __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_CPP_UTILITIES_H__
-#define __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_CPP_UTILITIES_H__
+#ifndef __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_CPP_UTILITIES_H__
+#define __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_CPP_UTILITIES_H__
 
 #include <string>
 #include <sstream>
@@ -137,4 +137,4 @@ static int CountOccurrences(std::string search, std::string target,
 
 #pragma GCC diagnostic pop
 
-#endif  //  __DYLAN_MCADAM_SINGLE_INCLUDE_CUSTOM_CPP_UTILITIES_H__
+#endif  //  __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_CPP_UTILITIES_H__
