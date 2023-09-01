@@ -11,31 +11,38 @@ Project Contents and Overview
 Code Descriptions
     Catch.hpp (third-party)
         Credit
+        Usage
     Command line interface parser (cli_parser.h)
         The constructors and input parameters
         The types of options
         Credit
         Dependencies
+        Usage
     C++ Utilities
     HTTPRequest.hpp (third-party)
         Credit
     Log - A custom and configurable logger
         Credit
+        Usage
     Nlohmann JSON (third-party)
         Credit
     Proxy-based HTTP Request header
         Credit
         Dependencies
+        Usage
     RapidXML (third-party)
         Credit
     String - A custom String class
         Credit
+        Usage
     TCP Client network socket class
         Error codes
         Dependencies
+        Usage
     TCP Server network socket class
         Error codes
         Dependencies
+        Usage
 Installation and Build steps
 
 ## Brief
@@ -83,6 +90,13 @@ This header file allows you to write unit tests for C++ programs and comes from 
 
 Disclaimer: The 'catch.hpp' is not something I own or developed, and is part of the [Catch2](https://github.com/catchorg/Catch2) library to help developers build and run unit tests in C++ programs. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
+#### Usage
+
+Create a new C++ file and add the `#define CATCH_CONFIG_MAIN` macro at the top of the file. You can then create as many tests as desired using `TEST_CASE("Description", "[single-file]"){}`.
+- Description can be replaced for whatever descriptive text desired for this unit test.
+- `"[single-file]"` is the most common option for the second parameter, but others are available if you read the Catch2 documentation on the git repository.
+- There is an example recipe for building test files in the makefile in this project.
+
 ### Command line interface parser (cli_parser.h)
 
 Most of this code is completely unique, and I have developed everything from scratch (to an extent), but the original implementation was influenced by the functionality of the command line argument parser and parser option class found in the [QT libraries](https://www.qt.io/).
@@ -127,6 +141,13 @@ This class allows a developer to quickly define and manage arguments that can be
 
 This class requires the custom [logger class](#log---a-custom-and-configurable-logger) and the custom [C++ utilities class](#c-utilities) for some additional functions.
 
+#### Usage
+
+- You can declare Parser Options with a single string for a tag and a description for the simplest command line args like `ParserOption opt = ParserOption("tag", "description");`.
+- You can create as many as you like before adding them to a Parser. A Parser can be created by passing in the `argc` and `argv` variable pulled in by int main: `Parser parser = Parser(argc, argc, "Description");`.
+- Parser Options can be added in a brace-initialiser list: `parser.AddOptions({opt});`.
+- And the arguments can be parsed compared to the Parser Options: `parser.Process();`.
+
 ### C++ Utilities
 
 The utilities class solely contains a few static functions for various features and you should check the file for specific information. Nothing here is unique or proprietary and code can be found on a simple google search, but has been included in a file in this project as I tend to use them a lot in some of my projects. This class is a dependency to other custom classes.
@@ -134,6 +155,8 @@ The utilities class solely contains a few static functions for various features 
 ### HTTPRequest.hpp (third-party)
 
 This header file allows you to issue HTTP Requests to Web-based URL's, and implements the standards for HTTP/URI syntax defined by IETF. This header file as very complex and thorough, and you should investigate all the code through yourself as required.
+
+Usage examples can be found on the git repository documentation.
 
 #### Credit
 
@@ -149,9 +172,22 @@ The `LOG_SETTINGS` extern variable can be used to configure settings, and the `L
 
 This class has been modified from an original forum post I found [here](https://levelup.gitconnected.com/logging-in-c-60cd1571df15) but has been contained in a single header file. I modified this implementation to automatically call `std::endl` so I didn't have to remember to do it myself at the end of every line, and I created several macro's that include the `__FILE__` and `__LINE__` macro's so the filename and line number the `log` macro's are called from is pulled in to the log line and can be printed to the text file and `std::cout`.
 
+#### Usage
+
+- Declare the Log Settings extern at the top of main and **Only main**: `LogSettings LOG_SETTINGS;`.
+- Set the settings on this object in the int main function: 
+    - `LOG_SETTINGS.ls_selected_level = LogType::LT_LL_INFO;`.
+    - `LOG_SETTINGS.ls_print_to_file = false;`.
+- Initialise the logger: `LogInit(argv);`.
+- Start calling the logger macro's:
+    - `clog << "Basic log line";`.
+    - `flog << "Fatal log line";`.
+
 ### Nlohmann JSON (third-party)
 
 The entire library folder and its contents are required but the single json.hpp file can be used as an include statement in any file that needs JSON objects.
+
+Usage examples can be found on the git repository documentation.
 
 #### Credit
 
@@ -168,6 +204,17 @@ This file has been heavily influenced by the [HTTPRequest project](https://githu
 #### Dependencies
 
 This class requires the custom [logger class](#log---a-custom-and-configurable-logger), the custom [TCP Client class](#tcp-client-network-socket-class) and the custom [String class](#string---a-custom-string-class) for some additional functions.
+
+#### Usage
+
+- Optionally decide whether you need the default `HTTP::Method::GET` or some other HTTP Request type.
+- Declare the http request object:
+    - `HTTP::Request request{};`.
+    - `HTTP::Request request("uri string", "ip address");`.
+- Send the HTTP Request and read a response: `HTTP::Response response = request.send("uri string", "ip address");`.
+- And read the body: `std::string body = std::string(response._body.begin(), response._body.end());`.
+
+You can optionally send additional header fields, for example if you need to set a different content type: `HTTP::HeaderField fields = { ._name = Content-Type", ._value = "text/xml"};` and include them in the `HTTP::Request` object when calling `.send`.
 
 ### RapidXML (third-party)
 
@@ -195,6 +242,97 @@ Nothing here is especially unique, but all functions have been collected into a 
 
 This class was developed based on a [Geek for Geeks](https://www.geeksforgeeks.org/how-to-create-a-custom-string-class-in-c-with-basic-functionalities/) post, although partially modified for additional functionality.
 
+#### Usage
+
+- Initialise a string in multiple ways with multiple data types:
+```
+String _string;
+String _string = "asdf";
+String _string = 's';
+
+std::string str = ""; 
+String _string = str;
+
+const char* chars = "asdf";
+String _string = chars;
+```
+- Concatenate strings:
+```
+String _str1;
+String _str2;
+String _str3 = _str1 + _str2;
+_str3 += _str1;
+String _string = "string" + _str1;
+```
+- Return as data types:
+```
+std::string s = _string;
+const char* c = _string;
+``` 
+- NOTE: Because this String class object can be returned as both a std::string and a const char*, any time it is used in a function parameter list where a std::string and a const char* can be accepted in the same index position, the compiler throws an error related to ambiguous function calls because it is unsure what type you are trying to use. In these cases, you will need to use .c_str() to forcibly return it as a const char* only:
+```
+void Overloaded(std::string);
+void Overloaded(const char*);
+Overloaded(_string);            // Throws error
+Overloaded(_string.c_str());    // Does not throw error
+```
+- Use as an iterator:
+```
+for (auto it = _string.begin(); it != _string.end(); it++);
+```
+- Preexisting C++ string functionality:
+```
+const char* c = _string.c_str();
+int i = _string.length();
+String _new = _string.substr(2, 5);
+```
+- 'Replacement' functionality:
+```
+String _new = _string.replace('c', 'a');
+String _new = _string.replace("str", "ing");
+String _new = _string.replace("short", "longer");
+String _new = _string.replace("longer", "short");
+String _new = _string.replace('c', "str");
+String _new = _string.replace("str", 'c');
+```
+- Split to vector functionality:
+```
+std::vector<String> vec = _string.split(' ');
+std::vector<String> vec = _string.split("\r\n");
+```
+- 'Contains' functionality:
+```
+bool r = _string.contains('c');
+bool r = _string.contains("str");
+```
+- White space trimming functionality:
+```
+String _string = "   left trim    ";
+String r = _string.ltrim();
+r = "left trim    ";
+```
+```
+String _string = "    right trim    ";
+String r = _string.rtrim();
+r = "    right trim";
+```
+```
+String _string = "    full trim    ";
+String r = _string.trim();
+r = "full trim";
+```
+- To upper and lower case functionality:
+```
+String _string = "lower to UPPER";
+String r = _string.to_upper();
+r = "LOWER TO UPPER";
+```
+```
+String _string = "UPPER TO lower";
+String r = _string.to_lower();
+r = "upper to lower";
+```
+
 ### TCP Client network socket class
 
 Network sockets are originally very basic and must be configured for TCP or UDP type data streams. You do not need to be familiar with how network sockets work to use this class, but this class makes it simple to implement client-side functionality, with appropriate functions to initialise and connect to network sockets, applying some common functions and argument options that would be expected to configure a socket for a TCP-based data stream connection.
@@ -219,6 +357,8 @@ The custom codes are documented here, but the 'errno' code meaning will change d
 #### Dependencies
 
 This class requires the custom [logger class](#log---a-custom-and-configurable-logger) to log unique errors.
+
+#### Usage
 
 ### TCP Server network socket class
 
