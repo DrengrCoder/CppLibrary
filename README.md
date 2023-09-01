@@ -91,7 +91,7 @@ This header file allows you to write unit tests for C++ programs and comes from 
 
 ### Credit
 
-Disclaimer: The 'catch.hpp' is not something I own or developed, and is part of the [Catch2](https://github.com/catchorg/Catch2) library to help developers build and run unit tests in C++ programs. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
+The 'catch.hpp' is not something I own or developed, and is part of the [Catch2](https://github.com/catchorg/Catch2) library to help developers build and run unit tests in C++ programs. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
 ### Usage
 
@@ -101,8 +101,6 @@ Create a new C++ file and add the `#define CATCH_CONFIG_MAIN` macro at the top o
 - There is an example recipe for building test files in the makefile in this project.
 
 ## Command line interface parser (cli_parser.h)
-
-Most of this code is completely unique, and I have developed everything from scratch (to an extent), but the original implementation was influenced by the functionality of the command line argument parser and parser option class found in the [QT libraries](https://www.qt.io/).
 
 This class allows a developer to quickly define and manage arguments that can be passed in on the command line for binary file execution. This will probably not do everything you want it to, but it does everything I want it to, and has been developed in a way to minimise the code I need to write. You should carefully examine the constructor list and their input parameters and code docs for detailed instructions on how to use this class:
 
@@ -137,6 +135,8 @@ This class allows a developer to quickly define and manage arguments that can be
 
 ### Credit
 
+Most of this code is completely unique, and I have developed everything from scratch (to an extent), but the original implementation was influenced by the functionality of the command line argument parser and parser option class found in the [QT libraries](https://www.qt.io/).
+
 - The [Qt Library Command Line Parser Class](https://doc.qt.io/qt-6/qcommandlineparser.html).
 - The [Qt Library Command Line Option Class](https://doc.qt.io/qt-6/qcommandlineoption.html).
 
@@ -163,7 +163,7 @@ Usage examples can be found on the git repository documentation.
 
 ### Credit
 
-Disclaimer: The 'HTTPRequest.hpp' is not something I own or developed, and is part of the [HTTPRequest](https://github.com/elnormous/HTTPRequest/tree/master) project. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
+The 'HTTPRequest.hpp' is not something I own or developed, and is part of the [HTTPRequest](https://github.com/elnormous/HTTPRequest/tree/master) project. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
 ## Log - A custom and configurable logger
 
@@ -188,7 +188,7 @@ This class has been modified from an original forum post I found [here](https://
 
 ## Nlohmann JSON (third-party)
 
-The entire library folder and its contents are required but the single json.hpp file can be used as an include statement in any file that needs JSON objects.
+The entire library folder and its contents are required but the single json.hpp file can be used as an include statement in any file that needs JSON objects. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
 Usage examples can be found on the git repository documentation.
 
@@ -225,7 +225,7 @@ The rapid XML project includes 3 header files but only 2 are required: the base 
 
 ### Credit
 
-The [original project](https://github.com/Fe-Bell/RapidXML) and the [forked repository](https://github.com/viriw/rapidxml) contain these files, although the forked repository derivatives are easier and simpler to use.
+The [original project](https://github.com/Fe-Bell/RapidXML) and the [forked repository](https://github.com/viriw/rapidxml) contain these files, although the forked repository derivatives are easier and simpler to use. I own no rights to these files and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
 ## String - A custom String class
 
