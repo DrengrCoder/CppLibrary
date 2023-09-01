@@ -21,65 +21,55 @@
 extern class LogSettings LOG_SETTINGS;
 
 /**
- * @brief   Initialises the logging system. This should be called at the start
- *          of int main to initialise a log file in the launch directory in the
- *          event there is an early error, and once again later initialised with
- *          custom settings before calling main code.
+ * @brief   Initialise the logging system. Set some values on LOG_SETTINGS and
+ *          call this function.
  * 
  * @param argv  The 'argv' parameter pulled in from int main.
- * @throw       RuntimeError if there was an error trying to open the log file.
- *              if 'ls_print_to_file' is set to false before this is called,
- *              this error is avoided.
+ * @throw       runtime_error if there was an error trying to open the log file.
+ *              Setting 'ls_print_to_file' to false avoids this error.
  */
 #define LogInit(argv) LOG_SETTINGS.init(argv);
 /**
- * @brief   Initialises the logging system for TEST CASE CODE ONLY. This should
- *          be called at the start of the first test case in each file and
- *          initialised with any desired settings. The most common setting that
- *          should be set first is the 'ls_print_to_file' and this should be set
- *          to true before calling this init function.
+ * @brief   Initialises the logging system for TEST CASE CODE ONLY.
  * 
- * @throw   RuntimeError if there was an error trying to open the log file. If
- *          'ls_print_to_file' is set to false before this is called, this error
- *          is avoided.
+ * @throw       runtime_error if there was an error trying to open the log file.
+ *              Setting 'ls_print_to_file' to false avoids this error.
  */
 #define TestLogInit LOG_SETTINGS.tests_init();
 
 /**
- * @brief Closes the output file stream.
+ * Close the output file stream.
  */
 #define LogShutdown LOG_SETTINGS.shutdown();
 /**
- * @brief log << "LT_LL_INFO type";
+ * clog << "LT_LL_INFO type";
  */
 #define clog Log(LogType::LT_LL_INFO, __FILE__, __LINE__)
 /**
- * @brief ilog << "LT_INFO type";
+ * ilog << "LT_INFO type";
  */
 #define ilog Log(LogType::LT_INFO, __FILE__, __LINE__)
 /**
- * @brief dlog << "LT_DEBUG type";
+ * dlog << "LT_DEBUG type";
  */
 #define dlog Log(LogType::LT_DEBUG, __FILE__, __LINE__)
 /**
- * @brief wlog << "LT_WARN type";
- * 
+ * wlog << "LT_WARN type";
  */
 #define wlog Log(LogType::LT_WARN, __FILE__, __LINE__)
 /**
- * @brief elog << "LT_ERROR type";
+ * elog << "LT_ERROR type";
  */
 #define elog Log(LogType::LT_ERROR, __FILE__, __LINE__)
 /**
- * @brief flog << "LT_FATAL type";
+ * flog << "LT_FATAL type";
  */
 #define flog Log(LogType::LT_FATAL, __FILE__, __LINE__)
 
 /**
- * @brief   Logging levels enumerator, for label printing and including / 
- *          excluding certain log levels as needed through the command line
- *          arguments.
- * 
+ * Logging levels enumerator, for label printing and including / 
+ * excluding certain log levels as needed through the command
+ * line arguments.
  */
 class LogType{
 public:
@@ -202,6 +192,50 @@ public:
     }
 
     /**
+     * Convert enumeration value to custom upper case string representation.
+     */
+    const char* custom_upper_str() const{
+        switch (value) {
+            case LogType::LT_LL_INFO:
+                return "LOW INFO";
+            case LogType::LT_INFO:
+                return "INFO";
+            case LogType::LT_DEBUG:
+                return "DEBUG";
+            case LogType::LT_WARN:
+                return "WARN";
+            case LogType::LT_ERROR:
+                return "ERROR";
+            case LogType::LT_FATAL:
+                return "FATAL";
+            default:
+                return "";
+        }
+    }
+
+    /**
+     * Convert enumeration value to custom upper case string representation.
+     */
+    static const char* custom_upper_str(Value a){
+        switch (a) {
+            case LogType::LT_LL_INFO:
+                return "LOW INFO";
+            case LogType::LT_INFO:
+                return "INFO";
+            case LogType::LT_DEBUG:
+                return "DEBUG";
+            case LogType::LT_WARN:
+                return "WARN";
+            case LogType::LT_ERROR:
+                return "ERROR";
+            case LogType::LT_FATAL:
+                return "FATAL";
+            default:
+                return "";
+        }
+    }
+
+    /**
      * Convert custom string representation to enumeration value.
      */
     static Value custom_str_to_value(const char* a){
@@ -226,108 +260,110 @@ private:
 };
 
 /**
- * @brief 
- * Extern Log Settings class, to hold data exclusively separate from the Log 
- * class as the Log class is being instantiated and destroyed at every call.
+ * Extern Log Settings class, to hold data exclusively separate from
+ * the Log class as the Log class is being instantiated and destroyed
+ * at every call.
  *
  * Example use:
- *      <code>LogShutdown</code> should be used at the end of any execution 
- *      code to make sure the log file is closed. Most of the time there will 
- *      never be an issue because the program will release its resources when 
- *      execution ends, but this will further prevent any issues.
+ * <code>LogShutdown</code> should be used at the end of any
+ * execution code to make sure the log file is closed. Most of the
+ * time there will never be an issue because the program will release
+ * its resources when execution ends, but this will further prevent
+ * any issues.
  *
- *      Declare this include below any main library includes:
- *          #include "Log.h"
+ * Declare #include "log.h" in any files required.
  *
- *      Declare this under any include statements above 
- *      int main(int argc, char *argv[]), in main.cpp:
- *          LogSettings LOG_SETTINGS;
+ * Declare 'LogSettings LOG_SETTINGS' above int main.
  *
- *      This should be declared at the top of int main in case of an early error 
- *      (A parser error if you use a command line arg parser), but can be 
- *      commented out at any time:
+ * Try-catch should be declared at the top of int main in case of an
+ * early error (A parser error if you use a command line arg parser),
+ * but can be commented out at any time:
+ * 
  *          try {
- *              LogInit(argv);
+ *          ... LogInit(argv);
  *          } catch (std::runtime_error err) {
- *              std::cout << err.what() << std::endl;
- *              exit(0);
+ *          ... std::cout << err.what() << std::endl;
+ *          ... exit(0);
  *          } catch (std::exception e) {
- *              std::cout << "Program is unable to start: " << e.what() << std::endl;
- *              exit(0);
+ *          ... std::cout << "Program is unable to start: " << e.what() << std::endl;
+ *          ... exit(0);
  *          }
  *
- *      Optionally declare this with some specific settings before any main 
- *      program code executes, as well as or instead of the previous declaration 
- *      (This gives you the option to specify some settings found in a custom 
- *      command line parser, see full list of public variables for options):
- *          LOG_SETTINGS.ls_selected_level = LT_LL_INFO;
- *          LOG_SETTINGS.ls_use_working_dir = true;
- *          LogInit(argv);
- *
- *      Use the log macro's at the top of this file to log unique log levels, 
- *      see the full list of log levels above (Setting a different <code>.ls_selected_level</code> 
- *      will print those types of logs and above, with LT_LL_INFO will log 
- *      everything, and LT_FATAL will only log fatal error messages).
+ * Optionally declare LOG_SETTINGS with some specific settings before
+ * any main program code executes, as well as or instead of the previous
+ * declaration (This gives you the option to specify some settings found
+ * in a custom command line parser, see full list of public variables for
+ * options):
  * 
+ * ... LOG_SETTINGS.ls_selected_level = LT_LL_INFO;
+ * ... LOG_SETTINGS.ls_use_working_dir = true;
+ * ... LogInit(argv);
+ *
+ * Use the log macro's at the top of this file to log unique log levels,
+ * see the full list of log levels above (Setting a different
+ * '.ls_selected_level' will print those types of logs and above, where
+ * LT_LL_INFO will log everything, and LT_FATAL will only log fatal
+ * error messages).
  */
 class LogSettings {
 public:
     /**
-     * @brief   Denoting the log level determines what is printed out to the log
-     *          file (and the conosle when in an IDE). By default, LL_INFO for
-     *          all log lines.
+     * The log level. Denoting this determines what is printed out to
+     * std::cout, or a log file if selected. By default, LT_LL_INFO for all
+     * log lines.
      */
     LogType::Value ls_selected_level = LogType::LT_LL_INFO;
 
     /**
-     * @brief   True if you want to log to the working directory, false
-     *          otherwise. By default, False and logs to launch directory.
+     * True if you want to log to the working directory, false
+     * otherwise. By default, False and logs to binary directory.
      */
     bool ls_use_working_dir = false;
 
     /**
-     * @brief   True if you want to overwrite the existing file, false
-     *          otherwise. By default, False and will append date and time
-     *          information to the end of the file name.
+     * True if you want to overwrite the existing file, false
+     * otherwise. By default, False and will append date
+     * and time information to the end of the file name
+     * when it creates every new file.
      */
     bool ls_overwrite = false;
 
     /**
-     * @brief   True if you want to log to a file, false otherwise. By default,
-     *          True and will log to a file.
+     * True if you want to log to a file, false otherwise. By default,
+     * False and will not log to a file.
      */
     bool ls_print_to_file = false;
 
     /**
-     * @brief   True if you want to log to the std::cout console, false
-     *          otherwise. By default, True and will log to std::cout.
+     * True if you want to log to std::cout, false otherwise. By
+     * default, True and will log to std::cout.
      */
     bool ls_print_to_debug = true;
 
     /**
-     * @brief   True if you want to log the system date and time, false
-     *          otherwise. (System date and time shouold always be UTC). By
-     *          default, True and will log the system date and time with every
-     *          log line.
+     * True if you want to log the system date and time, false
+     * otherwise. (System date and time shouold always be
+     * UTC, but this will print the current system clock). By
+     * default, True and will log the system date and time with
+     * every log line.
      */
     bool ls_print_datetime = true;
 
     /**
-     * @brief   True if you want to log the file name and line number this lo
-     *          line came from, false otherwise. By default, True and will log
-     *          file name and line number the log line comes from.
+     * True if you want to log the file name and line number this log
+     * line came from, false otherwise. By default, True and will log
+     * file name and line number.
      */
     bool ls_print_fileline = true;
 
     /**
-     * @brief   The output file stream. Holds the reference to the file to log
-     *          to.
+     * The output file stream. Holds the reference to the file to log to.
      */
     std::ofstream ls_ofs;
 
 //  Disable the format warning and unused variable warning around these 
-//  functions to stop the format error with getting milliseconds and a disposed
-//  variable.
+//  functions to stop the format error with getting milliseconds and a
+//  disposed variable.
 #pragma GCC diagnostic ignored "-Wformat"
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
@@ -475,7 +511,7 @@ public:
 #pragma GCC diagnostic pop
 
     /**
-     * @brief Closes the output file stream.
+     * Close the output file stream.
      */
     void shutdown() {
         ls_ofs.close();
@@ -484,37 +520,36 @@ public:
 private:
 
     /**
-     * @brief   The name of the file to log to, typically the program / app name
-     *          with no spaces. Automatically set based on the input command
-     *          arguments, where the first argument always contains the name of
-     *          the binary executable.
+     * The name of the file to log to, standard practice is the
+     * program / app name. Automatically set based on the
+     * input command arguments, where the first argument
+     * always contains the name of the binary executable.
      */
     std::string ls_file_name;
 
     /**
-     * @brief   The working directory path. Calculated when LogInit is called.
-     * 
+     * The working directory path. Calculated when 'LogInit' is called.
      */
     std::string ls_working_dir;
 
     /**
-     * @brief   The launch directory path. Calculated when LogInit is called.
-     * 
+     * The launch directory path. Calculated when 'LogInit' is called.
      */
     std::string ls_launch_dir;
 
 };
 
 /**
- * @brief 
- * Custom Logger class. Each time one of the macro's is used it creates a new 
- * instance of the logger and appends all data to the string stream buffer. 
- * The destructor is called when the semi-colon is reached which flushes the 
- * buffer to the std::cout console and an output file stream. Only log lines of 
- * the specified <code>.ls_selected_level</code> and above are printed.
+ * Custom Logger class. Each time one of the macro's is used it
+ * creates a new instance of the logger class and appends all
+ * data to the string stream buffer. The destructor is called when
+ * the semi-colon is reached on each log line, which flushes the
+ * buffer to the std::cout console and an output file stream if one
+ * was selected. Only log lines of the specified LogType and above
+ * are printed.
  *
- * Macro's:
- *      log << "LT_LL_INFO type";
+ * Macro's in numeric order:
+ *      clog << "LT_LL_INFO type";
  *      ilog << "LT_INFO type";
  *      dlog << "LT_DEBUG type";
  *      wlog << "LT_WARN type";
@@ -525,11 +560,7 @@ class Log {
 public:
 
     /**
-     * @brief   Initialise a new Log instance to log some data.
-     * 
-     * @param type  The LogType for the debug level of this line.
-     * @param file  The __FILE__ macro.
-     * @param line  The __LINE__ macro.
+     * Initialise a new Log instance to log some data.
      */
     Log(LogType::Value type, const std::string &file, const int line) {
         if (type >= LOG_SETTINGS.ls_selected_level) {
@@ -539,9 +570,9 @@ public:
     }
 
     /**
-     * @brief   Destroy the Log instance using std::endl; on the output string
-     *          stream to write the buffer to the std::cout console and to the
-     *          output file stream.
+     * Destroy the Log instance using std::endl on the output string
+     * stream to flush the buffer to the std::cout console and to the
+     * output file stream if one was selected.
      */
     ~Log(){
         if (l_level >= LOG_SETTINGS.ls_selected_level) {
@@ -555,12 +586,12 @@ public:
     }
 
     /**
-     * @brief   Overridden insertion operator on custom Log class to append data
-     *          to the current Log instance string stream buffer.
+     * @brief   Insertion operator on custom Log class to append data
+     *          to the current Log instance.
      * 
-     * @tparam T    Any Type.
-     * @param t     Data to append.
-     * @return      This Log instance used.
+     * @tparam T
+     * @param t
+     * @return      This Log instance.
      */
     template<typename T>
     Log &operator<<(T t) {
@@ -572,25 +603,18 @@ public:
 
 private:
     /**
-     * @brief   The output string stream buffer.
-     * 
+     * The output string stream buffer.
      */
     std::ostringstream l__SS;
     
     /**
-     * @brief   This Log instance's LogType level.
-     * 
+     * This Log instance's LogType level.
      */
     LogType::Value l_level = LogType::LT_LL_INFO;
 
     /**
-     * @brief   Prefix the Date and Time as well as file name and line number
-     *          this log line was called.
-     * 
-     * @param file  The __FILE__ macro.
-     * @param line  The __LINE__ macro.
-     * @return      A formatted std::string holding the date, time, file name
-     *              and line number.
+     * Prefix the Date and Time as well as file name and line number
+     * this log line was called.
      */
     std::string prefix(const std::string &file, const int line) {
         //  Init return object
@@ -643,12 +667,8 @@ private:
     }
 
     /**
-     * @brief   Add an ordinal string to the date of the month portion ('st',
-     *          'nd', 'rd', or 'th')
-     * 
-     * @param date  The date of the month to append the ordinal string.
-     * @return      A formatted date of the month with appended ordinal
-     *              std::string.
+     * Add an ordinal string to the DATE of the month portion ('st',
+     * 'nd', 'rd', or 'th')
      */
     std::string dateOrdinalSuffix(int date) {
         std::ostringstream output;
@@ -669,27 +689,10 @@ private:
     }
 
     /**
-     * @brief   Get the current Log instance level as a string to print.
-     * 
-     * @return  A std::string corresponding to current LogType level.
+     * Get the current Log instance level as a string to print.
      */
     std::string LevelLabel() {
-        switch (l_level) {
-            case LogType::LT_LL_INFO:
-                return "LOW-INFO";
-            case LogType::LT_INFO:
-                return "INFO";
-            case LogType::LT_DEBUG:
-                return "DEBUG";
-            case LogType::LT_WARN:
-                return "WARN";
-            case LogType::LT_ERROR:
-                return "ERROR";
-            case LogType::LT_FATAL:
-                return "FATAL";
-            default:
-                return "";
-        }
+        return LogType::custom_upper_str(l_level);
     }
 };
 

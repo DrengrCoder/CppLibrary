@@ -19,14 +19,31 @@
  * The custom TCP Socket class is designed to simplify the process of using and
  * setting up network sockets for a TCP data stream in C++. A std::runtime_error
  * is thrown in places where an unrecoverable error occurs, along with a log
- * message printed and 'errno' being set and printed int he message as well,
- * otherwise the function will either return false or -1 where appropriate along
- * with a custom error message set that can be accessed via the ERROR_MSG string
- * function.
+ * message printed. 'ERR_NO' and 'ERR_MSG' are set.
  * 
  * This TCP Client object holds a reference to the configured socket file
  * descriptor that is used for sending and reading data over the network socket,
  * as well as storing the server file descriptor this client connected to.
+ * 
+ * __errno and __errmsg are local private variables that are set upon error, and
+ * can be accessed using ERR_NO() and ERR_MSG() functions.
+ * 
+ * NOTE:
+ * There is a unique error code numbering system implemented for this class.
+ * The error code system is a combination of custom error codes (between 100
+ * and 9999) and partial custom error codes combined with the ‘errno’ macro
+ * to produce values 10000 and over.
+ * 
+ * Custom error codes between 100 and 9999 denote some sort of usage
+ * error and have been documented in the readme. Error codes 10000 and
+ * over follow the pattern YYXXX where YY is a 2 digit custom code I have
+ * given it, and XXX is the 'errno' macro error code added to the value.
+ * Examples:
+ * - '12047' is the custom error code '12' and the errno code '047' or just '47'.
+ * - '10111' is the custom error code '10' and the errno code '111'.
+ * 
+ * The custom codes are documented in this readme. 'errno' code meaning
+ * will change depending on what caused the errno code to be set.
  */
 class TcpClient {
 public:
@@ -37,7 +54,7 @@ public:
 
     /**
      * @brief   Construct a new Tcp Client object with a socket file descriptor
-     *          and some default parameters for a TCP type connection.
+     *          and some default parameters for a TCP type connection:
      *          'socket(AF_INET, SOCK_STREAM, 0)'. Address Options: AF_INET
      *          family.
      * 
@@ -51,7 +68,7 @@ public:
         clog << "Initialise new TCP client object...";
 
         _ipv = ipv;
-        _socketFd = socket((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, -90);
+        _socketFd = socket((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
         if (_socketFd < 0){
             __errno = 10000 + errno;
 
@@ -71,7 +88,7 @@ public:
     }
 
     /**
-     * @brief   Destroy the Tcp Client object and perform necessary clean up.
+     * Destroy the Tcp Client object and perform necessary clean up.
      */
     ~TcpClient(){
         dlog << "TCP Client socket fd: " << _socketFd << " and server fd: "
@@ -98,8 +115,8 @@ public:
     }
 
     /**
-     * @brief   Close this client socket and the server socket with the socket
-     *          file descriptors.
+     * Close this client socket and the server socket with the socket
+     * file descriptors.
      */
     void Close(){
         dlog << "Closing socket " << _socketFd << " and server " << _serverFd
@@ -111,7 +128,8 @@ public:
     }
 
     /**
-     * @brief   Connect this socket to a port number and ip address. 
+     * @brief   Connect this socket to a port number and ip address. Sets
+     *          __errmsg and __errno on error.
      * 
      * @param portNumber    The port number to connect to.
      * @param ip            The IP address to connect to.
@@ -155,11 +173,10 @@ public:
     }
 
     /**
-     * @brief   Read n_bytes into buff on this socket.
+     * Read N_BYTES into BUFF on this socket. Return
+     * number of bytes read, -1 if error or 0 if EOF.
      * 
-     * @param buff      The char array to output the bytes to.
-     * @param n_bytes   The number of bytes to read on the socket at once.
-     * @return          The number of bytes read on the socket, or -1 on error.
+     * Sets __errmsg and __errno on error.
      */
     int Read(void *buff, size_t n_bytes){
         __errmsg = "";
@@ -195,10 +212,10 @@ public:
     }
 
     /**
-     * @brief   Send input string to the connected socket.
+     * Send INPUT string to the connected socket. Return
+     * number of bytes read, -1 if error or 0 if EOF.
      * 
-     * @param input     The string of characters to send.
-     * @return          The number of bytes sent, or -1 on error.
+     * Sets __errmsg and __errno on error.
      */
     int Send(const char *input){
         __errmsg = "";
@@ -233,66 +250,59 @@ public:
     }
 
     /**
-     * @brief   Get this client socket's file descriptor value.
-     * 
-     * @return  The client socket's file descriptor integer.
+     * Get this client socket's file descriptor value.
      */
     int GetSocketFd(){ return _socketFd; }
 
     /**
-     * @brief   Get the Server file descriptor value this client connected to.
-     * 
-     * @return  The server socket file descriptor integer.
+     * Get the Server file descriptor value this client connected to.
      */
     int GetServerFd(){ return _serverFd; }
 
     /**
-     * @brief   Get the last error message that occurred on this object.
-     * 
-     * @return  The last error message when an error occurs on this object. This
-     *          variable will contain the 'errno' value.
+     * Get the last error message set on this object.
      */
     std::string ERR_MSG(){ return __errmsg; }
 
     /**
-     * Get the error code that has been set.
+     * Get the last error code set on this object.
      */
     int ERR_NO(){ return __errno; }
 
 protected:
     /**
-     * @brief   The file descriptor for THIS socket object.
+     * The file descriptor for THIS socket object.
      */
     int _socketFd = -1;
 
 private:
     /**
-     * @brief   The file descriptor for the socket this client is connected to.
+     * The file descriptor for the server-side socket this client is connected to.
      */
     int _serverFd = -1;
 
     /**
-     * The set Internet Protocol version number (or IPv number).
+     * The Internet Protocol version number (IPv number).
      */
     InternetProtocol _ipv = InternetProtocol::v4;
 
     /**
-     * @brief   This client socket's address structure.
+     * This client socket's address structure.
      */
     struct sockaddr_in _address;
 
     /**
-     * @brief   The byte length of the address in memory.
+     * The byte length of the address in memory.
      */
     const int _addressLength = sizeof(_address);
 
     /**
-     * @brief   The last error message.
+     * The last error message set.
      */
     std::string __errmsg;
 
     /**
-     * The error code.
+     * The last error code set.
      */
     int __errno;
 };
