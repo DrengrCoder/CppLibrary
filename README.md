@@ -85,28 +85,28 @@ This project also includes a number of third-party classes and binary programs t
 
 This library of classes can be used standalone for the most part (dependencies listed) and allows a developer to quickly write fast, efficient and manageable code for all types of C/C++ projects (C compatibility will need to be tested on a case-by-case basis, but all classes developed for C++ compatibility).
 
-### Catch.hpp (third-party)
+## Catch.hpp (third-party)
 
 This header file allows you to write unit tests for C++ programs and comes from the 'Catch2' library. This has been included in the project to be used in another projects as desired, and is also used by the tests in this project.
 
-#### Credit
+### Credit
 
 Disclaimer: The 'catch.hpp' is not something I own or developed, and is part of the [Catch2](https://github.com/catchorg/Catch2) library to help developers build and run unit tests in C++ programs. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
-#### Usage
+### Usage
 
 Create a new C++ file and add the `#define CATCH_CONFIG_MAIN` macro at the top of the file. You can then create as many tests as desired using `TEST_CASE("Description", "[single-file]"){}`.
 - Description can be replaced for whatever descriptive text desired for this unit test.
 - `"[single-file]"` is the most common option for the second parameter, but others are available if you read the Catch2 documentation on the git repository.
 - There is an example recipe for building test files in the makefile in this project.
 
-### Command line interface parser (cli_parser.h)
+## Command line interface parser (cli_parser.h)
 
 Most of this code is completely unique, and I have developed everything from scratch (to an extent), but the original implementation was influenced by the functionality of the command line argument parser and parser option class found in the [QT libraries](https://www.qt.io/).
 
 This class allows a developer to quickly define and manage arguments that can be passed in on the command line for binary file execution. This will probably not do everything you want it to, but it does everything I want it to, and has been developed in a way to minimise the code I need to write. You should carefully examine the constructor list and their input parameters and code docs for detailed instructions on how to use this class:
 
-#### The constructors and input parameters
+### The constructors and input parameters
 
 - Tags automatically prepend the appropriate number of hyphon characters, so you should only define tags as a string without any hyphons.
 
@@ -127,7 +127,7 @@ This class allows a developer to quickly define and manage arguments that can be
     - tags, description, required bool, value name
         - This constructor has been defined this way because it is assumed that if you specify the argument as being required, that it expects data.
 
-#### The types of options
+### The types of options
 
 - You can define a flag-based argument (it either exists or it doesn't), by simply defining a tag and a description. Used to define boolean related variables.
 
@@ -135,47 +135,47 @@ This class allows a developer to quickly define and manage arguments that can be
 
 - You can define a data-based argument with a specific list of choices, with or without a default value after it. If there is no default value and the argument is found, it expects to find some sort of data after it, and the data value will be checked that it is a valid choice from the list of input choices. 
 
-#### Credit
+### Credit
 
 - The [Qt Library Command Line Parser Class](https://doc.qt.io/qt-6/qcommandlineparser.html).
 - The [Qt Library Command Line Option Class](https://doc.qt.io/qt-6/qcommandlineoption.html).
 
-#### Dependencies
+### Dependencies
 
 This class requires the custom [logger class](#log---a-custom-and-configurable-logger) and the custom [C++ utilities class](#c-utilities) for some additional functions.
 
-#### Usage
+### Usage
 
 - You can declare Parser Options with a single string for a tag and a description for the simplest command line args like `ParserOption opt = ParserOption("tag", "description");`.
 - You can create as many as you like before adding them to a Parser. A Parser can be created by passing in the `argc` and `argv` variable pulled in by int main: `Parser parser = Parser(argc, argc, "Description");`.
 - Parser Options can be added in a brace-initialiser list: `parser.AddOptions({opt});`.
 - And the arguments can be parsed compared to the Parser Options: `parser.Process();`.
 
-### C++ Utilities
+## C++ Utilities
 
 The utilities class solely contains a few static functions for various features and you should check the file for specific information. Nothing here is unique or proprietary and code can be found on a simple google search, but has been included in a file in this project as I tend to use them a lot in some of my projects. This class is a dependency to other custom classes.
 
-### HTTPRequest.hpp (third-party)
+## HTTPRequest.hpp (third-party)
 
 This header file allows you to issue HTTP Requests to Web-based URL's, and implements the standards for HTTP/URI syntax defined by IETF. This header file as very complex and thorough, and you should investigate all the code through yourself as required.
 
 Usage examples can be found on the git repository documentation.
 
-#### Credit
+### Credit
 
 Disclaimer: The 'HTTPRequest.hpp' is not something I own or developed, and is part of the [HTTPRequest](https://github.com/elnormous/HTTPRequest/tree/master) project. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
 
-### Log - A custom and configurable logger
+## Log - A custom and configurable logger
 
 This class can print out to `std::cout` and/or to a text file with varying levels of log lines from low level information up to fatal. The directory the log files go to can be slightly configured and you're free to add your own options. The code comments in the file and code docs explain in detail how to setup and use this class. The format of the text is probably easier to read directly in the file.
 
 The `LOG_SETTINGS` extern variable can be used to configure settings, and the `LogInit` function will reinitialise the logger with those settings. The logger will automatically print to `std::cout` before `LogInit` is called so nothing will need to be set up before you can start using the `log` macro's defined in the file, but if you want to change settings, such as printing to a file or toggling the filename and line number the log lines come from, you will need to change the settings on `LOG_SETTINGS` and call `LogInit` to set any changes. Calling `LogInit` will generate a 'LogFiles' folder in the appropriate location once called.
 
-#### Credit
+### Credit
 
 This class has been modified from an original forum post I found [here](https://levelup.gitconnected.com/logging-in-c-60cd1571df15) but has been contained in a single header file. I modified this implementation to automatically call `std::endl` so I didn't have to remember to do it myself at the end of every line, and I created several macro's that include the `__FILE__` and `__LINE__` macro's so the filename and line number the `log` macro's are called from is pulled in to the log line and can be printed to the text file and `std::cout`.
 
-#### Usage
+### Usage
 
 - Declare the Log Settings extern at the top of main and **Only main**: `LogSettings LOG_SETTINGS;`.
 - Set the settings on this object in the int main function: 
@@ -186,29 +186,29 @@ This class has been modified from an original forum post I found [here](https://
     - `clog << "Basic log line";`.
     - `flog << "Fatal log line";`.
 
-### Nlohmann JSON (third-party)
+## Nlohmann JSON (third-party)
 
 The entire library folder and its contents are required but the single json.hpp file can be used as an include statement in any file that needs JSON objects.
 
 Usage examples can be found on the git repository documentation.
 
-#### Credit
+### Credit
 
 The [JSON libraries](https://github.com/nlohmann/json) provided by [nlohmann](https://github.com/nlohmann) is widely regarded as the standard for JSON object manipulation by many developers, and the library folder has been included in this project as it is something I commonly use across a lot of programs I create.
 
-### Proxy-based HTTP Request header
+## Proxy-based HTTP Request header
 
 This header file uses the custom TCP Client class to create network sockets that allow data transfer to API's on devices with different IP address ranges.
 
-#### Credit
+### Credit
 
 This file has been heavily influenced by the [HTTPRequest project](https://github.com/elnormous/HTTPRequest/tree/master), but with some minor modifications for my custom naming conventions, additional code docs and a customised class enum type to add custom functions.
 
-#### Dependencies
+### Dependencies
 
 This class requires the custom [logger class](#log---a-custom-and-configurable-logger), the custom [TCP Client class](#tcp-client-network-socket-class) and the custom [String class](#string---a-custom-string-class) for some additional functions.
 
-#### Usage
+### Usage
 
 - Optionally decide whether you need the default `HTTP::Method::GET` or some other HTTP Request type.
 - Declare the http request object:
@@ -219,15 +219,15 @@ This class requires the custom [logger class](#log---a-custom-and-configurable-l
 
 You can optionally send additional header fields, for example if you need to set a different content type: `HTTP::HeaderField fields = { ._name = Content-Type", ._value = "text/xml"};` and include them in the `HTTP::Request` object when calling `.send`.
 
-### RapidXML (third-party)
+## RapidXML (third-party)
 
 The rapid XML project includes 3 header files but only 2 are required: the base 'rapidxml.hpp' and 'rapidxml_print.hpp' file to provide the functionality required and print-friendly functions respectively.
 
-#### Credit
+### Credit
 
 The [original project](https://github.com/Fe-Bell/RapidXML) and the [forked repository](https://github.com/viriw/rapidxml) contain these files, although the forked repository derivatives are easier and simpler to use.
 
-### String - A custom String class
+## String - A custom String class
 
 This class implements several common functions and loops you might use in C++ to achieve the relevant functionality, but contained in a single header file for ease-of-use. This class is still a work in progress and although many tests have been performed, there is no certainty that everything will work in every case, but as many things as possible has been accounted for at this time.
 
@@ -241,11 +241,11 @@ Nothing here is especially unique, but all functions have been collected into a 
 3. This class can return **both** a `const char*` and a `std::string`, but when used in a function that accepts a `const char*` and a `std::string` in the same index position in the parameter list, you will need to force it to return a `const char*` by calling `c_str()` on the `String` object, otherwise you experience an error because your code is not sure which variable type you are trying to use and therefore, which function parameter list you are trying to specify.
 4. While you can concatenate two `char`'s and assign the concatenation to a `String` object, it is worth noting that 'adding' two `char`'s to each other produces a different `char` because they are essentially integers.
 
-#### Credit
+### Credit
 
 This class was developed based on a [Geek for Geeks](https://www.geeksforgeeks.org/how-to-create-a-custom-string-class-in-c-with-basic-functionalities/) post, although partially modified for additional functionality.
 
-#### Usage
+### Usage
 
 - Initialise a string in multiple ways with multiple data types:
 ```
@@ -336,7 +336,7 @@ String r = _string.to_lower();
 r = "upper to lower";
 ```
 
-### TCP Client network socket class
+## TCP Client network socket class
 
 Network sockets are originally very basic and must be configured for TCP or UDP type data streams. You do not need to be familiar with how network sockets work to use this class, but this class makes it simple to implement client-side functionality, with appropriate functions to initialise and connect to network sockets, applying some common functions and argument options that would be expected to configure a socket for a TCP-based data stream connection.
 
@@ -344,7 +344,7 @@ Network socket objects are easier to manipulate if they are pointer objects.
 
 Nothing here is especially unique and can be learned after a few google searches and looking at the right forum posts, but the simplest implementations have been created. This class can be inherited to provide more advanced functionality. If you need to rewrite these classes for your own purposes, I suggest learning more about network sockets and network programming theory and practice before attempting to do something too complex.
 
-#### Error codes
+### Error codes
 
 There is a unique error code numbering system implemented for this class. The error code system is a combination of custom error codes (between 100 and 9999) and partial custom error codes combined with the ‘errno’ macro to produce values 10000 and over.
 
@@ -359,11 +359,11 @@ The custom codes are documented here, but the 'errno' code meaning will change d
 - 13xxx = Less than 0 bytes returned when sending and reading from the socket, the last 3 digits will be 'errno' and will provide more specific details.
 - 101 = Attempted to read from or write to the socket without a valid socket file descriptor being set or initialised. 'errno' will not be set as this error is manually caught by the class.
 
-#### Dependencies
+### Dependencies
 
 This class requires the custom [logger class](#log---a-custom-and-configurable-logger) to log unique errors.
 
-#### Usage
+### Usage
 
 - Initialise a TCP Client object:
 ```
@@ -389,13 +389,13 @@ std::string errmsg = client->ERR_MSG();
 int errcode = client->ERR_NO();
 ```
 
-### TCP Server network socket class
+## TCP Server network socket class
 
 Network sockets are originally very basic and must be configured for TCP or UDP type data streams. You do not need to be familiar with how network sockets work to use this class, but this class makes it simple to implement server-side functionality, with appropriate functions to initialise and listen to network socket ports, applying some common functions and argument options that would be expected to configure a socket for a TCP-based data stream connection.
 
 Nothing here is especially unique and can be learned after a few google searches and looking at the right forum posts, but the simplest implementations have been created. This class can be inherited to provide more advanced functionality. If you need to rewrite these classes for your own purposes, I suggest learning more about network sockets and network programming theory and practice before attempting to do something too complex.
 
-#### Error codes
+### Error codes
 
 There is a unique error code numbering system implemented for this class. The error code system is a combination of custom error codes (between 100 and 9999) and partial custom error codes combined with the ‘errno’ macro to produce values 10000 and over.
 
@@ -410,11 +410,11 @@ The custom codes are documented here, but the 'errno' code meaning will change d
 - 16xxx = Starting to listen on a network port failed, the last 3 digits will be 'errno' and will provide more specific details.
 - 17xxx = Attempting to accept the next connection in the queue failed, the last 3 digits will be 'errno' and will provide more specific details.
 
-#### Dependencies
+### Dependencies
 
 This class requires the custom [logger class](#log---a-custom-and-configurable-logger) to log unique errors.
 
-#### Usage
+### Usage
 
 - Initialise TCP Server object:
 ```
