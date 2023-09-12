@@ -558,7 +558,7 @@ The Version Incrementor program has been created to quickly manage automated ver
 
 This program accepts a file path to the header file that is being incremented, and a flag to denote which version number is being incremented. This version numbering system follows [semantic versioning 2.0.0](https://semver.org/) system, with the added number for BUILD that is automatically incremented if a flag is omitted from the Version Incrementor command line args list.
 
-The header file is created if it does not exist, and behaviour is undefined is passing in a directory as the argument for the file path. Use the -h flag with the Version Incrementor to see the list of arguments and their expected formats.
+The header file is created if it does not exist, and behaviour is undefined if passing in a directory as the argument for the file path. Use the -h flag with the Version Incrementor to see the list of arguments and their expected formats.
 
 ## Installation and Build steps
 
