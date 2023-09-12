@@ -556,6 +556,18 @@ This has been included for testing, along with a custom config file. I own no ri
 
 The Version Incrementor program has been created to quickly manage automated version number incrementation when building with GNU make. A make recipe should be defined that triggers the build commands and this binary program.
 
+```
+patch: increment_version_patch clean $(BLD_SRC_DIR)/$(TARGET_EXEC)
+
+increment_version_patch:
+	@echo Incrementing patch...
+	@VersionIncrementor -p ./src/version_number.h -n PATCH
+
+increment_version_build:
+	@echo Incrementing build...
+	@VersionIncrementor -p ./src/version_number.h
+```
+
 This program accepts a file path to the header file that is being incremented, and a flag to denote which version number is being incremented. This version numbering system follows [semantic versioning 2.0.0](https://semver.org/) system, with the added number for BUILD that is automatically incremented if a flag is omitted from the Version Incrementor command line args list.
 
 The header file is created if it does not exist, and behaviour is undefined if passing in a directory as the argument for the file path. Use the -h flag with the Version Incrementor to see the list of arguments and their expected formats.
