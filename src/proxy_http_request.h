@@ -988,10 +988,14 @@ namespace HTTP
                 elog << "HTTP request failed to connect to host, elapsed time: " 
                     << time_elapsed.count() << ".";
 
+                __errmsg = client->ERR_MSG();
+                __errno = client->ERR_NO();
+
                 if (time_elapsed.count() > timeout_milliseconds){
                     std::stringstream msg;
                     msg << "Host took too long to respond, request timeout. "
-                        << "Elapsed time (ms): " << time_elapsed.count();
+                        << "Elapsed time (ms): " << time_elapsed.count() << ", "
+                        << "TCP Client error: " << __errno << ", " << __errmsg;
 
                     elog << msg.str();
 
@@ -999,9 +1003,17 @@ namespace HTTP
                                 ._code = Status::Code::RequestTimeout,
                                 ._reason = msg.str() } };
                 }else{
+                    Status::Code active_code = Status::Code::Accepted;
                     std::stringstream msg;
-                    msg << "Failed to connect before expected timeout, "
-                        << "possible host actively refused connection.";
+                    msg << "Failed to connect before expected timeout, ";
+                    if (__errno >= 12000 && __errno <= 13000){
+                        msg << __errmsg << ".";
+                        active_code = Status::Code::Conflict;
+                    }else{
+                        msg << "possible host actively refused connection, "
+                            << "TCP error message: " << __errmsg << ".";
+                        active_code = Status::Code::Forbidden;
+                    }
 
                     elog << msg.str();
 
