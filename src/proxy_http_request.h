@@ -1028,13 +1028,14 @@ namespace HTTP
             const int bytesSent = client->Send(requestData.c_str());
             if (bytesSent < 1){
                 std::stringstream msg;
-                msg << "Client failed to send any bytes, bytesSent: " << bytesSent 
-                    << ", errno: " << errno;
+                msg << "Client failed to send any bytes, bytesSent: " 
+                    << bytesSent << ", TCP Error: " << __errno << ", "
+                    << __errmsg << ".";
 
                 elog << msg.str();
 
                 return { ._status = {
-                            ._code = Status::Code::Conflict,
+                            ._code = Status::Code::InternalServerError,
                             ._reason = msg.str() } };
             }
             
@@ -1077,13 +1078,14 @@ namespace HTTP
                 if (bytesRead < 0){
                     //  error
                     std::stringstream msg;
-                    msg << "Client failed to read any bytes, bytesRead: " << bytesRead 
-                        << ", errno: " << errno;
+                    msg << "Client failed to read any bytes, bytesRead: " 
+                        << bytesSent << ", TCP Error: " << __errno << ", "
+                        << __errmsg << ".";
 
                     elog << msg.str();
 
                     return { ._status = {
-                                ._code = Status::Code::Conflict,
+                                ._code = Status::Code::InternalServerError,
                                 ._reason = msg.str() } };
                 }else if (bytesRead == 0){
                     //  disconnected
