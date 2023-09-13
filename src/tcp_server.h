@@ -65,6 +65,9 @@ public:
     TcpServer(InternetProtocol ipv = InternetProtocol::v4){
         __errmsg = "";
         __errno = 0;
+
+        if (_serverFd != -1)
+            Shutdown();
         
         clog << "Initialise new TCP server object...";
 
