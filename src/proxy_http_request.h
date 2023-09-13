@@ -963,7 +963,14 @@ namespace HTTP
 
             clog << "Constructed request html: \"" << requestData
                 << "\", beginning TCP Client initialisation and comms...";
-            TcpClient *client = new TcpClient(_ipv);
+            TcpClient *client;
+            try {
+                client = new TcpClient(_ipv);
+            } catch (std::runtime_error &err){
+                //  Error message and number returned in exception as the
+                //  variables are inaccessible.
+                throw err;
+            }
             
             //  Capture the start time before a connection attempt is made for
             //      later processing
