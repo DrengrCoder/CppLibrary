@@ -1267,10 +1267,16 @@ namespace HTTP
             return response;
         }
 
+        std::string ERR_MSG(){ return __errmsg; }
+        int ERR_NO(){ return __errno; }
+
     private:
         TcpClient::InternetProtocol _ipv = TcpClient::InternetProtocol::v4;
         std::string _ipAddress;
         Uri _uri;
+
+        std::string __errmsg;
+        int __errno;
     };
 };
 
