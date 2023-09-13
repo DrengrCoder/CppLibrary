@@ -1018,7 +1018,7 @@ namespace HTTP
                     elog << msg.str();
 
                     return { ._status = {
-                                ._code = Status::Code::Forbidden,
+                                ._code = active_code,
                                 ._reason = msg.str() } };
                 }
             }
