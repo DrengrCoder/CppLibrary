@@ -963,7 +963,14 @@ namespace HTTP
 
             clog << "Constructed request html: \"" << requestData
                 << "\", beginning TCP Client initialisation and comms...";
-            TcpClient *client = new TcpClient(_ipv);
+            TcpClient *client;
+            try {
+                client = new TcpClient(_ipv);
+            } catch (std::runtime_error &err){
+                //  Error message and number returned in exception as the
+                //  variables are inaccessible.
+                throw err;
+            }
             
             //  Capture the start time before a connection attempt is made for
             //      later processing
@@ -981,10 +988,14 @@ namespace HTTP
                 elog << "HTTP request failed to connect to host, elapsed time: " 
                     << time_elapsed.count() << ".";
 
+                __errmsg = client->ERR_MSG();
+                __errno = client->ERR_NO();
+
                 if (time_elapsed.count() > timeout_milliseconds){
                     std::stringstream msg;
                     msg << "Host took too long to respond, request timeout. "
-                        << "Elapsed time (ms): " << time_elapsed.count();
+                        << "Elapsed time (ms): " << time_elapsed.count() << ", "
+                        << "TCP Client error: " << __errno << ", " << __errmsg;
 
                     elog << msg.str();
 
@@ -992,14 +1003,22 @@ namespace HTTP
                                 ._code = Status::Code::RequestTimeout,
                                 ._reason = msg.str() } };
                 }else{
+                    Status::Code active_code = Status::Code::Accepted;
                     std::stringstream msg;
-                    msg << "Failed to connect before expected timeout, "
-                        << "possible host actively refused connection.";
+                    msg << "Failed to connect before expected timeout, ";
+                    if (__errno >= 12000 && __errno <= 13000){
+                        msg << __errmsg << ".";
+                        active_code = Status::Code::Conflict;
+                    }else{
+                        msg << "possible host actively refused connection, "
+                            << "TCP error message: " << __errmsg << ".";
+                        active_code = Status::Code::Forbidden;
+                    }
 
                     elog << msg.str();
 
                     return { ._status = {
-                                ._code = Status::Code::Forbidden,
+                                ._code = active_code,
                                 ._reason = msg.str() } };
                 }
             }
@@ -1009,13 +1028,14 @@ namespace HTTP
             const int bytesSent = client->Send(requestData.c_str());
             if (bytesSent < 1){
                 std::stringstream msg;
-                msg << "Client failed to send any bytes, bytesSent: " << bytesSent 
-                    << ", errno: " << errno;
+                msg << "Client failed to send any bytes, bytesSent: " 
+                    << bytesSent << ", TCP Error: " << __errno << ", "
+                    << __errmsg << ".";
 
                 elog << msg.str();
 
                 return { ._status = {
-                            ._code = Status::Code::Conflict,
+                            ._code = Status::Code::InternalServerError,
                             ._reason = msg.str() } };
             }
             
@@ -1058,13 +1078,14 @@ namespace HTTP
                 if (bytesRead < 0){
                     //  error
                     std::stringstream msg;
-                    msg << "Client failed to read any bytes, bytesRead: " << bytesRead 
-                        << ", errno: " << errno;
+                    msg << "Client failed to read any bytes, bytesRead: " 
+                        << bytesSent << ", TCP Error: " << __errno << ", "
+                        << __errmsg << ".";
 
                     elog << msg.str();
 
                     return { ._status = {
-                                ._code = Status::Code::Conflict,
+                                ._code = Status::Code::InternalServerError,
                                 ._reason = msg.str() } };
                 }else if (bytesRead == 0){
                     //  disconnected
@@ -1246,10 +1267,16 @@ namespace HTTP
             return response;
         }
 
+        std::string ERR_MSG(){ return __errmsg; }
+        int ERR_NO(){ return __errno; }
+
     private:
         TcpClient::InternetProtocol _ipv = TcpClient::InternetProtocol::v4;
         std::string _ipAddress;
         Uri _uri;
+
+        std::string __errmsg;
+        int __errno;
     };
 };
 

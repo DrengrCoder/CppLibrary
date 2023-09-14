@@ -65,6 +65,9 @@ public:
         __errno = 0;
         __errmsg = "";
 
+        if (_socketFd != -1 || _serverFd != -1)
+            Close();
+
         clog << "Initialise new TCP client object...";
 
         _ipv = ipv;
