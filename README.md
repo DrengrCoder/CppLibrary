@@ -1,4 +1,4 @@
-# Custom C++ class file library v1.0.0
+# Custom C++ class file library v1.0.1
 
 ## Table of contents
 
@@ -91,7 +91,7 @@ This header file allows you to write unit tests for C++ programs and comes from 
 
 ### Credit
 
-The 'catch.hpp' is not something I own or developed, and is part of the [Catch2](https://github.com/catchorg/Catch2) library to help developers build and run unit tests in C++ programs. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
+The 'catch.hpp' is not something I own or developed, and is part of the [Catch2](https://github.com/catchorg/Catch2) library to help developers build and run unit tests in C++ programs. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licenses folder.
 
 ### Usage
 
@@ -106,9 +106,9 @@ This class allows a developer to quickly define and manage arguments that can be
 
 ### The constructors and input parameters
 
-- Tags automatically prepend the appropriate number of hyphon characters, so you should only define tags as a string without any hyphons.
+- Tags automatically prepend the appropriate number of hyphen characters, so you should only define tags as a string without any hyphens.
 
-- Leading and trailing white space in certain parameters is removed entirely, and some parameters that have remaining white space will be replaced with hyphons.
+- Leading and trailing white space in certain parameters is removed entirely, and some parameters that have remaining white space will be replaced with hyphens.
 
 - You can define the first parameter as a single string, a brace-initialised list of strings or a `std::vector` of strings, before passing it to the constructor.
 
@@ -150,7 +150,7 @@ This class requires the custom [logger class](#log---a-custom-and-configurable-l
 ```
 ParserOption _option = ParserOption("tag", "description");
 ```
-- Delcaring Parser Options with vectors and brace-initialiser lists (NOTE: We do not cover what a brace-initialised list is, and you should google this for yourself. The Parser Option class accepting brace-initialised lists as an input parameter shows you how to create your own functions using them):
+- Declaring Parser Options with vectors and brace-initialiser lists (NOTE: We do not cover what a brace-initialised list is, and you should google this for yourself. The Parser Option class accepting brace-initialised lists as an input parameter shows you how to create your own functions using them):
 ```
 std::vector<std::string> string_tags;
 _option = ParserOption(string_tags, "Description");
@@ -201,11 +201,11 @@ ParserOption opt3;
 int r = _parser.AddOptions({opt1, opt2, opt3});
 if (r != 0) throw error; 
 ```
-- After adding options to the Parser object, you can call `.Process()` to validate the input command line arg data. This function returns a bool for success or failure and should be checked for before proceeeding. Returns false or error (not exhaustive list): if the argument was required but was not found, if the argument had a specific subset list of choices but the arg data following it did not match one of those choices, or if some argument expected data after it but was not found:
+- After adding options to the Parser object, you can call `.Process()` to validate the input command line arg data. This function returns a bool for success or failure and should be checked for before proceeding. Returns false or error (not exhaustive list): if the argument was required but was not found, if the argument had a specific subset list of choices but the arg data following it did not match one of those choices, or if some argument expected data after it but was not found:
 ```
 if (!_parser.Process()) throw error;
 ```
-- The Parser class comes with two functions to quickly check the existance of flags and retrieve argument data, if applicable. A command line arg will need to exist before attempting to retrieve argument data, so it is advised to check for the option being set using `.IsSet` first before `.GetValue`. All data is a `std::string` by default, and after retrieving the specific string data, you should convert it to another data type as required:
+- The Parser class comes with two functions to quickly check the existence of flags and retrieve argument data, if applicable. A command line arg will need to exist before attempting to retrieve argument data, so it is advised to check for the option being set using `.IsSet` first before `.GetValue`. All data is a `std::string` by default, and after retrieving the specific string data, you should convert it to another data type as required:
 ```
 ParserOption flag_opt;
 ParserOption value_opt;
@@ -227,7 +227,7 @@ Usage examples can be found on the git repository documentation.
 
 ### Credit
 
-The 'HTTPRequest.hpp' is not something I own or developed, and is part of the [HTTPRequest](https://github.com/elnormous/HTTPRequest/tree/master) project. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
+The 'HTTPRequest.hpp' is not something I own or developed, and is part of the [HTTPRequest](https://github.com/elnormous/HTTPRequest/tree/master) project. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licenses folder.
 
 ## Log - A custom and configurable logger
 
@@ -269,7 +269,7 @@ flog << "Fatal level. Worst level of logging information. Used when something ve
 
 ## Nlohmann JSON (third-party)
 
-The entire library folder and its contents are required but the single json.hpp file can be used as an include statement in any file that needs JSON objects. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
+The entire library folder and its contents are required but the single json.hpp file can be used as an include statement in any file that needs JSON objects. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licenses folder.
 
 Usage examples can be found on the git repository documentation.
 
@@ -328,7 +328,7 @@ The rapid XML project includes 3 header files but only 2 are required: the base 
 
 ### Credit
 
-The [original project](https://github.com/Fe-Bell/RapidXML) and the [forked repository](https://github.com/viriw/rapidxml) contain these files, although the forked repository derivatives are easier and simpler to use. I own no rights to these files and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
+The [original project](https://github.com/Fe-Bell/RapidXML) and the [forked repository](https://github.com/viriw/rapidxml) contain these files, although the forked repository derivatives are easier and simpler to use. I own no rights to these files and cannot guarantee its stability or security. The license for this project has been added under the Licenses folder.
 
 ## String - A custom String class
 
@@ -550,7 +550,7 @@ Binary programs have been included in this project, but are not built in this pr
 
 The [CppNameLint project](https://github.com/dougpuob/cppnamelint/tree/master) was created as a way of defining custom naming conventions and applying them to your code. '.toml' files are used in conjunction with this binary file and a source file (or multiple source files) to quickly produce a report of what is and is not obeying the defined conventions.
 
-This has been included for testing, along with a custom config file. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licencses folder.
+This has been included for testing, along with a custom config file. I own no rights to this file and cannot guarantee its stability or security. The license for this project has been added under the Licenses folder.
 
 ### Automated Version Incrementor program
 
