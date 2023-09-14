@@ -1,4 +1,4 @@
-# Custom C++ class file library v1.0.0
+# Custom C++ class file library v1.0.1
 
 ## Table of contents
 
