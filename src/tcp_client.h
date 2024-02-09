@@ -181,7 +181,7 @@ public:
      * 
      * Sets __errmsg and __errno on error.
      */
-    int Read(void *buff, size_t n_bytes){
+    int Read(void *buff, size_t n_bytes, int flags = 0){
         __errmsg = "";
         __errno = 0;
 
