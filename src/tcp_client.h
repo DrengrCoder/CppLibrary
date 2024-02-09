@@ -220,7 +220,7 @@ public:
      * 
      * Sets __errmsg and __errno on error.
      */
-    int Send(const char *input){
+    int Send(const void* buff, size_t n_bytes, int flags = 0){
         __errmsg = "";
         __errno = 0;
         
@@ -234,7 +234,7 @@ public:
             return -1;
         }
 
-        int bytes = send(_socketFd, input, strlen(input), 0);
+        int bytes = send(_socketFd, buff, n_bytes, flags);
         if (bytes < 0){
             std::stringstream msg;
             msg << "Error sending bytes, _socketFd: " << _socketFd << ", bytes: "
@@ -246,7 +246,7 @@ public:
         } else if (bytes == 0){
             wlog << "No bytes were sent.";
         } else {
-            clog << bytes << " bytes sent: " << input;
+            clog << bytes << " bytes sent: " << buff;
         }
 
         return bytes;
