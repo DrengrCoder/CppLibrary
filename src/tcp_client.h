@@ -216,6 +216,18 @@ public:
 
     /**
      * Send INPUT string to the connected socket. Return
+     * number of bytes read, -1 if error or 0 if EOF. Uses
+     * STRLEN(input) to calculate N_BYTES for cascading
+     * function calls.
+     * 
+     * Sets __errmsg and __errno on error.
+     */
+    int Send(const char *input, int flags = 0){
+        return Send(input, strlen(input), flags);
+    }
+
+    /**
+     * Send N_BYTES of BUFF to the connected socket. Return
      * number of bytes read, -1 if error or 0 if EOF.
      * 
      * Sets __errmsg and __errno on error.
