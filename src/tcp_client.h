@@ -222,8 +222,8 @@ public:
      * 
      * Sets __errmsg and __errno on error.
      */
-    int Send(const char *input, int flags = 0){
-        return Send(input, strlen(input), flags);
+    int Send(const char *input){
+        return Send(input, strlen(input), 0);
     }
 
     /**
