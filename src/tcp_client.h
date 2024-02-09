@@ -196,7 +196,7 @@ public:
         }
 
         memset(buff, 0, n_bytes);
-        int bytes = read(_socketFd, buff, n_bytes);
+        int bytes = recv(_socketFd, buff, n_bytes, flags);
         if (bytes < 0){
             std::stringstream msg;
             msg << "Error reading bytes, _socketFd: " << _socketFd << ", bytes: "
