@@ -23,7 +23,7 @@ extern class LogSettings LOG_SETTINGS;
 /**
  * @brief   Initialise the logging system. Set some values on LOG_SETTINGS and
  *          call this function.
- * 
+ *
  * @param argv  The 'argv' parameter pulled in from int main.
  * @throw       runtime_error if there was an error trying to open the log file.
  *              Setting 'ls_print_to_file' to false avoids this error.
@@ -31,7 +31,7 @@ extern class LogSettings LOG_SETTINGS;
 #define LogInit(argv) LOG_SETTINGS.init(argv);
 /**
  * @brief   Initialises the logging system for TEST CASE CODE ONLY.
- * 
+ *
  * @throw       runtime_error if there was an error trying to open the log file.
  *              Setting 'ls_print_to_file' to false avoids this error.
  */
@@ -67,15 +67,15 @@ extern class LogSettings LOG_SETTINGS;
 #define flog Log(LogType::LT_FATAL, __FILE__, __LINE__)
 
 /**
- * Logging levels enumerator, for label printing and including / 
+ * Logging levels enumerator, for label printing and including /
  * excluding certain log levels as needed through the command
  * line arguments.
  */
-class LogType{
+class LogType {
 public:
     enum Value : uint8_t { LT_LL_INFO, LT_INFO, LT_DEBUG, LT_WARN, LT_ERROR, LT_FATAL };
     LogType() = default;
-    constexpr LogType(Value aState) : value(aState){}
+    constexpr LogType(Value aState) : value(aState) { }
     /**
      * Delete the default bool operator.
      */
@@ -92,7 +92,7 @@ public:
     /**
      * Get the enumeration values in a std::vector.
      */
-    static std::vector<Value> GetValues(){
+    static std::vector<Value> GetValues() {
         std::vector<Value> result;
         result.push_back(LT_LL_INFO);
         result.push_back(LT_INFO);
@@ -106,8 +106,8 @@ public:
     /**
      * Convert enumeration value to exact string representation.
      */
-    const char* c_str() const{
-        switch (value){
+    const char* c_str() const {
+        switch (value) {
             case LT_LL_INFO:
                 return "LT_LL_INFO";
             case LT_INFO:
@@ -128,8 +128,8 @@ public:
     /**
      * Convert enumeration value to exact string representation.
      */
-    static const char* c_str(Value a){
-        switch (a){
+    static const char* c_str(Value a) {
+        switch (a) {
             case LT_LL_INFO:
                 return "LT_LL_INFO";
             case LT_INFO:
@@ -150,8 +150,8 @@ public:
     /**
      * Convert enumeration value to custom string representation.
      */
-    const char* custom_str() const{
-        switch (value){
+    const char* custom_str() const {
+        switch (value) {
             case LT_LL_INFO:
                 return "low info";
             case LT_INFO:
@@ -172,8 +172,8 @@ public:
     /**
      * Convert enumeration value to custom string representation.
      */
-    static const char* custom_str(Value a){
-        switch (a){
+    static const char* custom_str(Value a) {
+        switch (a) {
             case LT_LL_INFO:
                 return "low info";
             case LT_INFO:
@@ -194,7 +194,7 @@ public:
     /**
      * Convert enumeration value to custom upper case string representation.
      */
-    const char* custom_upper_str() const{
+    const char* custom_upper_str() const {
         switch (value) {
             case LogType::LT_LL_INFO:
                 return "LOW INFO";
@@ -216,7 +216,7 @@ public:
     /**
      * Convert enumeration value to custom upper case string representation.
      */
-    static const char* custom_upper_str(Value a){
+    static const char* custom_upper_str(Value a) {
         switch (a) {
             case LogType::LT_LL_INFO:
                 return "LOW INFO";
@@ -238,7 +238,7 @@ public:
     /**
      * Convert custom string representation to enumeration value.
      */
-    static Value custom_str_to_value(const char* a){
+    static Value custom_str_to_value(const char* a) {
         if (strcmp(a, "low info") == 0)
             return LT_LL_INFO;
         else if (strcmp(a, "info") == 0)
@@ -278,7 +278,7 @@ private:
  * Try-catch should be declared at the top of int main in case of an
  * early error (A parser error if you use a command line arg parser),
  * but can be commented out at any time:
- * 
+ *
  *          try {
  *          ... LogInit(argv);
  *          } catch (std::runtime_error err) {
@@ -294,7 +294,7 @@ private:
  * declaration (This gives you the option to specify some settings found
  * in a custom command line parser, see full list of public variables for
  * options):
- * 
+ *
  * ... LOG_SETTINGS.ls_selected_level = LT_LL_INFO;
  * ... LOG_SETTINGS.ls_use_working_dir = true;
  * ... LogInit(argv);
@@ -367,7 +367,7 @@ public:
 #pragma GCC diagnostic ignored "-Wformat"
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
-    void init(char **argv) {
+    void init(char** argv) {
         //  Create buffer
         char buff[PATH_MAX];
         memset(buff, 0, PATH_MAX);
@@ -390,18 +390,18 @@ public:
         std::string firstArg = argv[0];
         //  Get the project or program name as the last item in the '/' 
         //  (forward-slash) delimited list
-        ls_file_name = firstArg.substr(firstArg.find_last_of('/') + 1, 
+        ls_file_name = firstArg.substr(firstArg.find_last_of('/') + 1,
                                         firstArg.size()) + ".txt";
 
         //  Get desired path
-        const std::string chosenPath = ls_use_working_dir ? 
-                                    ls_working_dir : ls_launch_dir;
+        const std::string chosenPath = ls_use_working_dir ?
+            ls_working_dir : ls_launch_dir;
 
-        //  Make dir if it does not exist, returns -1 if it already exists
+//  Make dir if it does not exist, returns -1 if it already exists
         int err = mkdir(chosenPath.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IWOTH);
         if (err < -1) {
             std::cout << "Error creating log file directory: "
-                      << std::to_string(err) << "." << std::endl;
+                << std::to_string(err) << "." << std::endl;
         }
 
         if (ls_ofs.is_open()) {
@@ -431,7 +431,7 @@ public:
             std::tm real_time = *std::localtime(&t);
 
             std::ostringstream oss;
-            oss << std::put_time(&real_time, "%Y-%m-%dT%H-%M-%S") << "." 
+            oss << std::put_time(&real_time, "%Y-%m-%dT%H-%M-%S") << "."
                 << ms_char << "Z";
 
             ls_ofs.open(chosenPath + '/' + oss.str() + "_" + ls_file_name);
@@ -443,7 +443,7 @@ public:
         }
     }
 
-    void tests_init(){
+    void tests_init() {
         //  Create buffer
         char buff[PATH_MAX];
         memset(buff, 0, PATH_MAX);
@@ -459,13 +459,13 @@ public:
         std::string firstArg = buff;
         //  Get the project or program name as the last item in the '/' 
         //  (forward-slash) delimited list
-        ls_file_name = firstArg.substr(firstArg.find_last_of('/') + 1, 
+        ls_file_name = firstArg.substr(firstArg.find_last_of('/') + 1,
                                         firstArg.size()) + ".txt";
 
         int err = mkdir(test_launch_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IWOTH);
         if (err < -1) {
             std::cout << "Error creating log file directory: "
-                      << std::to_string(err) << "." << std::endl;
+                << std::to_string(err) << "." << std::endl;
         }
 
         if (ls_ofs.is_open()) {
@@ -495,7 +495,7 @@ public:
             std::tm real_time = *std::localtime(&t);
 
             std::ostringstream oss;
-            oss << std::put_time(&real_time, "%Y-%m-%dT%H-%M-%S") << "." 
+            oss << std::put_time(&real_time, "%Y-%m-%dT%H-%M-%S") << "."
                 << ms_char << "Z";
 
             ls_ofs.open(test_launch_dir + '/' + oss.str() + "_" + ls_file_name);
@@ -562,7 +562,7 @@ public:
     /**
      * Initialise a new Log instance to log some data.
      */
-    Log(LogType::Value type, const std::string &file, const int line) {
+    Log(LogType::Value type, const std::string& file, const int line) {
         if (type >= LOG_SETTINGS.ls_selected_level) {
             l_level = type;
             operator<<(prefix(file, line));
@@ -574,7 +574,7 @@ public:
      * stream to flush the buffer to the std::cout console and to the
      * output file stream if one was selected.
      */
-    ~Log(){
+    ~Log() {
         if (l_level >= LOG_SETTINGS.ls_selected_level) {
             if (LOG_SETTINGS.ls_print_to_file) {
                 LOG_SETTINGS.ls_ofs << l__SS.str() << std::endl;
@@ -588,13 +588,13 @@ public:
     /**
      * @brief   Insertion operator on custom Log class to append data
      *          to the current Log instance.
-     * 
+     *
      * @tparam T
      * @param t
      * @return      This Log instance.
      */
     template<typename T>
-    Log &operator<<(T t) {
+    Log& operator<<(T t) {
         if (l_level >= LOG_SETTINGS.ls_selected_level) {
             l__SS << t;
         }
@@ -606,7 +606,7 @@ private:
      * The output string stream buffer.
      */
     std::ostringstream l__SS;
-    
+
     /**
      * This Log instance's LogType level.
      */
@@ -616,7 +616,7 @@ private:
      * Prefix the Date and Time as well as file name and line number
      * this log line was called.
      */
-    std::string prefix(const std::string &file, const int line) {
+    std::string prefix(const std::string& file, const int line) {
         //  Init return object
         std::ostringstream output;
 
@@ -629,7 +629,7 @@ private:
             //  Calculate milliseconds portion
             auto ms = duration_cast<milliseconds>(now.time_since_epoch()) % 1000;
             char ms_char[3];
-            
+
 //  Disable the format warning around this block to stop the format error with 
 //  getting milliseconds and a disposed variable.
 #pragma GCC diagnostic ignored "-Wformat"
@@ -646,8 +646,8 @@ private:
             std::string dateMonth = dateOrdinalSuffix(std::stoi(oss.str()));
 
             //  Format datetime as required string format, add ms, file and line info
-            output << std::put_time(&real_time, "%a %b ") << dateMonth 
-                    << std::put_time(&real_time, " %Y %H:%M:%S");
+            output << std::put_time(&real_time, "%a %b ") << dateMonth
+                << std::put_time(&real_time, " %Y %H:%M:%S");
             output << "." << ms_char;
 
             if (!LOG_SETTINGS.ls_print_fileline) {

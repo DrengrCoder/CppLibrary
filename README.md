@@ -477,9 +477,20 @@ TcpClient *client = new TcpClient(TcpClient::InternetProtocol::v6);
 ```
 client->Connect("127.0.0.1", 1234);
 ```
+- Check if the socket is initialised and connected by checking for a socket and server FD less than 1:
+```
+int sockFd = client->GetSocketFd();
+if (sockFd > 0)
+    std::cout << "Socket initialised";
+int servFd = client->GetServerFd();
+if (servFd > 0)
+    std::cout << "Socket connected";
+```
 - Send and Read bytes on the socket:
 ```
+char buff[1024];
 int n_sent = client->Send("Sending this string");
+int n_sent = client->Send(buff, 1024);
 ```
 ```
 char buff[1024];

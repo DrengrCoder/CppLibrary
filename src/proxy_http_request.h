@@ -15,8 +15,7 @@
 #include "tcp_client.h"
 #include "string.h"
 
-namespace HTTP
-{
+namespace HTTP {
     //  ################## HTTP request structures ###################
     //  ##############################################################
 
@@ -24,17 +23,17 @@ namespace HTTP
      * Custom class to define some functionality for an enumeration
      * typed data object. Has a local plain enum for the different HTTP
      * methods available, some initialisation and operator overloads.
-     * 
+     *
      * Overloads 'is-equals', 'is-not-equals' and 'insertion' operators.
-     * 
+     *
      * Defines a 'ToStdString' function to return the enumeration type
      * as a predefined string.
      */
-    class Method{
+    class Method {
     public:
-        enum Value : uint8_t{ GET, POST, PUT, DELETE };
+        enum Value : uint8_t { GET, POST, PUT, DELETE };
         Method() = default;
-        constexpr Method(Value aMethod) : value(aMethod){}
+        constexpr Method(Value aMethod) : value(aMethod) { }
 
         /**
          * Delete bool check operator.
@@ -51,7 +50,7 @@ namespace HTTP
         /**
          * 'insertion' to output stream.
          */
-        friend std::ostream& operator << (std::ostream& os, const Method& m){
+        friend std::ostream& operator << (std::ostream& os, const Method& m) {
             os << m.ToStdString();
             return os;
         }
@@ -60,15 +59,15 @@ namespace HTTP
          * Convert enumeration value to exact string representation.
          */
         std::string ToStdString() const {
-            switch (value){
+            switch (value) {
                 case Value::GET:
-                    return std::string{"GET"}.c_str();
+                    return std::string{ "GET" }.c_str();
                 case Value::POST:
-                    return std::string{"POST"}.c_str();
+                    return std::string{ "POST" }.c_str();
                 case Value::PUT:
-                    return std::string{"PUT"}.c_str();
+                    return std::string{ "PUT" }.c_str();
                 case Value::DELETE:
-                    return std::string{"DELETE"}.c_str();
+                    return std::string{ "DELETE" }.c_str();
                 default:
                     return "";
             }
@@ -84,8 +83,7 @@ namespace HTTP
     /**
      * The URI string components.
      */
-    struct Uri final
-    {
+    struct Uri final {
         std::string scheme;
         std::string user;
         std::string password;
@@ -99,8 +97,7 @@ namespace HTTP
     /**
      * The version number for the HTTP header.
      */
-    struct Version final
-    {
+    struct Version final {
         uint16_t _major;
         uint16_t _minor;
     };
@@ -110,13 +107,11 @@ namespace HTTP
      * response code for RFC 7231, 6. Response Status Codes, and
      * an explanation message.
      */
-    struct Status final
-    {
+    struct Status final {
         // RFC 7231, 6. Response Status Codes
-        enum class Code: std::uint16_t
-        {
+        enum class Code : std::uint16_t {
             //  Information
-            
+
             Continue = 100,
             SwitchingProtocol = 101,
             Processing = 102,
@@ -198,11 +193,11 @@ namespace HTTP
         Code _code;
         std::string _reason;
     };
-    
+
     /**
      * Formatted header field and value pairs.
      */
-    struct HeaderField{
+    struct HeaderField {
         std::string _name;
         std::string _value;
     };
@@ -215,8 +210,7 @@ namespace HTTP
      * The HTTP response details. Holds HTTP::Status struct, returned
      * header fields and response body.
      */
-    struct Response final
-    {
+    struct Response final {
         Status _status;
         HeaderFields _headerFields;
         std::vector<std::uint8_t> _body;
@@ -224,26 +218,24 @@ namespace HTTP
 
     //  ############### Character validation functions ###############
     //  ##############################################################
-    
+
     /**
      * Returns true if 'c' is a digit from 0 to 9, false otherwise.
-     * 
+     *
      * RFC 5234,Appendix B.1. Core Rules.
      */
     template <typename C>
-    constexpr bool IsDigitChar(const C c) noexcept
-    {
+    constexpr bool IsDigitChar(const C c) noexcept {
         return c >= 0x30 && c <= 0x39; // 0 - 9
     }
 
     /**
      * Returns true if 'c' is an upper or lower case character, false otherwise.
-     * 
+     *
      * RFC 5234, Appendix B.1. Core Rules.
      */
     template <typename C>
-    constexpr bool IsAlphaChar(const C c) noexcept
-    {
+    constexpr bool IsAlphaChar(const C c) noexcept {
         return
             (c >= 0x61 && c <= 0x7A) || // a - z
             (c >= 0x41 && c <= 0x5A); // A - Z
@@ -252,14 +244,13 @@ namespace HTTP
     /**
      * Returns true if 'c' is an alpha numeric character or one of
      * the following token characters, false otherwise:
-     * 
+     *
      * ! # $ % & ' * + - . ^ _ ` | ~
-     * 
+     *
      * RFC 7230, 3.2.6. Field Value Components.
      */
     template <typename C>
-    constexpr bool IsTokenChar(const C c) noexcept
-    {
+    constexpr bool IsTokenChar(const C c) noexcept {
         return c == 0x21 || // !
             c == 0x23 || // #
             c == 0x24 || // $
@@ -281,38 +272,35 @@ namespace HTTP
 
     /**
      * Returns true if 'c' is a white space or tab character, false otherwise.
-     * 
+     *
      * RFC 7230, 3.2.3. WhiteSpace.
      */
     template <typename C>
-    constexpr bool IsWhiteSpaceChar(const C c) noexcept
-    {
+    constexpr bool IsWhiteSpaceChar(const C c) noexcept {
         return c == 0x20 || c == 0x09; // space or tab
     };
 
     /**
      * Returns true if 'c' is a 'visible' character, false otherwise.
-     * 
+     *
      * A visible char has a hex value between 0x21 and 0x7E.
-     * 
+     *
      * RFC 5234, Appendix B.1. Core Rules.
      */
     template <typename C>
-    constexpr bool IsVisibleChar(const C c) noexcept
-    {
+    constexpr bool IsVisibleChar(const C c) noexcept {
         return c >= 0x21 && c <= 0x7E;
     }
 
     /**
      * Returns true if 'c' is an 'obsolete' text character, false otherwise.
-     * 
+     *
      * An obsolete char has a hex value between 0x80 and 0xFF.
-     * 
+     *
      * RFC 7230, Appendix B. Collected ABNF.
      */
     template <typename C>
-    constexpr bool IsObsoleteTextChar(const C c) noexcept
-    {
+    constexpr bool IsObsoleteTextChar(const C c) noexcept {
         return static_cast<unsigned char>(c) >= 0x80 &&
             static_cast<unsigned char>(c) <= 0xFF;
     }
@@ -322,10 +310,10 @@ namespace HTTP
 
     /**
      * @brief   Check the input is a valid Version major and minor number.
-     * 
+     *
      * @throw   runtime_error if the HTTP version string is invalid.
      */
-    inline Version ParseVersion(String input){
+    inline Version ParseVersion(String input) {
         clog << "Parsing version...";
 
         if (input[0] != 'H')
@@ -344,32 +332,32 @@ namespace HTTP
         if (input[4] != '/')
             throw std::runtime_error("Invalid HTTP version: index: 4, char: /");
 
-        const uint16_t verMajor = std::stoi(std::string{input[5]});
-        
+        const uint16_t verMajor = std::stoi(std::string{ input[5] });
+
         if (input[6] != '.')
             throw std::runtime_error("Invalid HTTP version: index: 6, char: .");
 
-        const uint16_t verMinor = std::stoi(std::string{input[7]});
+        const uint16_t verMinor = std::stoi(std::string{ input[7] });
 
         return { ._major = verMajor, ._minor = verMinor };
     }
 
     /**
      * @brief   Check the input is a valid status code value. See HTTP::Status::Code enum.
-     * 
+     *
      * @throw   runtime_error if the status code value is invalid.
      */
-    inline uint16_t ParseStatusCode(String input){
+    inline uint16_t ParseStatusCode(String input) {
         clog << "Parsing status code...";
 
-        if (input.length() != 3){
+        if (input.length() != 3) {
             std::stringstream msg;
             msg << "Invalid status code, not correct length: " << input << ".";
             throw std::runtime_error(msg.str());
         }
 
-        for (char c : input){
-            if (!IsDigitChar(c)){
+        for (char c : input) {
+            if (!IsDigitChar(c)) {
                 std::stringstream msg;
                 msg << "Invalid status code, char (" << std::to_string(c) << ") was not a digit: " << input << ".";
                 throw std::runtime_error(msg.str());
@@ -382,16 +370,16 @@ namespace HTTP
     /**
      * Check INPUT is a valid HTTP string, that is, if the input
      * only contains white space, visible, and obsolete char's
-     * 
+     *
      * Throws runtime_error if any of the characters are
      * invalid.
-     * 
+     *
      * See 'IsWhiteSpaceChar', 'IsVisibleChar' and
      * 'IsObsoleteTextChar' for details.
      */
-    inline bool ParseReason(String input){
-        for (char c : input){
-            if (!IsWhiteSpaceChar(c) && !IsVisibleChar(c) && !IsObsoleteTextChar(c)){
+    inline bool ParseReason(String input) {
+        for (char c : input) {
+            if (!IsWhiteSpaceChar(c) && !IsVisibleChar(c) && !IsObsoleteTextChar(c)) {
                 std::stringstream msg;
                 msg << "Invalid reason string, invalid character: " << std::to_string(c) << ".";
                 throw std::runtime_error(msg.str());
@@ -404,12 +392,12 @@ namespace HTTP
      * Parse the full status line portion of the header fields. Returns
      * Status::Code::InternalProgramError if an error was thrown and
      * caught from another function.
-     * 
+     *
      * The reason phrase may be empty with Status::Code 200 for OK.
-     * 
+     *
      * See 'ParseVersion', 'ParseStatusCode' and 'ParseReason' for details.
      */
-    inline Status ParseStatusLine(String headerLine){
+    inline Status ParseStatusLine(String headerLine) {
         clog << "Parsing status line...";
 
         std::vector<String> headerParts = headerLine.split(' ');
@@ -418,7 +406,7 @@ namespace HTTP
         try {
             versionResult = ParseVersion(headerParts[0]);
         }
-        catch (std::runtime_error &e){
+        catch (std::runtime_error& e) {
             std::stringstream msg;
             msg << "Error parsing version (" << errno << "): " << e.what();
             elog << msg.str();
@@ -428,9 +416,9 @@ namespace HTTP
 
         Status::Code codeResult;
         try {
-            codeResult = static_cast<Status::Code>(ParseStatusCode(headerParts[1])); 
-        } 
-        catch (std::runtime_error &e){
+            codeResult = static_cast<Status::Code>(ParseStatusCode(headerParts[1]));
+        }
+        catch (std::runtime_error& e) {
             std::stringstream msg;
             msg << "Error parsing status code (" << errno << "): " << e.what();
             elog << msg.str();
@@ -441,8 +429,8 @@ namespace HTTP
         std::string reasonPhrase;
         try {
             if (ParseReason(headerParts[2])) reasonPhrase = headerParts[2].c_str();
-        } 
-        catch (std::runtime_error &e){
+        }
+        catch (std::runtime_error& e) {
             std::stringstream msg;
             msg << "Error parsing reason phrase (" << errno << "): " << e.what();
             elog << msg.str();
@@ -456,15 +444,15 @@ namespace HTTP
     /**
      * Check the token portion of the header field line only
      * contains valid token characters, returns true if so.
-     * 
+     *
      * Throws runtime_error if there is an invalid character
      * in the token.
-     * 
+     *
      * See 'IsTokenChar' for details.
      */
-    inline bool ParseToken(String input){
-        for (char c : input){
-            if (!IsTokenChar(c)){
+    inline bool ParseToken(String input) {
+        for (char c : input) {
+            if (!IsTokenChar(c)) {
                 std::stringstream msg;
                 msg << "Invalid token: " << std::to_string(c);
                 throw std::runtime_error(msg.str());
@@ -476,16 +464,16 @@ namespace HTTP
     /**
      * Check the content portion of the header field line only
      * contains valid characters, returns true if so.
-     * 
+     *
      * Throws runtime_error if there is an invalid character in
      * the content.
-     * 
+     *
      * See 'IsWhiteSpaceChar', 'IsVisibleChar' and
      * 'IsObsoleteTextChar' for details.
      */
-    inline bool ParseContent(String input){
-        for (char c : input){
-            if (!IsWhiteSpaceChar(c) && !IsVisibleChar(c) && !IsObsoleteTextChar(c)){
+    inline bool ParseContent(String input) {
+        for (char c : input) {
+            if (!IsWhiteSpaceChar(c) && !IsVisibleChar(c) && !IsObsoleteTextChar(c)) {
                 std::stringstream msg;
                 msg << "Invalid content: " << std::to_string(c);
                 throw std::runtime_error(msg.str());
@@ -497,13 +485,13 @@ namespace HTTP
     /**
      * Parse the full header field line and return a header field
      * object with the token and content values.
-     * 
+     *
      * Throws runtime_error if the header field line is invalid and
      * re-throws caught runtime_error exceptions
-     * 
+     *
      * See 'ParseToken' and 'ParseContent' for details.
      */
-    inline HeaderField ParseHeaderLine(String headerLine){
+    inline HeaderField ParseHeaderLine(String headerLine) {
         clog << "Parsing header line...";
 
         std::vector<String> headerParts = headerLine.split(':');
@@ -515,7 +503,7 @@ namespace HTTP
         try {
             if (ParseToken(headerParts[0])) token = headerParts[0];
         }
-        catch (std::runtime_error &e){
+        catch (std::runtime_error& e) {
             throw e;
         }
         clog << "Token: " << token.c_str();
@@ -524,7 +512,7 @@ namespace HTTP
         try {
             if (!ParseContent(content)) content = "";
         }
-        catch (std::runtime_error &e){
+        catch (std::runtime_error& e) {
             throw e;
         }
         clog << "Content: " << content.c_str();
@@ -540,16 +528,16 @@ namespace HTTP
     /**
      * Parses or decodes the input URI string and return a a URI data
      * object. The expected format is as follows:
-     * 
+     *
      * "http://user:pass\@www.url.co.uk:port/path?query=0#fragment"
-     * 
+     *
      * Throws logic_error if the HTTP scheme was invalid (must be http,
      * FIXME: https not currently implemented).
-     * 
+     *
      * RFC 3986, 3. Syntax Components.
      */
     template <class Iterator>
-    Uri ParseUri(const Iterator begin, const Iterator end){
+    Uri ParseUri(const Iterator begin, const Iterator end) {
         clog << "Parsing the input URI string...";
 
         Uri result;
@@ -557,7 +545,7 @@ namespace HTTP
         // RFC 3986, 3.1. Scheme
         //  Reference the 'begin' input iterator
         auto i = begin;
-        if (i == end || !IsAlphaChar(*begin)){
+        if (i == end || !IsAlphaChar(*begin)) {
             std::stringstream msg;
             msg << "Invalid scheme, 'begin' iterator was at the end, or first character was not an alpha char.";
             flog << msg.str();
@@ -566,7 +554,7 @@ namespace HTTP
 
         //  Add the first character in the uri string
         result.scheme.push_back(*i++);
-        
+
         //  Increment the iterator position before checking these...
         //  Continue adding characters WHILE the iterator is not at the end and either:
         //      - the character at the current iterator position is a char
@@ -574,21 +562,21 @@ namespace HTTP
         //      - the character is one of: plus (+), hyphon (-), or period / dot (.)
         for (; i != end && (IsAlphaChar(*i) || IsDigitChar(*i) || *i == '+' || *i == '-' || *i == '.'); ++i)
             result.scheme.push_back(*i);
-            
+
         //  Validate the characters following this follow the correct 'http://' pattern
-        if (i == end || *i++ != ':'){
+        if (i == end || *i++ != ':') {
             std::stringstream msg;
             msg << "Invalid scheme, iterator reached end, or character was not a colon (:).";
             flog << msg.str();
             throw std::logic_error(msg.str());
         }
-        if (i == end || *i++ != '/'){
+        if (i == end || *i++ != '/') {
             std::stringstream msg;
             msg << "Invalid scheme, iterator reached end, or character was not a forward slash (/).";
             flog << msg.str();
             throw std::logic_error(msg.str());
         }
-        if (i == end || *i++ != '/'){
+        if (i == end || *i++ != '/') {
             std::stringstream msg;
             msg << "Invalid scheme, iterator reached end, or character was not a forward slash (/).";
             flog << msg.str();
@@ -597,7 +585,7 @@ namespace HTTP
 
         //  FIXME: Uncomment this when HTTPS has been implemented and verified to work
         if (!(strcmp(result.scheme.c_str(), "http") == 0 /* ||
-                strcmp(result.scheme.c_str(), "https") == 0 */)){
+                strcmp(result.scheme.c_str(), "https") == 0 */)) {
             std::stringstream msg;
             msg << "Invalid scheme, scheme was not http or https.";
             flog << msg.str();
@@ -611,17 +599,15 @@ namespace HTTP
         // RFC 3986, 3.5. Fragment
         //      Typically used for a speific section of a web page
         const auto fragmentPosition = authority.find('#');
-        if (fragmentPosition != std::string::npos)
-        {
+        if (fragmentPosition != std::string::npos) {
             result.fragment = authority.substr(fragmentPosition + 1);
             authority.resize(fragmentPosition); // remove the fragment part
         }
-        
+
         // RFC 3986, 3.4. Query
         //      uri query parameters
         const auto queryPosition = authority.find('?');
-        if (queryPosition != std::string::npos)
-        {
+        if (queryPosition != std::string::npos) {
             result.query = authority.substr(queryPosition + 1);
             authority.resize(queryPosition); // remove the query part
         }
@@ -629,44 +615,37 @@ namespace HTTP
         // RFC 3986, 3.3. Path
         //      the host is the main portion of the uri, the path is everything after the '.com' section
         const auto pathPosition = authority.find('/');
-        if (pathPosition != std::string::npos)
-        {
+        if (pathPosition != std::string::npos) {
             // RFC 3986, 3.3. Path
             result.path = authority.substr(pathPosition);
             authority.resize(pathPosition);
-        }
-        else{
+        } else {
             result.path = "/";
         }
-        
+
         // RFC 3986, 3.2.1. User Information
         //      authorisation information goes before the host / main uri part
         std::string userinfo;
         const auto hostPosition = authority.find('@');
-        if (hostPosition != std::string::npos)
-        {
+        if (hostPosition != std::string::npos) {
             userinfo = authority.substr(0, hostPosition);
 
             const auto passwordPosition = userinfo.find(':');
-            if (passwordPosition != std::string::npos)
-            {
+            if (passwordPosition != std::string::npos) {
                 result.user = userinfo.substr(0, passwordPosition);
                 result.password = userinfo.substr(passwordPosition + 1);
-            }
-            else
+            } else
                 result.user = userinfo;
 
             result.host = authority.substr(hostPosition + 1);
-        }
-        else{
+        } else {
             result.host = authority;
         }
 
         // RFC 3986, 3.2.2. Host
         //      port number goes between the host / main uri part, and the path
         const auto portPosition = result.host.find(':');
-        if (portPosition != std::string::npos)
-        {
+        if (portPosition != std::string::npos) {
             // RFC 3986, 3.2.3. Port
             result.port = result.host.substr(portPosition + 1);
             result.host.resize(portPosition);
@@ -687,17 +666,16 @@ namespace HTTP
     /**
      * Return a string with the formatted METHOD request line with
      * TARGET path and query parameters.
-     * 
+     *
      * The METHOD is any HTTP method such as GET or POST, and
      * the TARGET should be the path after the host, plus any query
      * parameters. The remaining text is added automatically.
-     * 
+     *
      * Example: "GET /path?query_params=query_value HTTP/1.1\\r\\n".
-     * 
+     *
      * RFC 7230, 3.1.1. Request Line.
      */
-    inline std::string EncodeRequestLine(const std::string& method, const std::string& target)
-    {
+    inline std::string EncodeRequestLine(const std::string& method, const std::string& target) {
         std::stringstream result;
         result << method << " " << target << " HTTP/1.1\r\n";
         return result.str();
@@ -705,28 +683,26 @@ namespace HTTP
 
     /**
      * Return a string for all formatted HEADERFIELDS.
-     * 
+     *
      * Throws logic_error if one of the header fields is empty, or is
      * one of the characters is not a token, a white space, a visible,
      * or an obsolete character.
-     * 
+     *
      * RFC 7230, 3.2. Header Fields.
      */
-    inline std::string EncodeHeaderFields(const HeaderFields& headerFields)
-    {
+    inline std::string EncodeHeaderFields(const HeaderFields& headerFields) {
         std::stringstream result;
-        for (const auto& headerField : headerFields)
-        {
+        for (const auto& headerField : headerFields) {
             if (headerField._name.empty())
-                throw std::logic_error{"Invalid header field name"};
+                throw std::logic_error{ "Invalid header field name" };
 
             for (const auto c : headerField._name)
                 if (!IsTokenChar(c))
-                    throw std::logic_error{"Invalid header field name"};
+                    throw std::logic_error{ "Invalid header field name" };
 
             for (const auto c : headerField._value)
                 if (!IsWhiteSpaceChar(c) && !IsVisibleChar(c) && !IsObsoleteTextChar(c))
-                    throw std::logic_error{"Invalid header field value"};
+                    throw std::logic_error{ "Invalid header field value" };
 
             result << headerField._name << ": " << headerField._value << "\r\n";
         }
@@ -737,12 +713,11 @@ namespace HTTP
     /**
      * Returns a string for the base 64 encoded authorisation string
      * of the HTTP request.
-     * 
+     *
      * RFC 4648, 4. Base 64 Encoding.
      */
     template <class Iterator>
-    std::string EncodeBase64(const Iterator begin, const Iterator end)
-    {
+    std::string EncodeBase64(const Iterator begin, const Iterator end) {
         constexpr std::array<char, 64> chars{
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
             'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -755,10 +730,9 @@ namespace HTTP
         std::size_t c = 0;
         std::array<std::uint8_t, 3> charArray;
 
-        for (auto i = begin; i != end; ++i){
+        for (auto i = begin; i != end; ++i) {
             charArray[c++] = static_cast<std::uint8_t>(*i);
-            if (c == 3)
-            {
+            if (c == 3) {
                 result << chars[static_cast<std::uint8_t>((charArray[0] & 0xFC) >> 2)];
                 result << chars[static_cast<std::uint8_t>(((charArray[0] & 0x03) << 4) + ((charArray[1] & 0xF0) >> 4))];
                 result << chars[static_cast<std::uint8_t>(((charArray[1] & 0x0F) << 2) + ((charArray[2] & 0xC0) >> 6))];
@@ -766,13 +740,13 @@ namespace HTTP
                 c = 0;
             }
         }
-        
-        if (c){
+
+        if (c) {
             result << chars[static_cast<std::uint8_t>((charArray[0] & 0xFC) >> 2)];
 
-            if (c == 1){
+            if (c == 1) {
                 result << chars[static_cast<std::uint8_t>((charArray[0] & 0x03) << 4)];
-            }else{  //  c == 2
+            } else {  //  c == 2
                 result << chars[static_cast<std::uint8_t>(((charArray[0] & 0x03) << 4) + ((charArray[1] & 0xF0) >> 4))];
                 result << chars[static_cast<std::uint8_t>((charArray[1] & 0x0F) << 2)];
             }
@@ -785,7 +759,7 @@ namespace HTTP
 
     /**
      * @brief   Encode input data to a valid string to send to the API.
-     * 
+     *
      * @param uri           The URI struct object holding various URI data.
      * @param method        The HTTP method being used (GET, POST etc).
      * @param body          The request body (can be empty).
@@ -795,15 +769,14 @@ namespace HTTP
     inline std::string EncodeHtml(const Uri& uri,
                         const std::string& method,
                         const std::vector<uint8_t>& body,
-                        HeaderFields headerFields)
-    {
+                        HeaderFields headerFields) {
         // RFC 7230, 5.3. Request Target
         std::stringstream requestTarget;
         requestTarget << uri.path << (uri.query.empty() ? "" : "?" + uri.query);
 
         // RFC 7230, 5.4. Host
-        headerFields.push_back({ 
-            ._name = "Host", 
+        headerFields.push_back({
+            ._name = "Host",
             ._value = uri.host
         });
         // RFC 7230, 3.3.2. Content-Length
@@ -811,20 +784,20 @@ namespace HTTP
             ._name = "Content-Length",
             ._value = std::to_string(body.size())
         });
-        
+
         // RFC 7617, 2. The 'Basic' Authentication Scheme
-        if (!uri.user.empty() || !uri.password.empty()){
+        if (!uri.user.empty() || !uri.password.empty()) {
             std::stringstream userInfo;
             userInfo << uri.user << ':' << uri.password;
             headerFields.push_back({
-                ._name = "Authorization", 
+                ._name = "Authorization",
                 ._value = "Basic " + EncodeBase64(userInfo.str().begin(), userInfo.str().end())
             });
         }
 
         std::stringstream headerData;
-        headerData << EncodeRequestLine(method, requestTarget.str()) 
-                << EncodeHeaderFields(headerFields) << "\r\n";
+        headerData << EncodeRequestLine(method, requestTarget.str())
+            << EncodeHeaderFields(headerFields) << "\r\n";
 
         std::stringstream result;
         result << headerData.str() << body.data();
@@ -838,64 +811,64 @@ namespace HTTP
     /**
      * The main class to control, issue, and received formatted data
      * from a HTTP request.
-     * 
+     *
      * Construct a HTTP::Request object with or without predefined
      * URI and IP values, and use the Request.send functions to
      * initiate a HTTP request.
      */
-    class Request final
-    {
+    class Request final {
     public:
         /**
          * @brief   Construct a new HTTP Request object.
-         * 
+         *
          * @param uriString     The URI string to use.
          * @param ip            The IP address the request is going to.
          * @param ipv           The Internet Protocol Version Number.
          */
-        explicit Request(const std::string& uriString, const std::string& ip, 
-                            const TcpClient::InternetProtocol ipv = TcpClient::InternetProtocol::v4):
-                _ipAddress(ip),
-                _uri(ParseUri(uriString.begin(), uriString.end())),
-                _ipv(ipv)
-        { clog << "A HTTP Request object has been initiailised."; }
+        explicit Request(const std::string& uriString, const std::string& ip,
+                            const TcpClient::InternetProtocol ipv = TcpClient::InternetProtocol::v4) :
+            _ipAddress(ip),
+            _uri(ParseUri(uriString.begin(), uriString.end())),
+            _ipv(ipv) {
+            clog << "A HTTP Request object has been initiailised.";
+        }
 
-        /**
-         * @brief   Construct a new HTTP Request object.
-         * 
-         * @param ipv   The Internet Protocol Version Number.
-         */
-        explicit Request(const TcpClient::InternetProtocol ipv = TcpClient::InternetProtocol::v4):
-                _ipv(ipv)
-        { clog << "A HTTP Request object has been initiailised."; }
+/**
+ * @brief   Construct a new HTTP Request object.
+ *
+ * @param ipv   The Internet Protocol Version Number.
+ */
+        explicit Request(const TcpClient::InternetProtocol ipv = TcpClient::InternetProtocol::v4) :
+            _ipv(ipv) {
+            clog << "A HTTP Request object has been initiailised.";
+        }
 
-        /**
-         * Initiate a HTTP request to URISTRING at IP of type METHOD, optionally
-         * sending a request BODY with configurable HEADERFIELDS and an optional
-         * TIMEOUT threshold for the request (the timeout is strictly for information
-         * returned and not used in the network sockets). Return a HTTP::Response
-         * struct object.
-         * 
-         * This function is used when you want to initiate a HTTP request to a different
-         * URI and IP than what has been previously stored via the primary constructor,
-         * or if one was not supplied when using the secondary constructor.
-         * 
-         * Marked noexcept so it cannot be caught, as an exception thrown here would
-         * be bad code.
-         * 
-         * A BODY is not required when using the METHOD type GET, and header fields
-         * should be left empty unless requiring special header field parameters.
-         */
+/**
+ * Initiate a HTTP request to URISTRING at IP of type METHOD, optionally
+ * sending a request BODY with configurable HEADERFIELDS and an optional
+ * TIMEOUT threshold for the request (the timeout is strictly for information
+ * returned and not used in the network sockets). Return a HTTP::Response
+ * struct object.
+ *
+ * This function is used when you want to initiate a HTTP request to a different
+ * URI and IP than what has been previously stored via the primary constructor,
+ * or if one was not supplied when using the secondary constructor.
+ *
+ * Marked noexcept so it cannot be caught, as an exception thrown here would
+ * be bad code.
+ *
+ * A BODY is not required when using the METHOD type GET, and header fields
+ * should be left empty unless requiring special header field parameters.
+ */
         Response send(const std::string& uriString,
                         const std::string& ip,
                         const Method method = Method::GET,
                         const std::string& body = "",
                         const HeaderFields& headerFields = {},
-                        const int timeout_milliseconds = 5000) noexcept
-        {
+                        const int timeout_milliseconds = 5000) noexcept {
             return send(ParseUri(uriString.begin(), uriString.end()),
                         ip,
-                        method, 
+                        method,
                         std::vector<uint8_t>(body.begin(), body.end()),
                         headerFields,
                         timeout_milliseconds);
@@ -906,22 +879,21 @@ namespace HTTP
          * with configurable HEADERFIELDS and an optional TIMEOUT threshold for
          * the request (the timeout is strictly for information returned and not used in
          * the network sockets). Return a HTTP::Response struct object.
-         * 
+         *
          * This function is used when you want to initiate a HTTP request to the URI and
          * IP that has already been supplied to this class object instance via the primary
          * constructor, and will throw logic_error if the URI has no scheme.
-         * 
+         *
          * Marked noexcept so it cannot be caught, as an exception thrown here would
          * be bad code.
-         * 
+         *
          * A BODY is not required when using the METHOD type GET, and header fields
          * should be left empty unless requiring special header field parameters.
          */
         Response send(const Method method = Method::GET,
                         const std::string& body = "",
                         const HeaderFields& headerFields = {},
-                        const int timeout_milliseconds = 5000) noexcept
-        {
+                        const int timeout_milliseconds = 5000) noexcept {
 #pragma GCC diagnostic ignored "-Wterminate"
             if (_uri.scheme.empty())
                 throw std::logic_error("No valid scheme to initiate a HTTP request.");
@@ -940,14 +912,14 @@ namespace HTTP
          * request BODY with configurable HEADERFIELDS and an optional TIMEOUT
          * threshold for the request (the timeout is strictly for information returned and
          * not used in the network sockets). Return a HTTP::Response struct object.
-         * 
+         *
          * This is the primary logic function that performs all necessary actions to fulfill
          * the request. A URI struct object, IP, METHOD and BODY must be supplied
          * with this function.
-         * 
+         *
          * Marked noexcept so it cannot be caught, as an exception thrown here would
          * be bad code.
-         * 
+         *
          * The BODY can be left empty when using the METHOD type GET, and header
          * fields should be left empty unless requiring special header field parameters.
          */
@@ -956,42 +928,42 @@ namespace HTTP
                         const Method method,
                         const std::vector<uint8_t>& body,
                         const HeaderFields& headerFields = {},
-                        const int timeout_milliseconds = 5000) noexcept
-        {
+                        const int timeout_milliseconds = 5000) noexcept {
             clog << "Initiating URI request...";
             const std::string requestData = EncodeHtml(uri, method.ToStdString(), body, headerFields);
 
             clog << "Constructed request html: \"" << requestData
                 << "\", beginning TCP Client initialisation and comms...";
-            TcpClient *client;
+            TcpClient* client;
             try {
                 client = new TcpClient(_ipv);
-            } catch (std::runtime_error &err){
-                //  Error message and number returned in exception as the
-                //  variables are inaccessible.
+            }
+            catch (std::runtime_error& err) {
+             //  Error message and number returned in exception as the
+             //  variables are inaccessible.
                 throw err;
             }
-            
+
             //  Capture the start time before a connection attempt is made for
             //      later processing
-            const auto start_time_connection_attempt = 
-                    std::chrono::duration_cast<std::chrono::milliseconds>
-                    (std::chrono::steady_clock::now().time_since_epoch());
+            const auto start_time_connection_attempt =
+                std::chrono::duration_cast<std::chrono::milliseconds>
+                (std::chrono::steady_clock::now().time_since_epoch());
 
-            if (!client->Connect(uri.port.empty() ? 80 : std::stoi(uri.port), ip.c_str())){
+            if (!client->Connect(uri.port.empty() ? 80 : std::stoi(uri.port), ip.c_str())) {
 
                 //  Evaluate how much time as passed since the connect call was made
                 const auto time_elapsed =
-                        std::chrono::duration_cast<std::chrono::milliseconds>
-                        (std::chrono::steady_clock::now().time_since_epoch())
-                            - start_time_connection_attempt;
-                elog << "HTTP request failed to connect to host, elapsed time: " 
+                    std::chrono::duration_cast<std::chrono::milliseconds>
+                    (std::chrono::steady_clock::now().time_since_epoch())
+                    - start_time_connection_attempt;
+                elog << "HTTP request failed to connect to host, elapsed time: "
                     << time_elapsed.count() << ".";
 
                 __errmsg = client->ERR_MSG();
                 __errno = client->ERR_NO();
 
-                if (time_elapsed.count() > timeout_milliseconds){
+                if (time_elapsed.count() > timeout_milliseconds) {
                     std::stringstream msg;
                     msg << "Host took too long to respond, request timeout. "
                         << "Elapsed time (ms): " << time_elapsed.count() << ", "
@@ -1002,14 +974,14 @@ namespace HTTP
                     return { ._status = {
                                 ._code = Status::Code::RequestTimeout,
                                 ._reason = msg.str() } };
-                }else{
+                } else {
                     Status::Code active_code = Status::Code::Accepted;
                     std::stringstream msg;
                     msg << "Failed to connect before expected timeout, ";
-                    if (__errno >= 12000 && __errno <= 13000){
+                    if (__errno >= 12000 && __errno <= 13000) {
                         msg << __errmsg << ".";
                         active_code = Status::Code::Conflict;
-                    }else{
+                    } else {
                         msg << "possible host actively refused connection, "
                             << "TCP error message: " << __errmsg << ".";
                         active_code = Status::Code::Forbidden;
@@ -1022,13 +994,13 @@ namespace HTTP
                                 ._reason = msg.str() } };
                 }
             }
-            
+
             clog << "Client connected on " << ip << ":" << (uri.port.empty() ? "80" : uri.port);
 
             const int bytesSent = client->Send(requestData.c_str());
-            if (bytesSent < 1){
+            if (bytesSent < 1) {
                 std::stringstream msg;
-                msg << "Client failed to send any bytes, bytesSent: " 
+                msg << "Client failed to send any bytes, bytesSent: "
                     << bytesSent << ", TCP Error: " << __errno << ", "
                     << __errmsg << ".";
 
@@ -1038,7 +1010,7 @@ namespace HTTP
                             ._code = Status::Code::InternalServerError,
                             ._reason = msg.str() } };
             }
-            
+
             //  The HTTP response information
             Response response;
             //  The full output response for html content
@@ -1051,14 +1023,14 @@ namespace HTTP
             const std::string crlf = "\r\n";
             //  The character sequence that defines the end of the header section in the output html
             const std::string headerEndString = "\r\n\r\n";
-            
+
             //  A flag to toggle is the header specifies this is a chunked data reply
             bool chunkedResponse = false;
             //  Define the content length of the response
             std::size_t contentLength = 0U;
             //  Toggle if the content length header was found
             bool contentLengthReceived = false;
-            
+
             //  To store the updated expected chunk size during processing
             std::size_t expectedChunkSize = 0U;
             //  A flag to remove crlf after the chunk
@@ -1067,18 +1039,17 @@ namespace HTTP
             clog << "Parsing response...";
 
             //  Need to continuously read bytes on the socket until no more bytes are available
-            while (true)
-            {
+            while (true) {
                 //  Read from the socket
                 size_t buffSize = 10000;
                 uint8_t buff[buffSize];
 
                 const int bytesRead = client->Read(buff, buffSize);
 
-                if (bytesRead < 0){
+                if (bytesRead < 0) {
                     //  error
                     std::stringstream msg;
-                    msg << "Client failed to read any bytes, bytesRead: " 
+                    msg << "Client failed to read any bytes, bytesRead: "
                         << bytesSent << ", TCP Error: " << __errno << ", "
                         << __errmsg << ".";
 
@@ -1087,17 +1058,17 @@ namespace HTTP
                     return { ._status = {
                                 ._code = Status::Code::InternalServerError,
                                 ._reason = msg.str() } };
-                }else if (bytesRead == 0){
+                } else if (bytesRead == 0) {
                     //  disconnected
                     return response;
                 }
-                
+
                 clog << "Read bytes: " << bytesRead << ", socket buff:\n\n" << buff << "\n";
 
                 //  Raw output
                 responseData.insert(responseData.end(), buff, buff + bytesRead);
-                
-                if (!headerParsed){
+
+                if (!headerParsed) {
                     clog << "Parsing header...";
 
                     // RFC 7230, 3. Message Format
@@ -1108,11 +1079,11 @@ namespace HTTP
 
                     //  two consecutive CRLFs not found
                     if (!fullOutput.contains(headerEndString)) break;
-                    
+
                     clog << "End of header found, parsing header fields...";
 
                     std::vector<String> headerLines = fullOutput.split(crlf);
-                    if (headerLines.size() < 2){
+                    if (headerLines.size() < 2) {
                         std::stringstream msg;
                         msg << "Error splitting header content into separate lines; "
                             << "Returned headers were not formatted correctly.";
@@ -1124,7 +1095,7 @@ namespace HTTP
                     }
 
                     response._status = ParseStatusLine(headerLines[0]);
-                    if (response._status._code == Status::Code::InternalProgramError){
+                    if (response._status._code == Status::Code::InternalProgramError) {
                         std::stringstream msg;
                         msg << "Internal program error occurred with processing.";
 
@@ -1134,24 +1105,24 @@ namespace HTTP
                                     ._code = Status::Code::InternalProgramError,
                                     ._reason = msg.str() } };
                     }
-                    
-                    clog << "\nResponse:\n\tStatus:\n\t\tCode: " 
-                        << static_cast<std::uint16_t>(response._status._code) 
-                        << "\n\t\tVersion: " 
-                            << response._status._version._major 
-                            << "." << response._status._version._minor
-                        << "\n\t\tReason: " 
+
+                    clog << "\nResponse:\n\tStatus:\n\t\tCode: "
+                        << static_cast<std::uint16_t>(response._status._code)
+                        << "\n\t\tVersion: "
+                        << response._status._version._major
+                        << "." << response._status._version._minor
+                        << "\n\t\tReason: "
                         << response._status._reason;
 
 #pragma GCC diagnostic ignored "-Wsign-compare"
-                    for (int i = 1; i < headerLines.size(); i++){
+                    for (int i = 1; i < headerLines.size(); i++) {
 #pragma GCC diagnostic pop
 
                         HeaderField headerField;
-                        try { 
-                            headerField = ParseHeaderLine(headerLines[i]); 
+                        try {
+                            headerField = ParseHeaderLine(headerLines[i]);
                         }
-                        catch (std::runtime_error &e){
+                        catch (std::runtime_error& e) {
                             return { ._status = {
                                         ._code = Status::Code::InternalProgramError,
                                         ._reason = e.what() } };
@@ -1162,12 +1133,11 @@ namespace HTTP
                             << "\n\tValue:"
                             << headerField._value;
 
-                        if (strcmp(headerField._name.c_str(), "transfer-encoding") == 0){
+                        if (strcmp(headerField._name.c_str(), "transfer-encoding") == 0) {
                             // RFC 7230, 3.3.1. Transfer-Encoding
-                            if (strcmp(headerField._value.c_str(), "chunked") == 0){
+                            if (strcmp(headerField._value.c_str(), "chunked") == 0) {
                                 chunkedResponse = true;
-                            }
-                            else{
+                            } else {
                                 std::stringstream msg;
                                 msg << "Unsupported transfer encoding: " << headerField._value;
                                 flog << msg.str();
@@ -1177,8 +1147,7 @@ namespace HTTP
 #pragma GCC diagnostic pop
 
                             }
-                        }
-                        else if (strcmp(headerField._name.c_str(), "content-length") == 0){
+                        } else if (strcmp(headerField._name.c_str(), "content-length") == 0) {
                             // RFC 7230, 3.3.2. Content-Length
                             contentLength = std::stoi(headerField._value);
                             contentLengthReceived = true;
@@ -1190,7 +1159,7 @@ namespace HTTP
                         //  Check if this is the last header field
                         if (strcmp(headerLines[i + 1], "") == 0) break;
                     }
-                    
+
                     // RFC 7230, 3. Message Format
                     // Empty line indicates the end of the header section (RFC 7230, 2.1. Client/Server Messaging)
                     const auto endIterator = std::search(responseData.cbegin(), responseData.cend(),
@@ -1199,15 +1168,14 @@ namespace HTTP
                     responseData.erase(responseData.begin(), endIterator + 4);
                     headerParsed = true;
                 }
-            
-                if (headerParsed){
+
+                if (headerParsed) {
                     // Content-Length must be ignored if Transfer-Encoding is received (RFC 7230, 3.2. Content-Length)
-                    if (chunkedResponse){
+                    if (chunkedResponse) {
                         // RFC 7230, 4.1. Chunked Transfer Coding
-                        for (;;){
-                            if (expectedChunkSize > 0)
-                            {
-                                const auto toWrite = (std::min)(expectedChunkSize, responseData.size());
+                        for (;;) {
+                            if (expectedChunkSize > 0) {
+                                const auto toWrite = (std::min) (expectedChunkSize, responseData.size());
                                 response._body.insert(response._body.end(), responseData.begin(),
                                                      responseData.begin() + static_cast<std::ptrdiff_t>(toWrite));
                                 responseData.erase(responseData.begin(),
@@ -1216,14 +1184,11 @@ namespace HTTP
 
                                 if (expectedChunkSize == 0) removeCrlfAfterChunk = true;
                                 if (responseData.empty()) break;
-                            }
-                            else
-                            {
-                                if (removeCrlfAfterChunk)
-                                {
+                            } else {
+                                if (removeCrlfAfterChunk) {
                                     if (responseData.size() < 2) break;
-                                    
-                                    if (!std::equal(crlf.begin(), crlf.end(), responseData.begin())){
+
+                                    if (!std::equal(crlf.begin(), crlf.end(), responseData.begin())) {
                                         flog << "Invalid chunk.";
 
 #pragma GCC diagnostic ignored "-Wterminate"
@@ -1253,7 +1218,7 @@ namespace HTTP
                                     return response;
                             }
                         }
-                    }else{
+                    } else {
                         response._body.insert(response._body.end(), responseData.begin(), responseData.end());
                         responseData.clear();
 
@@ -1263,12 +1228,12 @@ namespace HTTP
                     }
                 }
             }
-            
+
             return response;
         }
 
-        std::string ERR_MSG(){ return __errmsg; }
-        int ERR_NO(){ return __errno; }
+        std::string ERR_MSG() { return __errmsg; }
+        int ERR_NO() { return __errno; }
 
     private:
         TcpClient::InternetProtocol _ipv = TcpClient::InternetProtocol::v4;
