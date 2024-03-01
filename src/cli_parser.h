@@ -656,7 +656,7 @@ private:
             }
 
             //  Add the value name if there is one
-            if (option.GetValueName() != "") {
+            if (!option.GetValueName().empty()) {
                 oss << " <" << option.GetValueName() << ">";
             }
 
@@ -699,6 +699,9 @@ private:
     void PrintHelpInfo() {
         //  The maximum width of the screen for a new line should be entered
         const int maxLineWidth = 80;
+        //  Flag for whether there are other single-character tags for other
+        //  parser options. Assists in formatting spaces appropriately
+        bool hasSingleLetterTags = false;
 
         //  Hold a local reference to the maximum number of tabs required to
         //  exceed the end of the string of combined tags for every option
@@ -711,10 +714,29 @@ private:
         std::stringstream ossRequiredOptions;
         for (ParserOption option : _options) {
             if (option._isRequired) {
-                ossRequiredOptions << " " << option.GetTags()[0]
-                    << " <" << option.GetValueName() << ">";
+                ossRequiredOptions << option.GetTags()[0]
+                    << " <" << option.GetValueName() << "> ";
             }
         }
+
+        std::stringstream ossDataOptions;
+        std::vector<ParserOption>::iterator opt_it;
+        for (opt_it = _options.begin(); opt_it != _options.end();){
+            ParserOption opt = (*opt_it);
+            if (!opt.GetValueName().empty()){
+                ossDataOptions << opt.GetTags()[0] << " <" << opt.GetValueName() << ">";
+                if (++opt_it != _options.end()) {
+                    ossDataOptions << " ";
+                }
+            } else {
+                opt_it++;
+            }
+        }
+        // for (ParserOption option : _options) {
+        //     if (!option.GetValueName().empty()) {
+        //         ossDataOptions << option.GetTags()[0] << " <" << option.GetValueName() << "> ";
+        //     }
+        // }
 
         //  Define the string for the list of possible options and arguments
         std::stringstream ossOptionInformation;
@@ -737,7 +759,7 @@ private:
             }
 
             //  If there is a value name, as this to the end of the final tag
-            if (option.GetValueName() != "") {
+            if (!option.GetValueName().empty()) {
                 ossOptionEntry << " <" << option.GetValueName() << ">";
             }
 
@@ -754,7 +776,7 @@ private:
             //  Add the description
             ossOptionEntry << option._description;
             //  If this option has a default value, append it to the description
-            if (option.GetDefaultValue() != "") {
+            if (!option.GetDefaultValue().empty()) {
                 ossOptionEntry << " [Default: "
                     << option.GetDefaultValue() << "].";
             }
@@ -814,7 +836,7 @@ private:
         std::stringstream helpOutput;
         helpOutput << this->_name << " Help Information...\n\n";
         helpOutput << "Usage: " << this->_args[0]
-            << " [options]" << ossRequiredOptions.str() << '\n';
+            << " [options] [" << ossDataOptions.str() << "] " << ossRequiredOptions.str() << '\n';
         helpOutput << "Description: " << this->_description << "\n\n";
         helpOutput << "Options:\n" << ossOptionInformation.str() << std::endl;
 
@@ -1077,7 +1099,7 @@ public:
                         //  default value or throw invalid argument exception
 #pragma GCC diagnostic ignored "-Wterminate"
                         std::string defaultValue = option.GetDefaultValue();
-                        return defaultValue != "" ? defaultValue :
+                        return !defaultValue.empty() ? defaultValue :
                             throw std::invalid_argument("");
 #pragma GCC diagnostic pop
                     }
@@ -1090,7 +1112,7 @@ public:
         //  throw invalid argument exception
 #pragma GCC diagnostic ignored "-Wterminate"
         std::string defaultValue = option.GetDefaultValue();
-        return defaultValue != "" ? defaultValue :
+        return !defaultValue.empty() ? defaultValue :
             throw std::invalid_argument("No default value found for this option.");
 #pragma GCC diagnostic pop
     }
@@ -1203,7 +1225,7 @@ public:
                         ossBadArgDataErr << "\tInvalid data: \"" << next_arg
                             << "\", followed the REQUIRED argument tag: \""
                             << arg << "\"." << std::endl;
-                    } else if (next_arg == "") {
+                    } else if (next_arg.empty()) {
                         ossMissingDatErr << "\tData missing for argument: \""
                             << arg << "\"." << std::endl;
                     }
@@ -1239,7 +1261,7 @@ public:
                         ParserOption prev_option = GetOptionByTag(prev_arg);
                         //  If it was a valid parser option, check if it was not
                         //  expecting data after it
-                        if (prev_option.GetValueName() == "") {
+                        if (prev_option.GetValueName().empty()) {
                             invArg = true;
                         }
                     }
@@ -1255,8 +1277,8 @@ public:
             }
         }
 
-        if (ossInvalidArgErr.str() != "" || ossMissingArgErr.str() != "" ||
-            ossBadArgDataErr.str() != "" || ossMissingDatErr.str() != "") {
+        if (!ossInvalidArgErr.str().empty() || !ossMissingArgErr.str().empty() ||
+            !ossBadArgDataErr.str().empty() || !ossMissingDatErr.str().empty()) {
             std::stringstream output;
             output << "\n########################################\n";
             output << "Error processing command line arguments:\n";
