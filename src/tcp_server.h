@@ -222,7 +222,7 @@ public:
      */
     int ERR_NO() { return __errno; }
 
-private:
+protected:
     /**
      * The file descriptor for this server-side socket.
      */

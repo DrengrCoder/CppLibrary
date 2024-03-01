@@ -290,7 +290,6 @@ protected:
      */
     int _socketFd = -1;
 
-private:
     /**
      * The file descriptor for the server-side socket this client is connected to.
      */
