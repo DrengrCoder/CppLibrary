@@ -343,7 +343,7 @@ public:
 
     /**
      * True if you want to log the system date and time, false
-     * otherwise. (System date and time shouold always be
+     * otherwise. (System date and time should always be
      * UTC, but this will print the current system clock). By
      * default, True and will log the system date and time with
      * every log line.

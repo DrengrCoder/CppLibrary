@@ -248,7 +248,7 @@ public:
                 //  Then recreate string without leading and trailing whitespace
                 choice = choice.substr(firstNotOf, lastNotOf - firstNotOf);
 
-                //  Replace all remaining spaces with a hyphon character
+                //  Replace all remaining spaces with a hyphen character
                 std::replace(choice.begin(), choice.end(), ' ', '-');
 
                 //  Make sure this is not an existing duplicate
@@ -280,7 +280,7 @@ public:
                 //  Then recreate string without leading and trailing whitespace
                 tag = tag.substr(firstNotOf, lastNotOf - firstNotOf);
 
-                //  Replace all remaining spaces with a hyphon character
+                //  Replace all remaining spaces with a hyphen character
                 std::replace(tag.begin(), tag.end(), ' ', '-');
 
                 //  Make sure they're not duplicates
@@ -322,7 +322,7 @@ public:
         lastNotOf = valueName.find_last_not_of(' ') + 1;
         valueName = firstNotOf < 0 ? "" :
             valueName.substr(firstNotOf, lastNotOf - firstNotOf);
-//  And replace remaining white space with hyphons
+//  And replace remaining white space with hyphens
         std::replace(valueName.begin(), valueName.end(), ' ', '-');
         _valueName = valueName;
 
@@ -331,7 +331,7 @@ public:
         lastNotOf = defaultValue.find_last_not_of(' ') + 1;
         defaultValue = firstNotOf < 0 ? "" :
             defaultValue.substr(firstNotOf, lastNotOf - firstNotOf);
-//  And replace remaining white space with hyphons
+//  And replace remaining white space with hyphens
         std::replace(defaultValue.begin(), defaultValue.end(), ' ', '-');
         _defaultValue = defaultValue;
     }
@@ -371,7 +371,7 @@ public:
     }
 
     /**
-     * onstruct a new Parser Option object. This ctor marks the option as NOT mandatory.
+     * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
      *
      * Define VALUENAME if this arg is expecting data after it.
      *
@@ -452,7 +452,7 @@ public:
                 //  Then recreate string without leading and trailing whitespace
                 tag = tag.substr(firstNotOf, lastNotOf - firstNotOf);
 
-                //  Replace all remaining spaces with a hyphon character
+                //  Replace all remaining spaces with a hyphen character
                 std::replace(tag.begin(), tag.end(), ' ', '-');
 
                 //  Make sure they're not duplicates
@@ -490,7 +490,7 @@ public:
         lastNotOf = valueName.find_last_not_of(' ') + 1;
         valueName = firstNotOf < 0 ? "" :
             valueName.substr(firstNotOf, lastNotOf - firstNotOf);
-//  And replace remaining white space with hyphons
+//  And replace remaining white space with hyphens
         std::replace(valueName.begin(), valueName.end(), ' ', '-');
         _valueName = valueName;
 
@@ -499,7 +499,7 @@ public:
         lastNotOf = defaultValue.find_last_not_of(' ') + 1;
         defaultValue = firstNotOf < 0 ? "" :
             defaultValue.substr(firstNotOf, lastNotOf - firstNotOf);
-//  And replace remaining white space with hyphons
+//  And replace remaining white space with hyphens
         std::replace(defaultValue.begin(), defaultValue.end(), ' ', '-');
         _defaultValue = defaultValue;
     }
@@ -852,7 +852,7 @@ public:
     std::string _name = "Default Name.";
     /**
      * The description of the program. This can be adjusted after
-     * calling the contructor to set it, and should be a general brief
+     * calling the constructor to set it, and should be a general brief
      * description of what the program is doing and how.
      */
     std::string _description = "Default Description.";
@@ -1190,7 +1190,7 @@ public:
                 if (this_option._isRequired) {
 
                     //  There is an error if:
-                    //  - The next arg starts with a hyphon (means it was a 
+                    //  - The next arg starts with a hyphen (means it was a 
                     //      parser option tag)
                     //  - This option is using choices and the next arg is an 
                     //      invalid choice
@@ -1208,7 +1208,7 @@ public:
                             << arg << "\"." << std::endl;
                     }
                 } else if (this_option.IsUsingChoices()) {
-                    //  If the next argument does not begin with a hyphon...
+                    //  If the next argument does not begin with a hyphen...
                     if (next_arg.rfind('-', 0) != 0) {
                         //  Then it is not a parser option, meaning data is
                         //  going to follow this parser option choice. Make

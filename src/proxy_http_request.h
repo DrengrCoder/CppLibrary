@@ -598,7 +598,7 @@ namespace HTTP {
         std::string authority = std::string(i, end);
 
         // RFC 3986, 3.5. Fragment
-        //      Typically used for a speific section of a web page
+        //      Typically used for a specific section of a web page
         const auto fragmentPosition = authority.find('#');
         if (fragmentPosition != std::string::npos) {
             result.fragment = authority.substr(fragmentPosition + 1);
