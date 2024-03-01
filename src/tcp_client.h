@@ -18,9 +18,8 @@
 
 /**
  * The custom TCP Socket class is designed to simplify the process of using and
- * setting up network sockets for a TCP data stream in C++. A std::runtime_error
- * is thrown in places where an unrecoverable error occurs, along with a log
- * message printed. 'ERR_NO' and 'ERR_MSG' are set.
+ * setting up network sockets for a TCP data stream in C++. A log message
+ * printed. 'ERR_NO' and 'ERR_MSG' are set.
  *
  * This TCP Client object holds a reference to the configured socket file
  * descriptor that is used for sending and reading data over the network socket,
