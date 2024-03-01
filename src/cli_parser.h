@@ -1,5 +1,6 @@
 //
 // Created by Dylan Andrew McAdam (DrengrCoder) on 23/05/23.
+//  v1.0.1 TODO: UPDATE THIS
 //
 
 #ifndef __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_CLI_PARSER_H__
@@ -31,7 +32,7 @@
  *
  * Leading and trailing white space is removed from all TAG and
  * CHOICE strings, and any remaining white space is replaced
- * with hyphons. At least one TAG must be added to each option,
+ * with hyphens. At least one TAG must be added to each option,
  * and the resulting Parser Option object should be added to a
  * Parser Object for parsing incoming command line args.
  *
