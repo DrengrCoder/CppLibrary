@@ -81,9 +81,8 @@ public:
                 << _socketFd << ". ERROR CODE: " << __errno << ".";
 
             flog << msg.str();
-            //  This prevents the object being initialised and throws seg fault
-            //  if attempting to call the object.
-            throw std::runtime_error(msg.str());
+            
+            return;
         }
 
         _address.sin_family = (_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6);
@@ -109,13 +108,13 @@ public:
      * @param sockFd    The socket file descriptor value.
      */
     TcpClient(const int sockFd) {
-        clog << "Storing ref to pre-existing socket file descriptor: " << sockFd
-            << "...";
+        clog << "Storing ref to pre-existing socket file descriptor: "
+            << sockFd << "...";
 
         _socketFd = sockFd;
 
-        clog << "TCP client object initialised with file descriptor: " << _socketFd
-            << ".";
+        clog << "TCP client object initialised with file descriptor: "
+            << _socketFd << ".";
     }
 
     /**
@@ -266,13 +265,37 @@ public:
     }
 
     /**
-     * Check the number of bytes available to read on the socket. If
-     * 'Read' is called without any bytes available, it will block until
-     * there is.
+     * Returns the number of bytes available to read on the socket, or
+     * -1 on error.
+     * 
+     * Sets _errmsg and __errno on error.
      */
     int BytesAvailable() {
+        __errmsg = "";
+        __errno = 0;
+
+        if (_socketFd < 0) {
+            std::stringstream msg;
+            msg << "Socket read error, tried checking for available bytes on "
+                << "without valid socket file descriptor: " << _socketFd << ".";
+            elog << msg.str();
+            __errmsg = msg.str();
+            __errno = 101;
+            return -1;
+        }
+        
         int bytesAvailable;
-        ioctl(_socketFd, FIONREAD, &bytesAvailable);
+        if (ioctl(_socketFd, FIONREAD, &bytesAvailable) < 0) {
+            std::stringstream msg;
+            msg << "Error reading available byte count, _socketFd: "
+                << _socketFd << ".";
+
+            elog << msg.str();
+            __errmsg = msg.str();
+            __errno = 13000 + errno;
+            return -1;
+        }
+
         return bytesAvailable;
     }
 
