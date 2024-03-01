@@ -53,13 +53,10 @@ public:
     enum InternetProtocol : uint8_t { v4, v6 };
 
     /**
-     * @brief   Construct a new Tcp Client object with a socket file descriptor
-     *          and some default parameters for a TCP type connection:
-     *          'socket(AF_INET, SOCK_STREAM, 0)'. Address Options: AF_INET
-     *          family.
-     *
-     * @throw runtime_error if the socket failed to initialise and we did not
-     *                      receive a file descriptor.
+     * Construct a new Tcp Client object with a socket file descriptor
+     * and some default parameters for a TCP type connection:
+     * 'socket(AF_INET, SOCK_STREAM, 0)'. Address Options: AF_INET
+     * family.
      */
     TcpClient(InternetProtocol ipv = InternetProtocol::v4) {
         __errno = 0;
