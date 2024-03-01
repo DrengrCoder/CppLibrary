@@ -20,20 +20,20 @@
  * setting up network sockets for a TCP data stream in C++. A std::runtime_error
  * is thrown in places where an unrecoverable error occurs, along with a log
  * message printed. 'ERR_NO' and 'ERR_MSG' are set.
- * 
+ *
  * This TCP Client object holds a reference to the configured socket file
  * descriptor that is used for sending and reading data over the network socket,
  * as well as storing the server file descriptor this client connected to.
- * 
+ *
  * __errno and __errmsg are local private variables that are set upon error, and
  * can be accessed using ERR_NO() and ERR_MSG() functions.
- * 
+ *
  * NOTE:
  * There is a unique error code numbering system implemented for this class.
  * The error code system is a combination of custom error codes (between 100
  * and 9999) and partial custom error codes combined with the ‘errno’ macro
  * to produce values 10000 and over.
- * 
+ *
  * Custom error codes between 100 and 9999 denote some sort of usage
  * error and have been documented in the readme. Error codes 10000 and
  * over follow the pattern YYXXX where YY is a 2 digit custom code I have
@@ -41,7 +41,7 @@
  * Examples:
  * - '12047' is the custom error code '12' and the errno code '047' or just '47'.
  * - '10111' is the custom error code '10' and the errno code '111'.
- * 
+ *
  * The custom codes are documented in this readme. 'errno' code meaning
  * will change depending on what caused the errno code to be set.
  */
@@ -57,11 +57,11 @@ public:
      *          and some default parameters for a TCP type connection:
      *          'socket(AF_INET, SOCK_STREAM, 0)'. Address Options: AF_INET
      *          family.
-     * 
+     *
      * @throw runtime_error if the socket failed to initialise and we did not
      *                      receive a file descriptor.
      */
-    TcpClient(InternetProtocol ipv = InternetProtocol::v4){
+    TcpClient(InternetProtocol ipv = InternetProtocol::v4) {
         __errno = 0;
         __errmsg = "";
 
@@ -72,11 +72,11 @@ public:
 
         _ipv = ipv;
         _socketFd = socket((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
-        if (_socketFd < 0){
+        if (_socketFd < 0) {
             __errno = 10000 + errno;
 
             std::stringstream msg;
-            msg << "Client socket creation failed: _socketFd: " 
+            msg << "Client socket creation failed: _socketFd: "
                 << _socketFd << ". ERROR CODE: " << __errno << ".";
 
             flog << msg.str();
@@ -93,7 +93,7 @@ public:
     /**
      * Destroy the Tcp Client object and perform necessary clean up.
      */
-    ~TcpClient(){
+    ~TcpClient() {
         dlog << "TCP Client socket fd: " << _socketFd << " and server fd: "
             << _serverFd << " destruction...";
         Close();
@@ -104,10 +104,10 @@ public:
      *          file descriptor. This function should be used if you already
      *          have a socket file descriptor by some other means, such as the
      *          return value from 'NextConnection' on the custom TCP Server class.
-     * 
+     *
      * @param sockFd    The socket file descriptor value.
      */
-    TcpClient(const int sockFd){
+    TcpClient(const int sockFd) {
         clog << "Storing ref to pre-existing socket file descriptor: " << sockFd
             << "...";
 
@@ -121,7 +121,7 @@ public:
      * Close this client socket and the server socket with the socket
      * file descriptors.
      */
-    void Close(){
+    void Close() {
         dlog << "Closing socket " << _socketFd << " and server " << _serverFd
             << "...";
         close(_serverFd);
@@ -133,13 +133,13 @@ public:
     /**
      * @brief   Connect this socket to a port number and ip address. Sets
      *          __errmsg and __errno on error.
-     * 
+     *
      * @param portNumber    The port number to connect to.
      * @param ip            The IP address to connect to.
      * @return true         if the socket successfully connected to the endpoint,
      * @return false        otherwise.
      */
-    bool Connect(const int portNumber, const char *ip = "127.0.0.1"){
+    bool Connect(const int portNumber, const char* ip = "127.0.0.1") {
         __errno = 0;
         __errmsg = "";
 
@@ -148,7 +148,7 @@ public:
         _address.sin_port = htons(portNumber);
 
         const int inet_result = inet_pton((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), ip, &_address.sin_addr);
-        if (inet_result <= 0){
+        if (inet_result <= 0) {
             std::stringstream msg;
             msg << "Address invalid / not supported: inet_result: "
                 << inet_result << ".";
@@ -159,10 +159,10 @@ public:
             return false;
         }
 
-        _serverFd = connect(_socketFd, (struct sockaddr*)&_address, _addressLength);
-        if (_serverFd < 0){
+        _serverFd = connect(_socketFd, (struct sockaddr*) &_address, _addressLength);
+        if (_serverFd < 0) {
             std::stringstream msg;
-            msg << "Connection failed: _serverFd: " 
+            msg << "Connection failed: _serverFd: "
                 << _serverFd << ".";
 
             flog << msg.str();
@@ -178,14 +178,14 @@ public:
     /**
      * Read N_BYTES into BUFF on this socket. Return
      * number of bytes read, -1 if error or 0 if EOF.
-     * 
+     *
      * Sets __errmsg and __errno on error.
      */
-    int Read(void *buff, size_t n_bytes, int flags = 0){
+    int Read(void* buff, size_t n_bytes, int flags = 0) {
         __errmsg = "";
         __errno = 0;
 
-        if (_socketFd < 0){
+        if (_socketFd < 0) {
             std::stringstream msg;
             msg << "Socket read error, tried reading without valid socket file "
                 << "descriptor: " << _socketFd << ".";
@@ -197,7 +197,7 @@ public:
 
         memset(buff, 0, n_bytes);
         int bytes = recv(_socketFd, buff, n_bytes, flags);
-        if (bytes < 0){
+        if (bytes < 0) {
             std::stringstream msg;
             msg << "Error reading bytes, _socketFd: " << _socketFd << ", bytes: "
                 << bytes << ".";
@@ -205,7 +205,7 @@ public:
             elog << msg.str();
             __errmsg = msg.str();
             __errno = 13000 + errno;
-        } else if (bytes == 0){
+        } else if (bytes == 0) {
             dlog << "No bytes were read.";
         } else {
             clog << bytes << " bytes read.";
@@ -219,24 +219,24 @@ public:
      * number of bytes read, -1 if error or 0 if EOF. Uses
      * STRLEN(input) to calculate N_BYTES for cascading
      * function calls.
-     * 
+     *
      * Sets __errmsg and __errno on error.
      */
-    int Send(const char *input){
+    int Send(const char* input) {
         return Send(input, strlen(input), 0);
     }
 
     /**
      * Send N_BYTES of BUFF to the connected socket. Return
      * number of bytes read, -1 if error or 0 if EOF.
-     * 
+     *
      * Sets __errmsg and __errno on error.
      */
-    int Send(const void* buff, size_t n_bytes, int flags = 0){
+    int Send(const void* buff, size_t n_bytes, int flags = 0) {
         __errmsg = "";
         __errno = 0;
-        
-        if (_socketFd < 0){
+
+        if (_socketFd < 0) {
             std::stringstream msg;
             msg << "Socket send error, tried sending without valid socket file "
                 << "descriptor: " << _socketFd << ".";
@@ -247,7 +247,7 @@ public:
         }
 
         int bytes = send(_socketFd, buff, n_bytes, flags);
-        if (bytes < 0){
+        if (bytes < 0) {
             std::stringstream msg;
             msg << "Error sending bytes, _socketFd: " << _socketFd << ", bytes: "
                 << bytes << ".";
@@ -255,7 +255,7 @@ public:
             elog << msg.str();
             __errmsg = msg.str();
             __errno = 13000 + errno;
-        } else if (bytes == 0){
+        } else if (bytes == 0) {
             wlog << "No bytes were sent.";
         } else {
             clog << bytes << " bytes sent: " << buff;
@@ -267,22 +267,22 @@ public:
     /**
      * Get this client socket's file descriptor value.
      */
-    int GetSocketFd(){ return _socketFd; }
+    int GetSocketFd() { return _socketFd; }
 
     /**
      * Get the Server file descriptor value this client connected to.
      */
-    int GetServerFd(){ return _serverFd; }
+    int GetServerFd() { return _serverFd; }
 
     /**
      * Get the last error message set on this object.
      */
-    std::string ERR_MSG(){ return __errmsg; }
+    std::string ERR_MSG() { return __errmsg; }
 
     /**
      * Get the last error code set on this object.
      */
-    int ERR_NO(){ return __errno; }
+    int ERR_NO() { return __errno; }
 
 protected:
     /**

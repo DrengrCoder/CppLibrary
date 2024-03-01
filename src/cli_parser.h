@@ -18,8 +18,8 @@
  * The Parser Option class is used to quickly define CLI argument
  * input with strict data validation and type checking when CLI
  * arguments are parsed into the program. This also assists in
- * generating help information with the help flags are found. 
- * 
+ * generating help information with the help flags are found.
+ *
  * There are 4 types of arguments that can be found in the CLI
  * args list:
  * - Flag-type: (Optional flags, they exist or they don't, used to
@@ -28,13 +28,13 @@
  * - Flag-data-req: (Optional flags, but data must follow them
  * because they have no default).
  * - Req-data: (Required flags, and data must follow them).
- * 
+ *
  * Leading and trailing white space is removed from all TAG and
  * CHOICE strings, and any remaining white space is replaced
  * with hyphons. At least one TAG must be added to each option,
  * and the resulting Parser Option object should be added to a
  * Parser Object for parsing incoming command line args.
- * 
+ *
  * Due to the nature of the constructor methods in this class, it is
  * advised to surround string literals with 'std::string()' to avoid
  * confusing a 'char' variable with the 'bool' variable in the input
@@ -80,7 +80,7 @@ private:
 
     /**
      * @brief   Determine if CHOICE is a duplicate of one that already exists.
-     * 
+     *
      * @param choice    The string to check against the other existing choices.
      * @return true     if CHOICE is a duplicate,
      * @return false    otherwise.
@@ -96,7 +96,7 @@ private:
 
     /**
      * @brief   Determine if TAG is a duplicate of one that already exists.
-     * 
+     *
      * @param tag       The string to check against the other existing tags.
      * @return true     if TAG is a duplicate,
      * @return false    otherwise.
@@ -127,77 +127,73 @@ public:
 
     /**
      * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
-     * 
+     *
      * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
-    ParserOption(std::string tag, std::string descr, 
+    ParserOption(std::string tag, std::string descr,
             std::initializer_list<std::string> choices,
             std::string defaultValue = "")
-        : _isRequired(false)
-    {
+        : _isRequired(false) {
         new(this) ParserOption(tag, descr, choices, _isRequired, defaultValue);
     }
 
     /**
      * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
-     * 
+     *
      * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
-    ParserOption(std::string tag, std::string descr, 
+    ParserOption(std::string tag, std::string descr,
             std::initializer_list<std::string> choices, bool required,
             std::string defaultValue = "")
-        : _isRequired(required)
-    {
-        new(this) ParserOption({tag}, descr, choices, _isRequired, defaultValue);
+        : _isRequired(required) {
+        new(this) ParserOption({ tag }, descr, choices, _isRequired, defaultValue);
     }
 
     /**
      * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
-     * 
+     *
      * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::initializer_list<std::string> tags, std::string descr,
-            std::initializer_list<std::string> choices, 
+            std::initializer_list<std::string> choices,
             std::string defaultValue = "")
-        : _isRequired(false)
-    {
+        : _isRequired(false) {
         new(this) ParserOption(tags, descr, choices, _isRequired, defaultValue);
     }
 
     /**
      * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
-     * 
+     *
      * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
-    ParserOption(std::initializer_list<std::string> tags, std::string descr, 
+    ParserOption(std::initializer_list<std::string> tags, std::string descr,
             std::initializer_list<std::string> choices, bool required,
             std::string defaultValue = "")
-        : _isRequired(required)
-    {
+        : _isRequired(required) {
         std::vector<std::string> tag_vector;
         for (std::string str : tags)
             tag_vector.push_back(str);
@@ -206,40 +202,38 @@ public:
 
     /**
      * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
-     * 
+     *
      * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
-    ParserOption(std::vector<std::string> tags, std::string descr, 
+    ParserOption(std::vector<std::string> tags, std::string descr,
             std::initializer_list<std::string> choices,
             std::string defaultValue = "")
-        : _isRequired(false)
-    {
+        : _isRequired(false) {
         new(this) ParserOption(tags, descr, choices, _isRequired, defaultValue);
     }
 
     /**
      * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
-     * 
+     *
      * Use a brace-initialiser list for CHOICES, inline with ctor declaration.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
-    ParserOption(std::vector<std::string> tags, std::string descr, 
+    ParserOption(std::vector<std::string> tags, std::string descr,
             std::initializer_list<std::string> choices, bool required,
             std::string defaultValue = "") noexcept
-        : _isRequired(required)
-    {
-        
+        : _isRequired(required) {
+
         //  Check all the input choices...
         for (std::string choice : choices) {
 
@@ -255,7 +249,7 @@ public:
 
                 //  Replace all remaining spaces with a hyphon character
                 std::replace(choice.begin(), choice.end(), ' ', '-');
-                
+
                 //  Make sure this is not an existing duplicate
                 if (!ChoiceIsDuplicate(choice)) {
                     //  Add the choice to the list of choices on this Option
@@ -273,7 +267,7 @@ public:
         }
 
         //  Now check all the tags...
-        for (std::string tag : tags){
+        for (std::string tag : tags) {
 
             //  Get start and end of real string
             int firstNotOf = tag.find_first_not_of(' ');
@@ -319,15 +313,15 @@ public:
         int firstNotOf = descr.find_first_not_of(' ');
         int lastNotOf = descr.find_last_not_of(' ') + 1;
         descr = firstNotOf < 0 ? "" :
-                descr.substr(firstNotOf, lastNotOf - firstNotOf);
+            descr.substr(firstNotOf, lastNotOf - firstNotOf);
         _description = descr;
 
         //  Remove leading and trailing white space in value name before saving
         firstNotOf = valueName.find_first_not_of(' ');
         lastNotOf = valueName.find_last_not_of(' ') + 1;
         valueName = firstNotOf < 0 ? "" :
-                    valueName.substr(firstNotOf, lastNotOf - firstNotOf);
-        //  And replace remaining white space with hyphons
+            valueName.substr(firstNotOf, lastNotOf - firstNotOf);
+//  And replace remaining white space with hyphons
         std::replace(valueName.begin(), valueName.end(), ' ', '-');
         _valueName = valueName;
 
@@ -335,81 +329,77 @@ public:
         firstNotOf = defaultValue.find_first_not_of(' ');
         lastNotOf = defaultValue.find_last_not_of(' ') + 1;
         defaultValue = firstNotOf < 0 ? "" :
-                       defaultValue.substr(firstNotOf, lastNotOf - firstNotOf);
-        //  And replace remaining white space with hyphons
+            defaultValue.substr(firstNotOf, lastNotOf - firstNotOf);
+//  And replace remaining white space with hyphons
         std::replace(defaultValue.begin(), defaultValue.end(), ' ', '-');
         _defaultValue = defaultValue;
     }
 
     /**
      * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
-     * 
+     *
      * Define VALUENAME if this arg is expecting data after it.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
-    ParserOption(std::string tag, std::string descr, std::string valueName = "", 
-            std::string defaultValue = "") 
-        : _isRequired(false)
-    {
+    ParserOption(std::string tag, std::string descr, std::string valueName = "",
+            std::string defaultValue = "")
+        : _isRequired(false) {
         new(this) ParserOption(tag, descr, _isRequired, valueName, defaultValue);
     }
 
     /**
      * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
-     * 
+     *
      * Define VALUENAME if this arg is expecting data after it.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::string tag, std::string descr, bool required,
             std::string valueName, std::string defaultValue = "")
-        : _isRequired(required)
-    {
-        new(this) ParserOption({tag}, descr, _isRequired, valueName, defaultValue);
+        : _isRequired(required) {
+        new(this) ParserOption({ tag }, descr, _isRequired, valueName, defaultValue);
     }
 
     /**
      * onstruct a new Parser Option object. This ctor marks the option as NOT mandatory.
-     * 
+     *
      * Define VALUENAME if this arg is expecting data after it.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
-    ParserOption(std::initializer_list<std::string> tags, std::string descr, 
+    ParserOption(std::initializer_list<std::string> tags, std::string descr,
             std::string valueName = "", std::string defaultValue = "")
-        : _isRequired(false)
-    {
+        : _isRequired(false) {
         new(this) ParserOption(tags, descr, _isRequired, valueName, defaultValue);
     }
 
     /**
      * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
-     * 
+     *
      * Define VALUENAME if this arg is expecting data after it.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::initializer_list<std::string> tags, std::string descr,
             bool required, std::string valueName, std::string defaultValue = "")
-        : _isRequired(required)
-    {
+        : _isRequired(required) {
         std::vector <std::string> tag_vector;
         for (std::string s : tags)
             tag_vector.push_back(s);
@@ -418,47 +408,45 @@ public:
 
     /**
      * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
-     * 
+     *
      * Define VALUENAME if this arg is expecting data after it.
-     * 
+     *
      * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
-     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
-     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
-     * caught and will forcibly terminate the program (bad code).
-     */
-    ParserOption(std::vector<std::string> tags, std::string descr, 
-            std::string valueName = "", std::string defaultValue = "")
-        : _isRequired(false)
-    {
-        new (this) ParserOption(tags, descr, _isRequired, valueName, defaultValue);
-    }
-
-    /**
-     * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
-     * 
-     * Define VALUENAME if this arg is expecting data after it.
-     * 
-     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
-     * 
+     *
      * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
      * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
      * caught and will forcibly terminate the program (bad code).
      */
     ParserOption(std::vector<std::string> tags, std::string descr,
-            bool required, std::string valueName, 
+            std::string valueName = "", std::string defaultValue = "")
+        : _isRequired(false) {
+        new (this) ParserOption(tags, descr, _isRequired, valueName, defaultValue);
+    }
+
+    /**
+     * Construct a new Parser Option object. This ctor accepts a REQUIRED mandatory bool.
+     *
+     * Define VALUENAME if this arg is expecting data after it.
+     *
+     * DEFAULTVALUE should be surrounded with 'std::string()' if it is a string literal.
+     *
+     * THROW INVALID_ARGUMENT if no tags or choices were added to this Parser Option
+     * because they did not satisfy entry conditions. Marked 'noexcept' so it cannot be
+     * caught and will forcibly terminate the program (bad code).
+     */
+    ParserOption(std::vector<std::string> tags, std::string descr,
+            bool required, std::string valueName,
             std::string defaultValue = "") noexcept
-        : _isRequired(required)
-    {
+        : _isRequired(required) {
         //  Check all tags...
-        for (std::string tag : tags){
+        for (std::string tag : tags) {
 
             //  Get start and end of real string
             int firstNotOf = tag.find_first_not_of(' ');
             int lastNotOf = tag.find_last_not_of(' ') + 1;
 
             //  Make sure it is not an empty string
-            if (firstNotOf > -1){
+            if (firstNotOf > -1) {
 
                 //  Then recreate string without leading and trailing whitespace
                 tag = tag.substr(firstNotOf, lastNotOf - firstNotOf);
@@ -493,15 +481,15 @@ public:
         int firstNotOf = descr.find_first_not_of(' ');
         int lastNotOf = descr.find_last_not_of(' ') + 1;
         descr = firstNotOf < 0 ? "" :
-                descr.substr(firstNotOf, lastNotOf - firstNotOf);
+            descr.substr(firstNotOf, lastNotOf - firstNotOf);
         _description = descr;
 
         //  Remove leading and trailing white space in value name before saving
         firstNotOf = valueName.find_first_not_of(' ');
         lastNotOf = valueName.find_last_not_of(' ') + 1;
         valueName = firstNotOf < 0 ? "" :
-                    valueName.substr(firstNotOf, lastNotOf - firstNotOf);
-        //  And replace remaining white space with hyphons
+            valueName.substr(firstNotOf, lastNotOf - firstNotOf);
+//  And replace remaining white space with hyphons
         std::replace(valueName.begin(), valueName.end(), ' ', '-');
         _valueName = valueName;
 
@@ -509,8 +497,8 @@ public:
         firstNotOf = defaultValue.find_first_not_of(' ');
         lastNotOf = defaultValue.find_last_not_of(' ') + 1;
         defaultValue = firstNotOf < 0 ? "" :
-                       defaultValue.substr(firstNotOf, lastNotOf - firstNotOf);
-        //  And replace remaining white space with hyphons
+            defaultValue.substr(firstNotOf, lastNotOf - firstNotOf);
+//  And replace remaining white space with hyphons
         std::replace(defaultValue.begin(), defaultValue.end(), ' ', '-');
         _defaultValue = defaultValue;
     }
@@ -527,7 +515,7 @@ public:
 
     /**
      * @brief   Get the vector of Tags.
-     * 
+     *
      * @return  A std::vector<std::string> containing all the tags.
      */
     std::vector<std::string> GetTags() { return _tags; }
@@ -535,7 +523,7 @@ public:
     /**
      * @brief   Get the vector of Choices. At least 1 choice if choices are
      *          being used.
-     * 
+     *
      * @return  A std::vector<std::string> containing all the choices.
      */
     std::vector<std::string> GetChoices() { return _choicesList; }
@@ -578,12 +566,12 @@ public:
      * of this type are said to be "equal" when all variable fields are
      * identical across both of them.
      */
-    friend bool operator==(const ParserOption &p1, const ParserOption &p2) {
+    friend bool operator==(const ParserOption& p1, const ParserOption& p2) {
         return p1._tags == p2._tags &&
-               p1._description == p2._description &&
-               p1._valueName == p2._valueName &&
-               p1._defaultValue == p2._defaultValue &&
-               p1._choicesList == p2._choicesList;
+            p1._description == p2._description &&
+            p1._valueName == p2._valueName &&
+            p1._defaultValue == p2._defaultValue &&
+            p1._choicesList == p2._choicesList;
     }
 
 };
@@ -595,7 +583,7 @@ public:
  *          Options added to it. The Help and Version flags can be easily added
  *          with built-in functions and do not require you to create your own.
  */
-class Parser{
+class Parser {
 private:
     /**
      * The list of arguments that from the command line.
@@ -610,7 +598,7 @@ private:
      *The list of Parser Options to be Parsed.
      */
     std::vector<ParserOption> _options;
-    
+
     /**
      * Bool flag to denote if the help option has been added. The help
      * argument flag should be added by the built-in function in this
@@ -643,12 +631,12 @@ private:
      * 'PrintHelpInfo' function and is used to help format the text
      * printed out by the help option flag.
      */
-    int CalculateMaximumTabCount(){
+    int CalculateMaximumTabCount() {
         //  init counter
         int counter = -1;
 
         //  Loop all options to find the longest one...
-        for (ParserOption option : _options){
+        for (ParserOption option : _options) {
             //  init string
             std::stringstream oss;
             //  Add the first tab that will be at the start of every string entry
@@ -659,7 +647,7 @@ private:
             for (int i = 0; i < option.GetTags().size(); i++) {
 #pragma GCC diagnostic pop
                 //  If this is not the first tag, add a comma and a space
-                if (i > 0){
+                if (i > 0) {
                     oss << ", ";
                 }
                 //  Add the tag string
@@ -667,13 +655,13 @@ private:
             }
 
             //  Add the value name if there is one
-            if (option.GetValueName() != ""){
+            if (option.GetValueName() != "") {
                 oss << " <" << option.GetValueName() << ">";
             }
 
             //  Get the length of this string and save it if it's the longest
             int len = oss.str().length();
-            if (len > counter){
+            if (len > counter) {
                 counter = len;
             }
         }
@@ -697,7 +685,7 @@ private:
      * the version arg is found in the command line args list.
      */
     void PrintVersionInfo() {
-        std::cout << this->_name 
+        std::cout << this->_name
             << " Version: " << this->_version << std::endl;
     }
 
@@ -707,7 +695,7 @@ private:
      * calling 'Process' and formats the help info text with the
      * correct number of spaces and indentations for the console.
      */
-    void PrintHelpInfo(){
+    void PrintHelpInfo() {
         //  The maximum width of the screen for a new line should be entered
         const int maxLineWidth = 80;
 
@@ -720,16 +708,16 @@ private:
 
         //  Define the string for required arguments to print in the usage info
         std::stringstream ossRequiredOptions;
-        for (ParserOption option : _options){
+        for (ParserOption option : _options) {
             if (option._isRequired) {
-                ossRequiredOptions << " " << option.GetTags()[0] 
-                        << " <" << option.GetValueName() << ">";
+                ossRequiredOptions << " " << option.GetTags()[0]
+                    << " <" << option.GetValueName() << ">";
             }
         }
 
         //  Define the string for the list of possible options and arguments
         std::stringstream ossOptionInformation;
-        for (ParserOption option : _options){
+        for (ParserOption option : _options) {
 
             //  Define the string for this specific option entry
             std::stringstream ossOptionEntry;
@@ -737,10 +725,10 @@ private:
             ossOptionEntry << "    ";
 
 #pragma GCC diagnostic ignored "-Wsign-compare"
-            for (int i = 0; i < option.GetTags().size(); i++){
+            for (int i = 0; i < option.GetTags().size(); i++) {
 #pragma GCC diagnostic pop
                 //  If this is not the first tag, add a comma
-                if (i > 0){
+                if (i > 0) {
                     ossOptionEntry << ", ";
                 }
                 //  Add the tag string
@@ -748,10 +736,10 @@ private:
             }
 
             //  If there is a value name, as this to the end of the final tag
-            if (option.GetValueName() != ""){
+            if (option.GetValueName() != "") {
                 ossOptionEntry << " <" << option.GetValueName() << ">";
             }
-            
+
             //  Pad the remaining space expected
             int remainingSpace = maxTagWidth - ossOptionEntry.str().length();
             do {
@@ -759,19 +747,19 @@ private:
             } while (--remainingSpace > 0);
 
             //  If the option is required, specify this before the description
-            if (option._isRequired){
+            if (option._isRequired) {
                 ossOptionEntry << "(REQUIRED) ";
             }
             //  Add the description
             ossOptionEntry << option._description;
             //  If this option has a default value, append it to the description
-            if (option.GetDefaultValue() != ""){
-                ossOptionEntry << " [Default: " 
-                        << option.GetDefaultValue() << "].";
+            if (option.GetDefaultValue() != "") {
+                ossOptionEntry << " [Default: "
+                    << option.GetDefaultValue() << "].";
             }
 
             //  First check if this entry is over the screen width threshold
-            if (ossOptionEntry.str().length() > maxLineWidth){
+            if (ossOptionEntry.str().length() > maxLineWidth) {
                 //  Get the current entry as a plain string
                 std::string currentOptionEntry = ossOptionEntry.str();
                 //  Get ready to construct a new string
@@ -781,28 +769,28 @@ private:
                 std::stringstream currOptSs(currentOptionEntry);
                 std::vector<std::string> currOptArray;
                 std::string currOptStr;
-                while (std::getline(currOptSs, currOptStr, ' ')){
+                while (std::getline(currOptSs, currOptStr, ' ')) {
                     currOptArray.push_back(currOptStr);
                 }
 
                 //  Go to add the string array entries to the new string stream
                 int timesReachedLength = 1;
-                for (std::string str : currOptArray){
+                for (std::string str : currOptArray) {
 
                     //  If this array entry length plus existing string length 
                     //  is greater than the maximum width allowed...
 
 #pragma GCC diagnostic ignored "-Wsign-compare"
 
-                    if ((ossRestructuredEntry.str().length() + str.length()) > 
-                            (maxLineWidth * timesReachedLength)){
+                    if ((ossRestructuredEntry.str().length() + str.length()) >
+                            (maxLineWidth * timesReachedLength)) {
 
 #pragma GCC diagnostic pop
 
                         timesReachedLength++;
                         ossRestructuredEntry << '\n';
 
-                        for (int i = 0; i < maxTagWidth; i++){
+                        for (int i = 0; i < maxTagWidth; i++) {
                             ossRestructuredEntry << ' ';
                         }
 
@@ -824,18 +812,18 @@ private:
 
         std::stringstream helpOutput;
         helpOutput << this->_name << " Help Information...\n\n";
-        helpOutput << "Usage: " << this->_args[0] 
-                << " [options]" << ossRequiredOptions.str() << '\n';
+        helpOutput << "Usage: " << this->_args[0]
+            << " [options]" << ossRequiredOptions.str() << '\n';
         helpOutput << "Description: " << this->_description << "\n\n";
         helpOutput << "Options:\n" << ossOptionInformation.str() << std::endl;
-        
+
         flog << helpOutput.str();
     }
 
     /**
      * @brief   Returns a Parser Option based on a string TAG argument found in
      *          the command line args.
-     * 
+     *
      * @param tag   The string tag to look for.
      * @return      A ParserOption object that has been identified with the
      *              std::string TAG.
@@ -843,11 +831,10 @@ private:
      *              could not be found. This is used for catching errors and
      *              escaping portions of a function loop.
      */
-    ParserOption GetOptionByTag(std::string tag)
-    {
-        for (ParserOption option : _options){
-            for (std::string t : option.GetTags()){
-                if (t == tag){ 
+    ParserOption GetOptionByTag(std::string tag) {
+        for (ParserOption option : _options) {
+            for (std::string t : option.GetTags()) {
+                if (t == tag) {
                     return option;
                 }
             }
@@ -876,7 +863,7 @@ public:
      *          array of the arguments themselves. This constructor will
      *          automatically create a program name and assign it to the 'name'
      *          variable, which is based on the first argument from 'argv'.
-     * 
+     *
      * @param argc      The number of arguments. 'argc' is pulled in from int
      *                  main.
      * @param argv      The char pointer array of arguments. 'argv' is pulled in
@@ -884,7 +871,7 @@ public:
      * @param descr     A description of the program.
      * @param vers      The version number for the project.
      */
-    Parser(int &argc, char **argv, std::string descr, std::string vers = "0.0.0.0"){
+    Parser(int& argc, char** argv, std::string descr, std::string vers = "0.0.0.0") {
         std::string firstArg = argv[0];
         std::string exeName = firstArg
             .substr(firstArg.find_last_of('/') + 1, firstArg.size());
@@ -900,7 +887,7 @@ public:
      *          description, store the version number locally and add all the
      *          arguments from the 'argv' variable in the local list containing
      *          the args as a std::string vector.
-     * 
+     *
      * @param argc      The number of arguments. 'argc' is pulled in from int
      *                  main.
      * @param argv      The char pointer array of arguments. 'argv' is pulled in
@@ -910,15 +897,14 @@ public:
      * @param vers      The version number for the project.
      * @throw           invalid_argument if the name string is empty.
      */
-    Parser(int &argc, char **argv, std::string name, std::string descr, std::string vers) noexcept
-    {
+    Parser(int& argc, char** argv, std::string name, std::string descr, std::string vers) noexcept {
 
         //  Remove leading and trailing whitespace
         int firstNotOf = name.find_first_not_of(' ');
         int lastNotOf = name.find_last_not_of(' ') + 1;
-        
+
         //  Make sure it is not an empty string
-        if (firstNotOf < 0){
+        if (firstNotOf < 0) {
 #pragma GCC diagnostic ignored "-Wterminate"
             throw std::invalid_argument("Name cannot be an empty string.");
 #pragma GCC diagnostic pop
@@ -946,8 +932,8 @@ public:
      * Add a predefined Parser Option for the help flag.
      */
     void AddHelpOption() {
-        ParserOption po({"h", "help"}, "Show this help.");
-        if (int r = this->AddOptions({po}) != 0) {
+        ParserOption po({ "h", "help" }, "Show this help.");
+        if (int r = this->AddOptions({ po }) != 0) {
             elog << "Error adding help option: " << r << ".";
         } else {
             _usingHelpOption = true;
@@ -958,10 +944,10 @@ public:
      * Add a predefined Parser Option for the version flag.
      */
     void AddVersionOption() {
-        ParserOption po({"v", "version"}, "Show current version.");
-        if (int r = this->AddOptions({po}) != 0) {
+        ParserOption po({ "v", "version" }, "Show current version.");
+        if (int r = this->AddOptions({ po }) != 0) {
             elog << "Error adding version option: " << r << ".";
-        } else{
+        } else {
             _usingVersionOption = true;
         }
     }
@@ -969,7 +955,7 @@ public:
     /**
      * @brief   Add a list of Parser Options to this Parser class instance.
      *          Accepts a brace-initiailised list.
-     * 
+     *
      * @param options   The list of Parser Options to add.
      * @return          Zero (0) if successfully added all Parser Options,
      *                  otherwise returns an integer for the number of Parser
@@ -983,7 +969,7 @@ public:
             if (!this->ContainsOption(po)) {
                 //  Add it if not
                 _options.push_back(po);
-                if (!this->ContainsOption(po)){
+                if (!this->ContainsOption(po)) {
                     elog << "Failed to add new option.";
                     result++;
                 }
@@ -997,18 +983,17 @@ public:
     /**
      * @brief   Check if OPTION is found in the list of command line args,
      *          false otherwise.
-     * 
+     *
      * @param option    The Parser Option to check for matching flags.
      * @return true     if one of the Parser Option's tags has been found in the
      *                  list of args,
      * @return false    otherwise.
      * @throw           invalid_argument if the Parser Option was not added to
      *                  this Parser instance. This function has been marked
-     *                  'noexcept' so it cannot be caught and will forcibly 
+     *                  'noexcept' so it cannot be caught and will forcibly
      *                  terminate the program (bad code).
      */
-    bool IsSet(ParserOption option) noexcept
-    {
+    bool IsSet(ParserOption option) noexcept {
         bool optionExists = false;
         for (ParserOption opt : _options) {
             if (option == opt) {
@@ -1026,10 +1011,10 @@ public:
         }
 
 #pragma GCC diagnostic ignored "-Wsign-compare"
-        for (int i = 1; i < _args.size(); i++){
+        for (int i = 1; i < _args.size(); i++) {
 #pragma GCC diagnostic pop
-            for (std::string tag : option.GetTags()){
-                if (tag == _args[i]){
+            for (std::string tag : option.GetTags()) {
+                if (tag == _args[i]) {
                     return true;
                 }
             }
@@ -1041,16 +1026,15 @@ public:
     /**
      * @brief   Get the value for the OPTION tag that has been set in the
      *          command line args.
-     * 
+     *
      * @param option        The Parser Option to get the value for.
      * @return              The data following the Parser Option tag, as a string.
      * @throw               invalid_argument if the Parser Option was not added
      *                      to this Parser instance, or if a value could not be
-     *                      found and a default value was not specified (bad 
+     *                      found and a default value was not specified (bad
      *                      code or input args).
      */
-    std::string GetValue(ParserOption option) noexcept
-    {
+    std::string GetValue(ParserOption option) noexcept {
         bool optionExists = false;
         for (ParserOption opt : _options) {
             if (option == opt) {
@@ -1069,19 +1053,19 @@ public:
 
         //  Go through all the command line arguments
 #pragma GCC diagnostic ignored "-Wsign-compare"
-        for (int i = 1; i < _args.size(); i++){
+        for (int i = 1; i < _args.size(); i++) {
 #pragma GCC diagnostic pop
 
             //  Get this current argument
             std::string this_arg = _args[i];
 
             //  Check all the tags on this option
-            for (std::string tag : option.GetTags()){
+            for (std::string tag : option.GetTags()) {
                 //  If we found a tag matching this option
-                if (tag == this_arg){
+                if (tag == this_arg) {
                     //  Check if we are at the end of the arguments list
 #pragma GCC diagnostic ignored "-Wsign-compare"
-                    if (i + 1 < _args.size()){
+                    if (i + 1 < _args.size()) {
 #pragma GCC diagnostic pop
                         //  return the data after this option's tag
                         //      This must be data because 'Process' would have
@@ -1093,7 +1077,7 @@ public:
 #pragma GCC diagnostic ignored "-Wterminate"
                         std::string defaultValue = option.GetDefaultValue();
                         return defaultValue != "" ? defaultValue :
-                                throw std::invalid_argument("");
+                            throw std::invalid_argument("");
 #pragma GCC diagnostic pop
                     }
                 }
@@ -1106,7 +1090,7 @@ public:
 #pragma GCC diagnostic ignored "-Wterminate"
         std::string defaultValue = option.GetDefaultValue();
         return defaultValue != "" ? defaultValue :
-                throw std::invalid_argument("No default value found for this option.");
+            throw std::invalid_argument("No default value found for this option.");
 #pragma GCC diagnostic pop
     }
 
@@ -1114,23 +1098,23 @@ public:
      * @brief   Handle processing of all command line args passed in to this
      *          Parser class instance. Prints out detailed information if there
      *          is a problem with the arguments or their data.
-     * 
+     *
      * @return true     if args were successfully parsed,
      * @return false    otherwise.
      * @throw           invalid_argument if there is a runtime_error in
      *                  processing.
      */
-    bool Process(){
+    bool Process() {
 
         //  Check for help and version flags first...
 #pragma GCC diagnostic ignored "-Wsign-compare"
-        for (int i = 1; i < _args.size(); i++){
+        for (int i = 1; i < _args.size(); i++) {
 #pragma GCC diagnostic pop
 
-            if (_usingHelpOption && (_args[i] == "-h" || _args[i] == "--help")){
+            if (_usingHelpOption && (_args[i] == "-h" || _args[i] == "--help")) {
 
                 //  If we found the help option but it wasn't the first argument...
-                if (i > 1){
+                if (i > 1) {
 
                     //  Get the tag preceeding the help tag
                     std::string tag = _args[i - 1];
@@ -1143,15 +1127,16 @@ public:
                             option.PrintOptionChoiceInfo();
                         else
                             throw std::invalid_argument("No help information for tag");
-                    } catch (std::invalid_argument &err){
-                        //  Log exceptions thrown
+                    }
+                    catch (std::invalid_argument& err) {
+                     //  Log exceptions thrown
                         elog << err.what() << ": \"" << tag << "\".";
                     }
                 }
                 PrintHelpInfo();
                 exit(0);
             }
-            if (_usingVersionOption && (_args[i] == "-v" || _args[i] == "--version")){
+            if (_usingVersionOption && (_args[i] == "-v" || _args[i] == "--version")) {
                 PrintVersionInfo();
                 exit(0);
             }
@@ -1168,17 +1153,17 @@ public:
         std::stringstream ossBadArgDataErr;
 
         //  Look for required argument existence
-        for (ParserOption option : _options){
-            if (option._isRequired && !this->IsSet(option)){
+        for (ParserOption option : _options) {
+            if (option._isRequired && !this->IsSet(option)) {
                 ossMissingArgErr << "\tRequired argument missing: \""
-                                << option.GetTags()[0] << " <" 
-                                << option.GetValueName() << ">\"." << std::endl;
+                    << option.GetTags()[0] << " <"
+                    << option.GetValueName() << ">\"." << std::endl;
             }
         }
-        
+
         //  Loop all the arguments...
 #pragma GCC diagnostic ignored "-Wsign-compare"
-        for (int i = 1; i < _args.size(); i++){
+        for (int i = 1; i < _args.size(); i++) {
 #pragma GCC diagnostic pop
 
             //  Get this argument
@@ -1193,15 +1178,15 @@ public:
                 //  Get the next argument in the list
                 std::string next_arg = "";
 #pragma GCC diagnostic ignored "-Wsign-compare"
-                if (i + 1 < _args.size()){
+                if (i + 1 < _args.size()) {
 #pragma GCC diagnostic pop
                     next_arg = _args[i + 1];
                 }
-                
+
                 //  If the argument is marked as required, we're expecting data 
                 //  after it, otherwise check if it's using choices to check
                 //  those instead
-                if (this_option._isRequired){
+                if (this_option._isRequired) {
 
                     //  There is an error if:
                     //  - The next arg starts with a hyphon (means it was a 
@@ -1211,24 +1196,24 @@ public:
                     //  - The next arg is an empty string (means this option's 
                     //      argument was the last in the array)
 
-                    if (next_arg.rfind('-', 0) == 0 || 
-                            (this_option.IsUsingChoices() && 
-                            !this_option.ValueIsValidChoice(next_arg))){
+                    if (next_arg.rfind('-', 0) == 0 ||
+                            (this_option.IsUsingChoices() &&
+                                !this_option.ValueIsValidChoice(next_arg))) {
                         ossBadArgDataErr << "\tInvalid data: \"" << next_arg
-                                << "\", followed the REQUIRED argument tag: \""
-                                << arg << "\"." << std::endl;
-                    } else if (next_arg == ""){
+                            << "\", followed the REQUIRED argument tag: \""
+                            << arg << "\"." << std::endl;
+                    } else if (next_arg == "") {
                         ossMissingDatErr << "\tData missing for argument: \""
-                                << arg << "\"." << std::endl;
+                            << arg << "\"." << std::endl;
                     }
-                } else if (this_option.IsUsingChoices()){
+                } else if (this_option.IsUsingChoices()) {
                     //  If the next argument does not begin with a hyphon...
-                    if (next_arg.rfind('-', 0) != 0){
+                    if (next_arg.rfind('-', 0) != 0) {
                         //  Then it is not a parser option, meaning data is
                         //  going to follow this parser option choice. Make
                         //  sure the data is a valid choice for this option.
-                        if (!this_option.ValueIsValidChoice(next_arg)){
-                            ossBadArgDataErr << "\tInvalid data: \"" << next_arg 
+                        if (!this_option.ValueIsValidChoice(next_arg)) {
+                            ossBadArgDataErr << "\tInvalid data: \"" << next_arg
                                 << "\", followed the argument tag: \"" << arg
                                 << "\"." << std::endl;
                         }
@@ -1236,13 +1221,13 @@ public:
                 }
 
             }
-            catch (std::invalid_argument &err) {
+            catch (std::invalid_argument& err) {
                 //  If retrieving the parser option by tag failed, it could be
                 //  because it was argument data for the previous tag...
 
                 //  If i == 1 then it's definitely an error
                 bool invArg = false;
-                if (i == 1){
+                if (i == 1) {
                     invArg = true;
                 } else {
                     //  Otherwise get the argument previous to this one
@@ -1253,18 +1238,18 @@ public:
                         ParserOption prev_option = GetOptionByTag(prev_arg);
                         //  If it was a valid parser option, check if it was not
                         //  expecting data after it
-                        if (prev_option.GetValueName() == ""){
+                        if (prev_option.GetValueName() == "") {
                             invArg = true;
                         }
                     }
-                    catch (std::invalid_argument &err){    
+                    catch (std::invalid_argument& err) {
                         invArg = true;
                     }
                 }
 
-                if (invArg){
+                if (invArg) {
                     ossInvalidArgErr << "\tArgument was not added to parser as an "
-                            << "option: \"" << arg << "\"." << std::endl;
+                        << "option: \"" << arg << "\"." << std::endl;
                 }
             }
         }
