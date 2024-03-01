@@ -1,5 +1,6 @@
 //
 // Created by Dylan Andrew McAdam (DrengrCoder) on 21/08/23.
+//  v1.0.1 TODO: UPDATE THIS
 //
 
 #ifndef __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_PROXY_HTTP_REQUEST__
@@ -597,7 +598,7 @@ namespace HTTP {
         std::string authority = std::string(i, end);
 
         // RFC 3986, 3.5. Fragment
-        //      Typically used for a speific section of a web page
+        //      Typically used for a specific section of a web page
         const auto fragmentPosition = authority.find('#');
         if (fragmentPosition != std::string::npos) {
             result.fragment = authority.substr(fragmentPosition + 1);

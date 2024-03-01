@@ -1,5 +1,6 @@
 //
 // Created by Dylan Andrew McAdam (DrengrCoder) on 28/11/22.
+//  v1.0.1 TODO: UPDATE THIS
 //
 
 #ifndef __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_LOG_H__
@@ -342,7 +343,7 @@ public:
 
     /**
      * True if you want to log the system date and time, false
-     * otherwise. (System date and time shouold always be
+     * otherwise. (System date and time should always be
      * UTC, but this will print the current system clock). By
      * default, True and will log the system date and time with
      * every log line.

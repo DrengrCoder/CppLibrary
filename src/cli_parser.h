@@ -1,5 +1,6 @@
 //
 // Created by Dylan Andrew McAdam (DrengrCoder) on 23/05/23.
+//  v1.0.1 TODO: UPDATE THIS
 //
 
 #ifndef __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_CLI_PARSER_H__
@@ -31,7 +32,7 @@
  *
  * Leading and trailing white space is removed from all TAG and
  * CHOICE strings, and any remaining white space is replaced
- * with hyphons. At least one TAG must be added to each option,
+ * with hyphens. At least one TAG must be added to each option,
  * and the resulting Parser Option object should be added to a
  * Parser Object for parsing incoming command line args.
  *
@@ -247,7 +248,7 @@ public:
                 //  Then recreate string without leading and trailing whitespace
                 choice = choice.substr(firstNotOf, lastNotOf - firstNotOf);
 
-                //  Replace all remaining spaces with a hyphon character
+                //  Replace all remaining spaces with a hyphen character
                 std::replace(choice.begin(), choice.end(), ' ', '-');
 
                 //  Make sure this is not an existing duplicate
@@ -279,7 +280,7 @@ public:
                 //  Then recreate string without leading and trailing whitespace
                 tag = tag.substr(firstNotOf, lastNotOf - firstNotOf);
 
-                //  Replace all remaining spaces with a hyphon character
+                //  Replace all remaining spaces with a hyphen character
                 std::replace(tag.begin(), tag.end(), ' ', '-');
 
                 //  Make sure they're not duplicates
@@ -321,7 +322,7 @@ public:
         lastNotOf = valueName.find_last_not_of(' ') + 1;
         valueName = firstNotOf < 0 ? "" :
             valueName.substr(firstNotOf, lastNotOf - firstNotOf);
-//  And replace remaining white space with hyphons
+//  And replace remaining white space with hyphens
         std::replace(valueName.begin(), valueName.end(), ' ', '-');
         _valueName = valueName;
 
@@ -330,7 +331,7 @@ public:
         lastNotOf = defaultValue.find_last_not_of(' ') + 1;
         defaultValue = firstNotOf < 0 ? "" :
             defaultValue.substr(firstNotOf, lastNotOf - firstNotOf);
-//  And replace remaining white space with hyphons
+//  And replace remaining white space with hyphens
         std::replace(defaultValue.begin(), defaultValue.end(), ' ', '-');
         _defaultValue = defaultValue;
     }
@@ -370,7 +371,7 @@ public:
     }
 
     /**
-     * onstruct a new Parser Option object. This ctor marks the option as NOT mandatory.
+     * Construct a new Parser Option object. This ctor marks the option as NOT mandatory.
      *
      * Define VALUENAME if this arg is expecting data after it.
      *
@@ -451,7 +452,7 @@ public:
                 //  Then recreate string without leading and trailing whitespace
                 tag = tag.substr(firstNotOf, lastNotOf - firstNotOf);
 
-                //  Replace all remaining spaces with a hyphon character
+                //  Replace all remaining spaces with a hyphen character
                 std::replace(tag.begin(), tag.end(), ' ', '-');
 
                 //  Make sure they're not duplicates
@@ -489,7 +490,7 @@ public:
         lastNotOf = valueName.find_last_not_of(' ') + 1;
         valueName = firstNotOf < 0 ? "" :
             valueName.substr(firstNotOf, lastNotOf - firstNotOf);
-//  And replace remaining white space with hyphons
+//  And replace remaining white space with hyphens
         std::replace(valueName.begin(), valueName.end(), ' ', '-');
         _valueName = valueName;
 
@@ -498,7 +499,7 @@ public:
         lastNotOf = defaultValue.find_last_not_of(' ') + 1;
         defaultValue = firstNotOf < 0 ? "" :
             defaultValue.substr(firstNotOf, lastNotOf - firstNotOf);
-//  And replace remaining white space with hyphons
+//  And replace remaining white space with hyphens
         std::replace(defaultValue.begin(), defaultValue.end(), ' ', '-');
         _defaultValue = defaultValue;
     }
@@ -655,7 +656,7 @@ private:
             }
 
             //  Add the value name if there is one
-            if (option.GetValueName() != "") {
+            if (!option.GetValueName().empty()) {
                 oss << " <" << option.GetValueName() << ">";
             }
 
@@ -698,6 +699,17 @@ private:
     void PrintHelpInfo() {
         //  The maximum width of the screen for a new line should be entered
         const int maxLineWidth = 80;
+        //  Flag for whether there are other single-character tags for other
+        //  parser options. Assists in formatting spaces appropriately
+        bool hasSingleLetterTags = false;
+        for (ParserOption option : _options){
+            for (std::string tag : option.GetTags()){
+                if (CountOccurrences(tag, "-") == 1){
+                    hasSingleLetterTags = true;
+                    break;
+                }
+            }
+        }
 
         //  Hold a local reference to the maximum number of tabs required to
         //  exceed the end of the string of combined tags for every option
@@ -710,10 +722,29 @@ private:
         std::stringstream ossRequiredOptions;
         for (ParserOption option : _options) {
             if (option._isRequired) {
-                ossRequiredOptions << " " << option.GetTags()[0]
-                    << " <" << option.GetValueName() << ">";
+                ossRequiredOptions << option.GetTags()[0]
+                    << " <" << option.GetValueName() << "> ";
             }
         }
+
+        std::stringstream ossDataOptions;
+        std::vector<ParserOption>::iterator opt_it;
+        for (opt_it = _options.begin(); opt_it != _options.end();){
+            ParserOption opt = (*opt_it);
+            if (!opt.GetValueName().empty()){
+                ossDataOptions << opt.GetTags()[0] << " <" << opt.GetValueName() << ">";
+                if (++opt_it != _options.end()) {
+                    ossDataOptions << " ";
+                }
+            } else {
+                opt_it++;
+            }
+        }
+        // for (ParserOption option : _options) {
+        //     if (!option.GetValueName().empty()) {
+        //         ossDataOptions << option.GetTags()[0] << " <" << option.GetValueName() << "> ";
+        //     }
+        // }
 
         //  Define the string for the list of possible options and arguments
         std::stringstream ossOptionInformation;
@@ -727,6 +758,19 @@ private:
 #pragma GCC diagnostic ignored "-Wsign-compare"
             for (int i = 0; i < option.GetTags().size(); i++) {
 #pragma GCC diagnostic pop
+                if (hasSingleLetterTags && i == 0){
+                    bool thisOptionHasSingleLetters = false;
+                    for (std::string tag : option.GetTags()){
+                        if (CountOccurrences(tag, "-") == 1){
+                            thisOptionHasSingleLetters = true;
+                            break;
+                        }
+                    }
+                    if (!thisOptionHasSingleLetters){
+                        ossOptionEntry << "    ";
+                    }
+                }
+
                 //  If this is not the first tag, add a comma
                 if (i > 0) {
                     ossOptionEntry << ", ";
@@ -736,7 +780,7 @@ private:
             }
 
             //  If there is a value name, as this to the end of the final tag
-            if (option.GetValueName() != "") {
+            if (!option.GetValueName().empty()) {
                 ossOptionEntry << " <" << option.GetValueName() << ">";
             }
 
@@ -753,7 +797,7 @@ private:
             //  Add the description
             ossOptionEntry << option._description;
             //  If this option has a default value, append it to the description
-            if (option.GetDefaultValue() != "") {
+            if (!option.GetDefaultValue().empty()) {
                 ossOptionEntry << " [Default: "
                     << option.GetDefaultValue() << "].";
             }
@@ -813,7 +857,7 @@ private:
         std::stringstream helpOutput;
         helpOutput << this->_name << " Help Information...\n\n";
         helpOutput << "Usage: " << this->_args[0]
-            << " [options]" << ossRequiredOptions.str() << '\n';
+            << " [options] [" << ossDataOptions.str() << "] " << ossRequiredOptions.str() << '\n';
         helpOutput << "Description: " << this->_description << "\n\n";
         helpOutput << "Options:\n" << ossOptionInformation.str() << std::endl;
 
@@ -851,7 +895,7 @@ public:
     std::string _name = "Default Name.";
     /**
      * The description of the program. This can be adjusted after
-     * calling the contructor to set it, and should be a general brief
+     * calling the constructor to set it, and should be a general brief
      * description of what the program is doing and how.
      */
     std::string _description = "Default Description.";
@@ -1076,7 +1120,7 @@ public:
                         //  default value or throw invalid argument exception
 #pragma GCC diagnostic ignored "-Wterminate"
                         std::string defaultValue = option.GetDefaultValue();
-                        return defaultValue != "" ? defaultValue :
+                        return !defaultValue.empty() ? defaultValue :
                             throw std::invalid_argument("");
 #pragma GCC diagnostic pop
                     }
@@ -1089,8 +1133,8 @@ public:
         //  throw invalid argument exception
 #pragma GCC diagnostic ignored "-Wterminate"
         std::string defaultValue = option.GetDefaultValue();
-        return defaultValue != "" ? defaultValue :
-            throw std::invalid_argument("No default value found for this option.");
+        return !defaultValue.empty() ? defaultValue :
+            throw std::invalid_argument("No default value found for this option: " + option.GetTags()[0]);
 #pragma GCC diagnostic pop
     }
 
@@ -1189,7 +1233,7 @@ public:
                 if (this_option._isRequired) {
 
                     //  There is an error if:
-                    //  - The next arg starts with a hyphon (means it was a 
+                    //  - The next arg starts with a hyphen (means it was a 
                     //      parser option tag)
                     //  - This option is using choices and the next arg is an 
                     //      invalid choice
@@ -1202,12 +1246,12 @@ public:
                         ossBadArgDataErr << "\tInvalid data: \"" << next_arg
                             << "\", followed the REQUIRED argument tag: \""
                             << arg << "\"." << std::endl;
-                    } else if (next_arg == "") {
+                    } else if (next_arg.empty()) {
                         ossMissingDatErr << "\tData missing for argument: \""
                             << arg << "\"." << std::endl;
                     }
                 } else if (this_option.IsUsingChoices()) {
-                    //  If the next argument does not begin with a hyphon...
+                    //  If the next argument does not begin with a hyphen...
                     if (next_arg.rfind('-', 0) != 0) {
                         //  Then it is not a parser option, meaning data is
                         //  going to follow this parser option choice. Make
@@ -1238,7 +1282,7 @@ public:
                         ParserOption prev_option = GetOptionByTag(prev_arg);
                         //  If it was a valid parser option, check if it was not
                         //  expecting data after it
-                        if (prev_option.GetValueName() == "") {
+                        if (prev_option.GetValueName().empty()) {
                             invArg = true;
                         }
                     }
@@ -1254,8 +1298,8 @@ public:
             }
         }
 
-        if (ossInvalidArgErr.str() != "" || ossMissingArgErr.str() != "" ||
-            ossBadArgDataErr.str() != "" || ossMissingDatErr.str() != "") {
+        if (!ossInvalidArgErr.str().empty() || !ossMissingArgErr.str().empty() ||
+            !ossBadArgDataErr.str().empty() || !ossMissingDatErr.str().empty()) {
             std::stringstream output;
             output << "\n########################################\n";
             output << "Error processing command line arguments:\n";
