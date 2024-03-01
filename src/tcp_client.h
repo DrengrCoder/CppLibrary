@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <vector>
+#include <sys/ioctl.h>
 
 #include "log.h"
 
@@ -262,6 +263,17 @@ public:
         }
 
         return bytes;
+    }
+
+    /**
+     * Check the number of bytes available to read on the socket. If
+     * 'Read' is called without any bytes available, it will block until
+     * there is.
+     */
+    int BytesAvailable() {
+        int bytesAvailable;
+        ioctl(_socketFd, FIONREAD, &bytesAvailable);
+        return bytesAvailable;
     }
 
     /**
