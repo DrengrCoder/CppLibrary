@@ -702,6 +702,14 @@ private:
         //  Flag for whether there are other single-character tags for other
         //  parser options. Assists in formatting spaces appropriately
         bool hasSingleLetterTags = false;
+        for (ParserOption option : _options){
+            for (std::string tag : option.GetTags()){
+                if (CountOccurrences(tag, "-") == 1){
+                    hasSingleLetterTags = true;
+                    break;
+                }
+            }
+        }
 
         //  Hold a local reference to the maximum number of tabs required to
         //  exceed the end of the string of combined tags for every option
@@ -750,6 +758,19 @@ private:
 #pragma GCC diagnostic ignored "-Wsign-compare"
             for (int i = 0; i < option.GetTags().size(); i++) {
 #pragma GCC diagnostic pop
+                if (hasSingleLetterTags && i == 0){
+                    bool thisOptionHasSingleLetters = false;
+                    for (std::string tag : option.GetTags()){
+                        if (CountOccurrences(tag, "-") == 1){
+                            thisOptionHasSingleLetters = true;
+                            break;
+                        }
+                    }
+                    if (!thisOptionHasSingleLetters){
+                        ossOptionEntry << "    ";
+                    }
+                }
+
                 //  If this is not the first tag, add a comma
                 if (i > 0) {
                     ossOptionEntry << ", ";
@@ -1113,7 +1134,7 @@ public:
 #pragma GCC diagnostic ignored "-Wterminate"
         std::string defaultValue = option.GetDefaultValue();
         return !defaultValue.empty() ? defaultValue :
-            throw std::invalid_argument("No default value found for this option.");
+            throw std::invalid_argument("No default value found for this option: " + option.GetTags()[0]);
 #pragma GCC diagnostic pop
     }
 
