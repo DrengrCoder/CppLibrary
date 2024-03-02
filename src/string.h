@@ -549,6 +549,26 @@ public:
         return s;
     }
 
+    /**
+     * Return this string as an integer.
+     */
+    int to_int() { return std::stoi(_str); }
+
+    /**
+     * Return this string as a double.
+     */
+    double to_double() { return std::stod(_str); }
+
+    /**
+     * Return this string as a float.
+     */
+    float to_float() { return std::stof(_str); }
+
+    /**
+     * Return this string as a long.
+     */
+    long to_long() { return std::stol(_str); }
+
 };
 
 
