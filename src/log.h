@@ -45,7 +45,7 @@ extern class LogSettings LOG_SETTINGS;
 /**
  * clog << "LT_LL_INFO type";
  */
-#define clog Log(LogType::LT_LL_INFO, __FILE__, __LINE__)
+#define llog Log(LogType::LT_LL_INFO, __FILE__, __LINE__)
 /**
  * ilog << "LT_INFO type";
  */
