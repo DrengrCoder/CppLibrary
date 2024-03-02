@@ -315,7 +315,7 @@ namespace HTTP {
      * @throw   runtime_error if the HTTP version string is invalid.
      */
     inline Version ParseVersion(String input) {
-        clog << "Parsing version...";
+        llog << "Parsing version...";
 
         if (input[0] != 'H')
             throw std::runtime_error("Invalid HTTP version: index: 0, char: H");
@@ -349,7 +349,7 @@ namespace HTTP {
      * @throw   runtime_error if the status code value is invalid.
      */
     inline uint16_t ParseStatusCode(String input) {
-        clog << "Parsing status code...";
+        llog << "Parsing status code...";
 
         if (input.length() != 3) {
             std::stringstream msg;
@@ -399,7 +399,7 @@ namespace HTTP {
      * See 'ParseVersion', 'ParseStatusCode' and 'ParseReason' for details.
      */
     inline Status ParseStatusLine(String headerLine) {
-        clog << "Parsing status line...";
+        llog << "Parsing status line...";
 
         std::vector<String> headerParts = headerLine.split(' ');
 
@@ -413,7 +413,7 @@ namespace HTTP {
             elog << msg.str();
             return { ._code = Status::Code::InternalProgramError, ._reason = msg.str() };
         }
-        clog << "Version = " << versionResult._major << "." << versionResult._minor;
+        llog << "Version = " << versionResult._major << "." << versionResult._minor;
 
         Status::Code codeResult;
         try {
@@ -425,7 +425,7 @@ namespace HTTP {
             elog << msg.str();
             return { ._code = Status::Code::InternalProgramError, ._reason = msg.str() };
         }
-        clog << "Code = " << static_cast<std::uint16_t>(codeResult);
+        llog << "Code = " << static_cast<std::uint16_t>(codeResult);
 
         std::string reasonPhrase;
         try {
@@ -437,7 +437,7 @@ namespace HTTP {
             elog << msg.str();
             return { ._code = Status::Code::InternalProgramError, ._reason = msg.str() };
         }
-        clog << "Reason = " << reasonPhrase;
+        llog << "Reason = " << reasonPhrase;
 
         return { ._version = versionResult, ._code = codeResult, ._reason = reasonPhrase };
     }
@@ -493,7 +493,7 @@ namespace HTTP {
      * See 'ParseToken' and 'ParseContent' for details.
      */
     inline HeaderField ParseHeaderLine(String headerLine) {
-        clog << "Parsing header line...";
+        llog << "Parsing header line...";
 
         std::vector<String> headerParts = headerLine.split(':');
 
@@ -507,7 +507,7 @@ namespace HTTP {
         catch (std::runtime_error& e) {
             throw e;
         }
-        clog << "Token: " << token.c_str();
+        llog << "Token: " << token.c_str();
 
         String content = headerParts[1].trim();
         try {
@@ -516,7 +516,7 @@ namespace HTTP {
         catch (std::runtime_error& e) {
             throw e;
         }
-        clog << "Content: " << content.c_str();
+        llog << "Content: " << content.c_str();
 
         return { ._name = token.to_lower(), ._value = content };
     }
@@ -539,7 +539,7 @@ namespace HTTP {
      */
     template <class Iterator>
     Uri ParseUri(const Iterator begin, const Iterator end) {
-        clog << "Parsing the input URI string...";
+        llog << "Parsing the input URI string...";
 
         Uri result;
 
@@ -652,14 +652,14 @@ namespace HTTP {
             result.host.resize(portPosition);
         }
 
-        clog << "result.scheme: " << result.scheme;
-        clog << "result.user: " << result.user;
-        clog << "result.password: " << result.password;
-        clog << "result.host: " << result.host;
-        clog << "result.port: " << result.port;
-        clog << "result.path: " << result.path;
-        clog << "result.query: " << result.query;
-        clog << "result.fragment: " << result.fragment;
+        llog << "result.scheme: " << result.scheme;
+        llog << "result.user: " << result.user;
+        llog << "result.password: " << result.password;
+        llog << "result.host: " << result.host;
+        llog << "result.port: " << result.port;
+        llog << "result.path: " << result.path;
+        llog << "result.query: " << result.query;
+        llog << "result.fragment: " << result.fragment;
 
         return result;
     }
@@ -831,7 +831,7 @@ namespace HTTP {
             _ipAddress(ip),
             _uri(ParseUri(uriString.begin(), uriString.end())),
             _ipv(ipv) {
-            clog << "A HTTP Request object has been initiailised.";
+            llog << "A HTTP Request object has been initiailised.";
         }
 
 /**
@@ -841,7 +841,7 @@ namespace HTTP {
  */
         explicit Request(const TcpClient::InternetProtocol ipv = TcpClient::InternetProtocol::v4) :
             _ipv(ipv) {
-            clog << "A HTTP Request object has been initiailised.";
+            llog << "A HTTP Request object has been initiailised.";
         }
 
 /**
@@ -930,10 +930,10 @@ namespace HTTP {
                         const std::vector<uint8_t>& body,
                         const HeaderFields& headerFields = {},
                         const int timeout_milliseconds = 5000) noexcept {
-            clog << "Initiating URI request...";
+            llog << "Initiating URI request...";
             const std::string requestData = EncodeHtml(uri, method.ToStdString(), body, headerFields);
 
-            clog << "Constructed request html: \"" << requestData
+            llog << "Constructed request html: \"" << requestData
                 << "\", beginning TCP Client initialisation and comms...";
             TcpClient* client;
             try {
@@ -996,7 +996,7 @@ namespace HTTP {
                 }
             }
 
-            clog << "Client connected on " << ip << ":" << (uri.port.empty() ? "80" : uri.port);
+            llog << "Client connected on " << ip << ":" << (uri.port.empty() ? "80" : uri.port);
 
             const int bytesSent = client->Send(requestData.c_str());
             if (bytesSent < 1) {
@@ -1037,7 +1037,7 @@ namespace HTTP {
             //  A flag to remove crlf after the chunk
             bool removeCrlfAfterChunk = false;
 
-            clog << "Parsing response...";
+            llog << "Parsing response...";
 
             //  Need to continuously read bytes on the socket until no more bytes are available
             while (true) {
@@ -1064,13 +1064,13 @@ namespace HTTP {
                     return response;
                 }
 
-                clog << "Read bytes: " << bytesRead << ", socket buff:\n\n" << buff << "\n";
+                llog << "Read bytes: " << bytesRead << ", socket buff:\n\n" << buff << "\n";
 
                 //  Raw output
                 responseData.insert(responseData.end(), buff, buff + bytesRead);
 
                 if (!headerParsed) {
-                    clog << "Parsing header...";
+                    llog << "Parsing header...";
 
                     // RFC 7230, 3. Message Format
                     // Two empty lines indicates the end of the header section (RFC 7230, 2.1. Client/Server Messaging)
@@ -1081,7 +1081,7 @@ namespace HTTP {
                     //  two consecutive CRLFs not found
                     if (!fullOutput.contains(headerEndString)) break;
 
-                    clog << "End of header found, parsing header fields...";
+                    llog << "End of header found, parsing header fields...";
 
                     std::vector<String> headerLines = fullOutput.split(crlf);
                     if (headerLines.size() < 2) {
@@ -1107,7 +1107,7 @@ namespace HTTP {
                                     ._reason = msg.str() } };
                     }
 
-                    clog << "\nResponse:\n\tStatus:\n\t\tCode: "
+                    llog << "\nResponse:\n\tStatus:\n\t\tCode: "
                         << static_cast<std::uint16_t>(response._status._code)
                         << "\n\t\tVersion: "
                         << response._status._version._major
@@ -1129,7 +1129,7 @@ namespace HTTP {
                                         ._reason = e.what() } };
                         }
 
-                        clog << "\nHeader:\n\tName:"
+                        llog << "\nHeader:\n\tName:"
                             << headerField._name
                             << "\n\tValue:"
                             << headerField._value;

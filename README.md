@@ -259,7 +259,7 @@ LOG_SETTINGS.ls_print_to_file = false;.
 - Initialise the logger after settings params on `LOG_SETTINGS`: `LogInit(argv);`.
 - Start calling the logger macro's:
 ```
-clog << "Lowest level. For the least insignificant logging information but will be useful to know in extreme circumstances, such as when objects are created and destroyed, and when certain functions are triggered.";
+llog << "Lowest level. For the least insignificant logging information but will be useful to know in extreme circumstances, such as when objects are created and destroyed, and when certain functions are triggered.";
 ilog << "Information level. When data is being set on an object and will be useful for debugging.";
 dlog << "Debug level. When something useful is worth knowing and logging, but is nothing to worry about. This should be the minimum level a program is set to by default when building a binary for production.";
 wlog << "Warning level. When something happened that probably should not have happened, but is not out of the ordinary and can be handled without throwing errors";
