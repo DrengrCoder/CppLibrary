@@ -740,11 +740,6 @@ private:
                 opt_it++;
             }
         }
-        // for (ParserOption option : _options) {
-        //     if (!option.GetValueName().empty()) {
-        //         ossDataOptions << option.GetTags()[0] << " <" << option.GetValueName() << "> ";
-        //     }
-        // }
 
         //  Define the string for the list of possible options and arguments
         std::stringstream ossOptionInformation;
