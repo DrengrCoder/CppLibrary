@@ -399,4 +399,8 @@ TEST_CASE("String to int, double, float and long conversions", "[single-file]")
     REQUIRE(d == 2.3);
     REQUIRE(f == 4.5);
     REQUIRE(l == 9223372036854775806);
+
+    _int_string = "1.234";
+    i = _int_string.to_int();
+    REQUIRE(i == 1);
 }
