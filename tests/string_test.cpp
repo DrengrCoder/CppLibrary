@@ -383,3 +383,20 @@ TEST_CASE("String to lower and to upper test", "[single-file]")
     REQUIRE(strcmp(_string.c_str(), "ThIs is A string WitH UPPER AnD lower CaSe ChArS") == 0);
 }
 
+TEST_CASE("String to int, double, float and long conversions", "[single-file]")
+{
+    String _int_string = "1";
+    String _double_string = "2.3";
+    String _float_string = "4.5";
+    String _long_string = "9223372036854775806";
+
+    int i = _int_string.to_int();
+    double d = _double_string.to_double();
+    float f = _float_string.to_float();
+    long l = _long_string.to_long();
+
+    REQUIRE(i == 1);
+    REQUIRE(d == 2.3);
+    REQUIRE(f == 4.5);
+    REQUIRE(l == 9223372036854775806);
+}
