@@ -1,4 +1,4 @@
-# Custom C++ class file library v1.0.1 TODO: UPDATE THIS
+# Custom C++ class file library v1.1.0
 
 ## Table of contents
 
