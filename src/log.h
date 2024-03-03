@@ -1,6 +1,6 @@
 //
 // Created by Dylan Andrew McAdam (DrengrCoder) on 28/11/22.
-//  v1.0.1 TODO: UPDATE THIS
+//  v1.1.0
 //
 
 #ifndef __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_LOG_H__
