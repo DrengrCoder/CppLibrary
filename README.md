@@ -1,8 +1,9 @@
-# Custom C++ class file library v1.0.1
+# Custom C++ class file library v1.1.0
 
 ## Table of contents
 
 - [Brief](#brief)
+- [Change Log](#change-log)
 - [Project Contents and Overview](#project-contents-and-overview)
     - [Custom code contents](#custom-code-contents)
     - [Custom binary programs](#custom-binary-programs)
@@ -53,6 +54,25 @@
 Custom C++ header files to simplify a number of common functions and operations. To be installed in the includes folder.
 
 This project also includes a number of third-party classes and binary programs that are extremely useful for most projects and developers. Their respective license files are included under the Licenses folder, appended with their project name, and the git repository they can be accessed from (at time of writing on 31/08/2023) at the top of the file.
+
+## Change Log
+
+v1.0.0:
+- Initial release of all base implementations. Includes the CLI Parser, C++ Utilities, Log, Proxy HTTP Request, String, TCP Client and TCP Server classes.
+
+v1.0.1:
+- Updated mistake with license files.
+- Capturing errors and defined some error codes.
+- Fixed typo's in docs and readme's.
+
+v1.1.0:
+- Improvements to TCP Client:
+    - Two 'send' function overloads, one to accept a simple string input and one to accept void pointer and define more complex parameters.
+    - Added function to check for available bytes.
+    - Removed throw-clause in constructor in favour of simply setting error messages and error codes - defined in the readme how to check for is-initialised and is-connected states.
+- String class now has conversion functions for int, double, float and long, including unit tests.
+- Fixed problem with log 'clog' macro conflicting with existing STL functions, including updating all usages for these.
+- Updated documentation.
 
 ## Project Contents and Overview
 
@@ -259,7 +279,7 @@ LOG_SETTINGS.ls_print_to_file = false;.
 - Initialise the logger after settings params on `LOG_SETTINGS`: `LogInit(argv);`.
 - Start calling the logger macro's:
 ```
-clog << "Lowest level. For the least insignificant logging information but will be useful to know in extreme circumstances, such as when objects are created and destroyed, and when certain functions are triggered.";
+llog << "Lowest level. For the least insignificant logging information but will be useful to know in extreme circumstances, such as when objects are created and destroyed, and when certain functions are triggered.";
 ilog << "Information level. When data is being set on an object and will be useful for debugging.";
 dlog << "Debug level. When something useful is worth knowing and logging, but is nothing to worry about. This should be the minimum level a program is set to by default when building a binary for production.";
 wlog << "Warning level. When something happened that probably should not have happened, but is not out of the ordinary and can be handled without throwing errors";
@@ -477,9 +497,20 @@ TcpClient *client = new TcpClient(TcpClient::InternetProtocol::v6);
 ```
 client->Connect("127.0.0.1", 1234);
 ```
-- Send and Read bytes on the socket:
+- Check if the socket is initialised and connected by checking for a socket and server FD less than 1:
 ```
+int sockFd = client->GetSocketFd();
+if (sockFd > 0)
+    std::cout << "Socket initialised";
+int servFd = client->GetServerFd();
+if (servFd > 0)
+    std::cout << "Socket connected";
+```
+- Send and Read bytes on the socket (There are two send functions, with the basic overload only expecting a string that will automatically calculate the length of the data to be sent, the length of characters for the string. This basic overload will not work if the data you are sending is not simply a C-String, as C-Strings are null-terminated and the length calculation will assume the end of the string at the null-character):
+```
+char buff[1024];
 int n_sent = client->Send("Sending this string");
+int n_sent = client->Send(buff, 1024);
 ```
 ```
 char buff[1024];

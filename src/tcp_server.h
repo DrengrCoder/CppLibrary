@@ -1,5 +1,6 @@
 //
 // Created by Dylan Andrew McAdam (DrengrCoder) on 05/12/22.
+//  v1.1.0
 //
 
 #ifndef __DAM_DRENGR_CODER_SINGLE_INCLUDE_CUSTOM_TCP_SERVER_H__
@@ -17,22 +18,22 @@
  * setting up network sockets for a TCP data stream in C++. A std::runtime_error
  * is thrown in places where an unrecoverable error occurs, along with a log
  * message printed. 'ERR_NO' and 'ERR_MSG' are set.
- * 
+ *
  * This class specifically and only listens for connection requests on a given port
  * number, if you need to write data back to that socket, the 'NextConnection'
  * function will return an integer for the socket file descriptor value, and this
  * should be used to initialise a custom TCP Client class object or to send bytes
  * via your own commands.
- * 
+ *
  * __errno and __errmsg are local private variables that are set upon error, and
  * can be accessed using ERR_NO() and ERR_MSG() functions.
- * 
+ *
  * NOTE:
  * There is a unique error code numbering system implemented for this class.
  * The error code system is a combination of custom error codes (between 100
  * and 9999) and partial custom error codes combined with the ‘errno’ macro
  * to produce values 10000 and over.
- * 
+ *
  * Custom error codes between 100 and 9999 denote some sort of usage
  * error and have been documented in the readme. Error codes 10000 and
  * over follow the pattern YYXXX where YY is a 2 digit custom code I have
@@ -40,11 +41,11 @@
  * Examples:
  * - '12047' is the custom error code '12' and the errno code '047' or just '47'.
  * - '10111' is the custom error code '10' and the errno code '111'.
- * 
+ *
  * The custom codes are documented in this readme. 'errno' code meaning
  * will change depending on what caused the errno code to be set.
  */
-class TcpServer{
+class TcpServer {
 public:
     /**
      * The internet protocol version.
@@ -57,23 +58,23 @@ public:
      *          'socket(AF_INET, SOCK_STREAM, 0)' and 'setsockopt(_serverFd,
      *          SOL_SOCKET, SO_REUSEADDR, &_opt, sizeof(_opt))'. Address Options:
      *          AF_INET family, INADDR_ANY s_addr.
-     * 
+     *
      * @throw runtime_error if the socket failed to initialise and we did not
      *                      receive a file descriptor or if the socket options
      *                      failed to set.
      */
-    TcpServer(InternetProtocol ipv = InternetProtocol::v4){
+    TcpServer(InternetProtocol ipv = InternetProtocol::v4) {
         __errmsg = "";
         __errno = 0;
 
         if (_serverFd != -1)
             Shutdown();
-        
-        clog << "Initialise new TCP server object...";
+
+        llog << "Initialise new TCP server object...";
 
         _ipv = ipv;
         _serverFd = socket((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
-        if (_serverFd < 0){
+        if (_serverFd < 0) {
             __errno = 10000 + errno;
 
             std::stringstream msg;
@@ -88,11 +89,11 @@ public:
 
         const int sockOptResult =
             setsockopt(_serverFd, SOL_SOCKET, SO_REUSEADDR, &_opt, sizeof(_opt));
-        if (sockOptResult < 0){
+        if (sockOptResult < 0) {
             __errno = 14000 + errno;
 
             std::stringstream msg;
-            msg << "Socket options failed: sockOptResult: " 
+            msg << "Socket options failed: sockOptResult: "
                 << sockOptResult << ". ERROR CODE: " << __errno << ".";
 
             flog << msg.str();
@@ -104,13 +105,13 @@ public:
         _address.sin_family = (_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6);
         _address.sin_addr.s_addr = INADDR_ANY;
 
-        clog << "TCP server object initialised.";
+        llog << "TCP server object initialised.";
     }
 
     /**
      * Destroy the Tcp Server object and perform necessary clean up.
      */
-    ~TcpServer(){
+    ~TcpServer() {
         dlog << "TCP Server destruction...";
         this->Shutdown();
     }
@@ -119,7 +120,7 @@ public:
      * Shuts down server socket file descriptor and resets the file
      * descriptor value.
      */
-    void Shutdown(){
+    void Shutdown() {
         dlog << "Shutting down TCP Server...";
         shutdown(_serverFd, SHUT_RDWR);
         _serverFd = -1;
@@ -128,23 +129,23 @@ public:
     /**
      * @brief   Start listening to the socket on a given port number. Sets
      *          __errmsg and __errno on error.
-     * 
+     *
      * @param portNumber    The port number for this TCP server to listen on.
      * @return true         if the socket successfully started listening to the
      *                      port,
      * @return false        otherwise.
      */
-    bool StartListening(const int portNumber){
+    bool StartListening(const int portNumber) {
         __errmsg = "";
         __errno = 0;
-        
-        clog << "Start listening on " << portNumber << "...";
+
+        llog << "Start listening on " << portNumber << "...";
 
         _address.sin_port = htons(portNumber);
 
         const int bindResult =
-            bind(_serverFd, (struct sockaddr*)&_address, _addressLength);
-        if (bindResult < 0){
+            bind(_serverFd, (struct sockaddr*) &_address, _addressLength);
+        if (bindResult < 0) {
             std::stringstream msg;
             msg << "Binding failed: bindResult: " << bindResult << ".";
 
@@ -155,7 +156,7 @@ public:
         }
 
         const int listenResult = listen(_serverFd, _maxQueueLength);
-        if (listenResult < 0){
+        if (listenResult < 0) {
             std::stringstream msg;
             msg << "Listen failed on port " << portNumber << ": listenResult: "
                 << listenResult << ".";
@@ -172,23 +173,23 @@ public:
     /**
      * Return the file descriptor value for the next
      * pending connection in the queue.
-     * 
+     *
      * Sets __errmsg and __errno on error.
      */
-    int NextConnection(){
+    int NextConnection() {
         __errmsg = "";
         __errno = 0;
-        
-        clog << "Accepting next connection in queue...";
+
+        llog << "Accepting next connection in queue...";
 
 #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
-        int newSocket = accept(_serverFd, (struct sockaddr*)&_address, 
-                                (socklen_t*)&_addressLength);
+        int newSocket = accept(_serverFd, (struct sockaddr*) &_address,
+                                (socklen_t*) &_addressLength);
 #pragma GCC diagnostic pop
 
-        if (newSocket < 0){
+        if (newSocket < 0) {
             std::stringstream msg;
-            msg << "Failed to accept new connection: _serverFd: " 
+            msg << "Failed to accept new connection: _serverFd: "
                 << _serverFd << ".";
 
             flog << msg.str();
@@ -205,24 +206,24 @@ public:
      * value should be set before 'StartListening' is called. Must be
      * less than 50, recommended it is at least 2.
      */
-    void SetMaximumQueueSize(int len){ _maxQueueLength = (len > 50 ? 50 : len); }
+    void SetMaximumQueueSize(int len) { _maxQueueLength = (len > 50 ? 50 : len); }
 
     /**
      * Get this server socket's file descriptor value.
      */
-    int GetSocketFd(){ return _serverFd; }
+    int GetSocketFd() { return _serverFd; }
 
     /**
      * Get the last error message set on this object.
      */
-    std::string ERR_MSG(){ return __errmsg; }
+    std::string ERR_MSG() { return __errmsg; }
 
     /**
      * Get the last error code set on this object.
      */
-    int ERR_NO(){ return __errno; }
+    int ERR_NO() { return __errno; }
 
-private:
+protected:
     /**
      * The file descriptor for this server-side socket.
      */
@@ -253,7 +254,7 @@ private:
      * The maximum queue length for this server socket listener.
      */
     int _maxQueueLength = 10;
-    
+
     /**
      * The last error message set.
      */
