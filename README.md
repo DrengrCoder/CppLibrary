@@ -3,6 +3,7 @@
 ## Table of contents
 
 - [Brief](#brief)
+- [Change Log](#change-log)
 - [Project Contents and Overview](#project-contents-and-overview)
     - [Custom code contents](#custom-code-contents)
     - [Custom binary programs](#custom-binary-programs)
@@ -53,6 +54,25 @@
 Custom C++ header files to simplify a number of common functions and operations. To be installed in the includes folder.
 
 This project also includes a number of third-party classes and binary programs that are extremely useful for most projects and developers. Their respective license files are included under the Licenses folder, appended with their project name, and the git repository they can be accessed from (at time of writing on 31/08/2023) at the top of the file.
+
+## Change Log
+
+v1.0.0:
+- Initial release of all base implementations. Includes the CLI Parser, C++ Utilities, Log, Proxy HTTP Request, String, TCP Client and TCP Server classes.
+
+v1.0.1:
+- Updated mistake with license files.
+- Capturing errors and defined some error codes.
+- Fixed typo's in docs and readme's.
+
+v1.1.0:
+- Improvements to TCP Client:
+    - Two 'send' function overloads, one to accept a simple string input and one to accept void pointer and define more complex parameters.
+    - Added function to check for available bytes.
+    - Removed throw-clause in constructor in favour of simply setting error messages and error codes - defined in the readme how to check for is-initialised and is-connected states.
+- String class now has conversion functions for int, double, float and long, including unit tests.
+- Fixed problem with log 'clog' macro conflicting with existing STL functions, including updating all usages for these.
+- Updated documentation.
 
 ## Project Contents and Overview
 
