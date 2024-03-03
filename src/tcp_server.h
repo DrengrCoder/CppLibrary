@@ -70,7 +70,7 @@ public:
         if (_serverFd != -1)
             Shutdown();
 
-        clog << "Initialise new TCP server object...";
+        llog << "Initialise new TCP server object...";
 
         _ipv = ipv;
         _serverFd = socket((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
@@ -105,7 +105,7 @@ public:
         _address.sin_family = (_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6);
         _address.sin_addr.s_addr = INADDR_ANY;
 
-        clog << "TCP server object initialised.";
+        llog << "TCP server object initialised.";
     }
 
     /**
@@ -139,7 +139,7 @@ public:
         __errmsg = "";
         __errno = 0;
 
-        clog << "Start listening on " << portNumber << "...";
+        llog << "Start listening on " << portNumber << "...";
 
         _address.sin_port = htons(portNumber);
 
@@ -180,7 +180,7 @@ public:
         __errmsg = "";
         __errno = 0;
 
-        clog << "Accepting next connection in queue...";
+        llog << "Accepting next connection in queue...";
 
 #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
         int newSocket = accept(_serverFd, (struct sockaddr*) &_address,

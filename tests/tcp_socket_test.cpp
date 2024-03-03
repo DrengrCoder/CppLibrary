@@ -19,7 +19,7 @@ TEST_CASE("Initialise Logger", "[single-file]")
     LOG_SETTINGS.ls_print_to_file = false;
     LOG_SETTINGS.ls_selected_level = LogType::LT_INFO;
     TestLogInit;
-    clog << "Logger initialised";
+    llog << "Logger initialised";
 }
 
 TEST_CASE("Initialising server object", "[single-file]")

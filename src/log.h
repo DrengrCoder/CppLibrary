@@ -43,9 +43,9 @@ extern class LogSettings LOG_SETTINGS;
  */
 #define LogShutdown LOG_SETTINGS.shutdown();
 /**
- * clog << "LT_LL_INFO type";
+ * llog << "LT_LL_INFO type";
  */
-#define clog Log(LogType::LT_LL_INFO, __FILE__, __LINE__)
+#define llog Log(LogType::LT_LL_INFO, __FILE__, __LINE__)
 /**
  * ilog << "LT_INFO type";
  */
@@ -550,7 +550,7 @@ private:
  * are printed.
  *
  * Macro's in numeric order:
- *      clog << "LT_LL_INFO type";
+ *      llog << "LT_LL_INFO type";
  *      ilog << "LT_INFO type";
  *      dlog << "LT_DEBUG type";
  *      wlog << "LT_WARN type";

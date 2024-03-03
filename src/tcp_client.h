@@ -66,7 +66,7 @@ public:
         if (_socketFd != -1 || _serverFd != -1)
             Close();
 
-        clog << "Initialise new TCP client object...";
+        llog << "Initialise new TCP client object...";
 
         _ipv = ipv;
         _socketFd = socket((_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6), SOCK_STREAM, 0);
@@ -84,7 +84,7 @@ public:
 
         _address.sin_family = (_ipv == InternetProtocol::v4 ? AF_INET : AF_INET6);
 
-        clog << "TCP socket object initialised.";
+        llog << "TCP socket object initialised.";
     }
 
     /**
@@ -105,12 +105,12 @@ public:
      * @param sockFd    The socket file descriptor value.
      */
     TcpClient(const int sockFd) {
-        clog << "Storing ref to pre-existing socket file descriptor: "
+        llog << "Storing ref to pre-existing socket file descriptor: "
             << sockFd << "...";
 
         _socketFd = sockFd;
 
-        clog << "TCP client object initialised with file descriptor: "
+        llog << "TCP client object initialised with file descriptor: "
             << _socketFd << ".";
     }
 
@@ -140,7 +140,7 @@ public:
         __errno = 0;
         __errmsg = "";
 
-        clog << "Connecting to " << ip << ":" << portNumber << "...";
+        llog << "Connecting to " << ip << ":" << portNumber << "...";
 
         _address.sin_port = htons(portNumber);
 
@@ -168,7 +168,7 @@ public:
             return false;
         }
 
-        clog << "Connected on " << ip << ":" << portNumber << ".";
+        llog << "Connected on " << ip << ":" << portNumber << ".";
         return true;
     }
 
@@ -205,7 +205,7 @@ public:
         } else if (bytes == 0) {
             dlog << "No bytes were read.";
         } else {
-            clog << bytes << " bytes read.";
+            llog << bytes << " bytes read.";
         }
 
         return bytes;
@@ -215,7 +215,11 @@ public:
      * Send INPUT string to the connected socket. Return
      * number of bytes read, -1 if error or 0 if EOF. Uses
      * STRLEN(input) to calculate N_BYTES for cascading
-     * function calls.
+     * function calls. NOTE: This function will not work for
+     * any data that is not simply a C-String, as C-String's
+     * are null-terminated and if the data contains any null
+     * characters, the length calculation will assume this is
+     * the end of the data.
      *
      * Sets __errmsg and __errno on error.
      */
@@ -255,7 +259,7 @@ public:
         } else if (bytes == 0) {
             wlog << "No bytes were sent.";
         } else {
-            clog << bytes << " bytes sent: " << buff;
+            llog << bytes << " bytes sent: " << buff;
         }
 
         return bytes;
