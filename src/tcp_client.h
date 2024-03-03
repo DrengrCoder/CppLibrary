@@ -215,7 +215,11 @@ public:
      * Send INPUT string to the connected socket. Return
      * number of bytes read, -1 if error or 0 if EOF. Uses
      * STRLEN(input) to calculate N_BYTES for cascading
-     * function calls.
+     * function calls. NOTE: This function will not work for
+     * any data that is not simply a C-String, as C-String's
+     * are null-terminated and if the data contains any null
+     * characters, the length calculation will assume this is
+     * the end of the data.
      *
      * Sets __errmsg and __errno on error.
      */

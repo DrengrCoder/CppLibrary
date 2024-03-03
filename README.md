@@ -486,7 +486,7 @@ int servFd = client->GetServerFd();
 if (servFd > 0)
     std::cout << "Socket connected";
 ```
-- Send and Read bytes on the socket:
+- Send and Read bytes on the socket (There are two send functions, with the basic overload only expecting a string that will automatically calculate the length of the data to be sent, the length of characters for the string. This basic overload will not work if the data you are sending is not simply a C-String, as C-Strings are null-terminated and the length calculation will assume the end of the string at the null-character):
 ```
 char buff[1024];
 int n_sent = client->Send("Sending this string");
